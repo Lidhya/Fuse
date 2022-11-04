@@ -17,7 +17,4 @@ router.put("/follow/:id", follow);
 //unfollow a user
 router.put("/unfollow/:id", unfollow);
 
-//followers list
-//following list
-//get all posts
 module.exports = router;
