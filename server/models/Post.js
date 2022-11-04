@@ -1,0 +1,52 @@
+const mongoose = require("mongoose");
+
+const CommentSchema = new mongoose.Schema({
+    authorId: {
+        type: String,
+        default: null,
+    },
+    comment: {
+        type: String,
+        default: null,
+    },
+    created_at: {
+        type: Date,
+        default: new Date(),
+    }
+})
+
+const PostSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: String,
+      required: true,
+    },
+    desc: {
+      type: String,
+      max: 500,
+    },
+    location:{
+        type:String,
+        default:null
+    },
+    url: {
+      type: String,
+    },
+    likes: {
+      type: Array,
+      default: [],
+    },
+    comments:[CommentSchema],
+    created_at: {
+        type: Date,
+        default: new Date(),
+    },
+    updated_at: {
+        type: Date,
+        default: null,
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Post", PostSchema);
