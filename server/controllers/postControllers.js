@@ -1,6 +1,6 @@
 const bcrypt=require('bcrypt')
 const userModel=require('../models/userModel');
-const Post = require("../models/Post");
+const PostModel = require("../models/Post");
 const {  } = require('../validations/userValidators.js');
 
 module.exports.getPost=async (req, res) => {
@@ -13,7 +13,7 @@ module.exports.getPost=async (req, res) => {
   }
 
 module.exports.createPost=async (req, res) => {
-    const newPost = userModel.updateOne(req.body);
+    const newPost = PostModel.updateOne(req.body);
     try {
       const savedPost = await newPost.save();
       res.status(200).json(savedPost);
@@ -24,7 +24,7 @@ module.exports.createPost=async (req, res) => {
 
   module.exports.updatePost=async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
+      const post = await PostModel.findById(req.params.id);
       if (post.userId === req.body.userId) {
         await post.updateOne({ $set: req.body });
         res.status(200).json("the post has been updated");
@@ -38,7 +38,7 @@ module.exports.createPost=async (req, res) => {
 
   module.exports.deletePost=async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
+      const post = await PostModel.findById(req.params.id);
       if (post.userId === req.body.userId) {
         await post.deleteOne();
         res.status(200).json("the post has been deleted");
@@ -52,7 +52,7 @@ module.exports.createPost=async (req, res) => {
 
   module.exports.likeDislike=async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
+      const post = await PostModel.findById(req.params.id);
       if (!post.likes.includes(req.body.userId)) {
         await post.updateOne({ $push: { likes: req.body.userId } });
         res.status(200).json("The post has been liked");
@@ -68,10 +68,10 @@ module.exports.createPost=async (req, res) => {
     module.exports.timeline=async (req, res) => {
     try {
       const currentUser = await User.findById(req.body.userId);
-      const userPosts = await Post.find({ userId: currentUser._id });
+      const userPosts = await PostModel.find({ userId: currentUser._id });
       const friendPosts = await Promise.all(
         currentUser.followings.map((friendId) => {
-          return Post.find({ userId: friendId });
+          return PostModel.find({ userId: friendId });
         })
       );
       res.json(userPosts.concat(...friendPosts))

@@ -9,6 +9,7 @@ const mongoose = require('mongoose')
 
 const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
+const postsRouter = require('./routes/posts');
 
 // db connection
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', usersRouter);
+app.use('/api/post', postsRouter);
 
 app.use(function (req, res, next) {
   res.status(404).json(`error: page not found`);
