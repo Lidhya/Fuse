@@ -21,16 +21,17 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    desc: {
+    description: {
       type: String,
       max: 500,
     },
     location:{
         type:String,
-        default:null
+        default:""
     },
     url: {
       type: String,
+      default:""
     },
     likes: {
       type: Array,

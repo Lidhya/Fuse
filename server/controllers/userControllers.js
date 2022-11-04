@@ -1,6 +1,5 @@
 const userModel=require('../models/userModel');
 const bcrypt=require('bcrypt')
-const {  } = require('../validations/userValidators.js');
 
 module.exports.userUpdate=async (req, res) => {
     if (req.body.userId === req.params.id ) {
@@ -25,7 +24,7 @@ module.exports.userUpdate=async (req, res) => {
   }
 
   module.exports.userDelete= async(req, res) => {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
+    if (req.body.userId === req.params.id ) {
       try {
         await userModel.findByIdAndDelete(req.params.id);
         res.status(200).json("Account has been deleted");
@@ -50,7 +49,7 @@ module.exports.userUpdate=async (req, res) => {
   module.exports.follow=async (req, res) => {
     if (req.body.userId !== req.params.id) {
       try {
-        const user = await User.findById(req.params.id);
+        const user = await userModel.findById(req.params.id);
         const currentUser = await userModel.findById(req.body.userId);
         if (!user.followers.includes(req.body.userId)) {
           await user.updateOne({ $push: { followers: req.body.userId } });
@@ -73,8 +72,8 @@ module.exports.userUpdate=async (req, res) => {
         const user = await userModel.findById(req.params.id);
         const currentUser = await userModel.findById(req.body.userId);
         if (user.followers.includes(req.body.userId)) {
-          await userModel.updateOne({ $pull: { followers: req.body.userId } });
-          await userModel.updateOne({ $pull: { followings: req.params.id } });
+          await user.updateOne({ $pull: { followers: req.body.userId } });
+          await currentUser.updateOne({ $pull: { followings: req.params.id } });
           res.status(200).json("user has been unfollowed");
         } else {
           res.status(403).json("you dont follow this user");

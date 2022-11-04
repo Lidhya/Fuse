@@ -1,7 +1,6 @@
-const bcrypt=require('bcrypt')
 const UserModel = require('../models/userModel');
 const PostModel = require("../models/PostModel");
-const {  } = require('../validations/userValidators.js');
+const { validatePost } = require('../validations/postValidators.js');
 
 module.exports.getPost=async (req, res) => {
     try {
@@ -13,12 +12,16 @@ module.exports.getPost=async (req, res) => {
   }
 
 module.exports.createPost=async (req, res) => {
-    const newPost = PostModel.updateOne(req.body);
-    try {
-      const savedPost = await newPost.save();
-      res.status(200).json(savedPost);
-    } catch (err) {
-      res.status(500).json(err);
+  const { error, value } = validatePost(req.body)
+        if (error) {
+            return res.status(422).json({ errors: error.details })
+        }
+        try {
+          console.log(req.body);
+      const newPost = PostModel.create(req.body);
+      res.status(200).json("Post created successfully");
+    } catch (error) {
+      res.status(500).json(error.message);
     }
   }
 
