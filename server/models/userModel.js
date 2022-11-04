@@ -45,7 +45,7 @@ const UserSchema = new mongoose.Schema({
         type: Array,
         default: [],
     },
-    following: {
+    followings: {
         type: Array,
         default: [],
     },
@@ -53,14 +53,6 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    created_at: {
-        type: Date,
-        default: new Date(),
-    },
-    updated_at: {
-        type: Date,
-        default: null,
-    }
 },
     { timestamps: true }
 )

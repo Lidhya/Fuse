@@ -73,7 +73,7 @@ module.exports.createPost=async (req, res) => {
       const currentUser = await UserModel.findById(req.body.userId);
       const userPosts = await PostModel.find({ userId: currentUser._id });
       const friendPosts = await Promise.all(
-        currentUser.following.map((friendId) => {
+        currentUser.followings.map((friendId) => {
           return PostModel.find({ userId: friendId });
         })
       );

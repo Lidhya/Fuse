@@ -1,6 +1,9 @@
+const jwt = require('jsonwebtoken');
 const userModel=require('../models/userModel');
 const bcrypt=require('bcrypt')
 const { validateRegister, validateLogin } = require('../validations/authValidators');
+
+
 
 module.exports.userRegister =async function (req, res) {
     try {
@@ -26,13 +29,22 @@ module.exports.userLogin =async function (req, res) {
         if (error)  return res.status(422).json({ errors: error.details })
         const checkUser= await userModel.findOne({username:value.username})           
         if(checkUser){
+            const {password, ...details}=checkUser._doc
             bcrypt.compare(value.password, checkUser.password)
-            .then(status => status ? res.status(200).json({ message: "Login success" }) : res.status(422).json({ message:'Incorrect password' }))
-            .catch(error => res.status(500).json({ message: error.message }))
+            .then(status => {
+               if(status) {
+                const id = checkUser._id
+                const token = jwt.sign({id}, "jwtSecret", {
+                    expiresIn: 3000,
+                })
+                res.status(200).json({auth: true, token: token, user:details }) 
+               }
+               else res.status(422).json({auth: false, message:'Incorrect password' })})       
+            .catch(error => res.status(500).json({auth: false, message: error.message }))
         }
-        else return res.status(422).json({ message:"User not found" })
+        else return res.status(422).json({auth: false, message:"User not found" })
         
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({auth: false, message: error.message });
     }
 }

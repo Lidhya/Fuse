@@ -37,15 +37,7 @@ const PostSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    comments:[CommentSchema],
-    created_at: {
-        type: Date,
-        default: new Date(),
-    },
-    updated_at: {
-        type: Date,
-        default: null,
-    },
+    comments:[CommentSchema]
   },
   { timestamps: true }
 );
