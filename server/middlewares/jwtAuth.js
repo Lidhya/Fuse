@@ -6,7 +6,7 @@ module.exports.verifyJWT = (req, res, next) => {
         res.status(401).json({error:"token not provided"});
     } else {
     const token = authHeader.split(" ")[1];
-        jwt.verify(token, "jwtSecret", (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 console.log(err);
                 res.json({ auth: false, message: "you are failed to authenticate"});

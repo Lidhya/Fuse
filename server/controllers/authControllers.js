@@ -5,19 +5,22 @@ const { validateRegister, validateLogin } = require('../validations/authValidato
 
 
 
-module.exports.userRegister =async function (req, res) {
+module.exports.userRegister = function (req, res) {
     try {
         const { error, value } = validateRegister(req.body)
         if (error)  return res.status(422).json({ errors: error.details })
-        const checkUser= await userModel.findOne({username:value.username})           
-        console.log(checkUser);
-        if(checkUser) return res.status(422).json({ message:"Username already exists" })
-        value.password= await bcrypt.hash(value.password, 10)
+        userModel.findOne({username:value.username}).then(async(user)=>{
+            if(user?.username) return res.status(422).json({ message:"Username already exists" })
+            value.password= await bcrypt.hash(value.password, 10)
         userModel.create(value).then((response)=>{
             res.status(200).json({message:"Successfully registered"})
-        }).catch((err)=>{
-        res.status(501).json({ message: err.message });
-        })  
+        }).catch((error)=>{
+        res.status(501).json({ message: error.message });
+        })
+        }).catch((error)=>{
+            res.status(501).json({ message: error.message });
+        })           
+          
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -28,13 +31,13 @@ module.exports.userLogin =async function (req, res) {
         const { error, value } = validateLogin(req.body)
         if (error)  return res.status(422).json({ errors: error.details })
         const checkUser= await userModel.findOne({username:value.username})           
-        if(checkUser){
+        if(checkUser?.username){
             const {password, ...details}=checkUser._doc
             bcrypt.compare(value.password, checkUser.password)
             .then(status => {
                if(status) {
                 const id = checkUser._id
-                const token = jwt.sign({id}, "jwtSecret", {
+                const token = jwt.sign({id}, process.env.JWT_SECRET, {
                     expiresIn: 3000,
                 })
                 res.status(200).json({auth: true, token: token, user:details }) 
