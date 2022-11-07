@@ -1,0 +1,121 @@
+:root {
+    --bs-primary: #4285f4;
+    --white: #ffffff;
+}
+
+
+.dark #circle-large,
+.dark #circle-medium,
+.dark #circle-small,
+.dark #circle-xlarge,
+.dark #circle-xxlarge {
+    background: #1a1a1a;
+}
+
+section {
+    background: var(--bs-primary);
+    background: #50b5ff;
+    background: linear-gradient(135deg, #50b5ff, #182039);
+    height: 100vh;
+    overflow: hidden;
+}
+
+#container-inside {
+    height: 100vh;
+    margin: 0 auto;
+    overflow: visible;
+    padding: 0 auto;
+    position: relative;
+    width: 100vw;
+}
+
+#circle-small,
+#circle-medium {
+    background: rgb(36, 36, 36);
+    border-radius: 50rem;
+    position: absolute;
+}
+
+#circle-large,
+#circle-xlarge {
+    background: rgb(23, 23, 23);
+    border-radius: 50rem;
+    position: absolute;
+}
+
+#circle-small {
+    -webkit-animation: circle-small-scale 3s ease-in-out infinite alternate;
+    animation: circle-small-scale 3s ease-in-out infinite alternate;
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
+    -webkit-animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    height: 18.75rem;
+    left: -9.375rem;
+    opacity: .4;
+    top: 12.5rem;
+    width: 18.75rem;
+}
+
+@keyframes circle-small-scale{
+  to  {transform: scale(1.1);}
+}
+
+#circle-medium {
+    -webkit-animation: circle-small-scale 3s ease-in-out infinite alternate;
+    animation: circle-small-scale 3s ease-in-out infinite alternate;
+    -webkit-animation-delay: .3s;
+    animation-delay: .3s;
+    -webkit-animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    height: 37.5rem;
+    left: -18.75rem;
+    opacity: .3;
+    top: 3.125rem;
+    width: 37.5rem;
+}
+
+#circle-large {
+    -webkit-animation: circle-small-scale 3s ease-in-out infinite alternate;
+    animation: circle-small-scale 3s ease-in-out infinite alternate;
+    -webkit-animation-delay: .6s;
+    animation-delay: .6s;
+    -webkit-animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    height: 56.25rem;
+    left: -28.125rem;
+    opacity: .2;
+    top: -6.25rem;
+    width: 56.25rem;
+}
+
+#circle-xlarge {
+    -webkit-animation: circle-small-scale 3s ease-in-out infinite alternate;
+    animation: circle-small-scale 3s ease-in-out infinite alternate;
+    -webkit-animation-delay: .9s;
+    animation-delay: .9s;
+    -webkit-animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    height: 75rem;
+    left: -37.5rem;
+    opacity: .1;
+    top: -15.625rem;
+    width: 75rem;
+}
+
+#circle-xxlarge {
+    -webkit-animation: circle-small-scale 3s ease-in-out infinite alternate;
+    animation: circle-small-scale 3s ease-in-out infinite alternate;
+    -webkit-animation-delay: 1.2s;
+    animation-delay: 1.2s;
+    -webkit-animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+    background: #fff;
+    border-radius: 50rem;
+    height: 93.75rem;
+    left: -46.875rem;
+    opacity: .05;
+    position: absolute;
+    top: -25rem;
+    width: 93.75rem;
+}
