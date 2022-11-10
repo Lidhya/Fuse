@@ -5,7 +5,7 @@ import Notifications from './Components/Notifications';
 import Error from './Pages/Error';
 import HomePage from './Pages/HomePage';
 import Layout from './Pages/Layout';
-import Profile from './Pages/Profile';
+import ProfilePage from './Pages/ProfilePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
 
@@ -35,7 +35,7 @@ let currentUser=true
         },
         {
           path: "/profile/:id",
-          element: <Profile />,
+          element: <ProfilePage />,
         },
         {
           path: "/notifications",
@@ -58,7 +58,7 @@ let currentUser=true
   ]);
 
   return (
-    <div>
+    <div >
       <RouterProvider router={router} />
     </div>
   );

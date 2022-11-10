@@ -63,21 +63,21 @@ export default function Share() {
                                 <div className="flex items-center mx-2 cursor-pointer" >
                                     <label htmlFor="image-upload">
                                         <PermMediaIcon htmlColor="gray" className="text-lg mr-1" /></label>
-                                    <input className='hidden' onChange={(e) => { setImage(e.target.files[0]) }} id='image-upload' type="file" accept="image/png, image/jpeg" />
+                                    <input className='hidden' onChange={(e) => { setImage(e.target.files[0]); setVideo(''); }} id='image-upload' type="file" accept="image/png, image/jpeg" />
                                 </div>
                                 <div className="flex items-center mx-2 cursor-pointer">
                                     <label htmlFor="video-upload">
                                         <VideoCameraBackIcon htmlColor="gray" className="text-lg mr-1" /></label>
-                                    <input className='hidden' onChange={(e) => { setVideo(e.target.files[0]) }} id='video-upload' type="file" accept="video/mp4,video/x-m4v,video/*" />
+                                    <input className='hidden' onChange={(e) => { setVideo(e.target.files[0]); setImage(''); }} id='video-upload' type="file" accept="video/mp4,video/x-m4v,video/*" />
                                 </div>
                             </div>
-                            <button className="border-none p-1.5 rounded bg-green-600 font-medium mr-5 cursor-pointer text-white">Post</button>
+                            <button className="border-none p-1.5 px-3 rounded bg-green-600 font-medium mr-5 cursor-pointer text-white">Post</button>
                         </div>
                     </div>
                 </div>
             </Modal>
 
-            <div className="w-full h-full rounded-xl shadow-md border-gray-100  border-2">
+            <div className="w-full h-full rounded-xl shadow-md  bg-white">
                 <div className="p-2.5">
                     <div className="flex items-center">
                         <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={User_1} alt="" />
@@ -112,7 +112,7 @@ export default function Share() {
                             </div> */}
 
                         </div>
-                        <button onClick={() => setModal(true)} className="border-none p-1.5 rounded bg-green-600 font-medium mr-5 cursor-pointer text-white">Post</button>
+                        <button onClick={() => setModal(true)} className="border-none p-1.5 px-3 rounded bg-green-600 font-medium mr-5 cursor-pointer text-white">Post</button>
                     </div>
                 </div>
             </div>

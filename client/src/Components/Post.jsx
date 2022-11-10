@@ -20,7 +20,7 @@ const Post = ({ post }) => {
   return (
     arr.map((image)=>(
     <div className="px-14 my-5">
-      <div className=" shadow-md p-8 rounded-lg border-gray-100  border-2">
+      <div className="bg-white shadow-md p-8 rounded-lg ">
         <div className="flex items-center justify-between">
           <div className="flex gap-5">
             <img src={User_1} alt="" width={40} height={40} className='rounded-full' />
@@ -29,7 +29,7 @@ const Post = ({ post }) => {
                 to={`/profile/1234tyui`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <span className="font-bold">bonnie</span>
+                <span className="font-bold">Bonnie Green</span>
               </Link>
               <span className="text-xs">1 min ago</span>
             </div>
