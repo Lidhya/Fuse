@@ -12,7 +12,7 @@ let currentUser=true
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
-      return <Navigate to="/login" />;
+      return <Navigate to="/signin" />;
     }
 
     return children;

@@ -18,9 +18,8 @@ const Post = ({ post }) => {
   const liked = false;
 
   return (
-    <div className="">
-      <div className="p-14 ">
-      <div className=" shadow-sm shadow-gray-400 p-8 rounded-lg">
+    <div className="px-14 my-3">
+      <div className=" shadow-md p-8 rounded-lg">
         <div className="flex items-center justify-between">
           <div className="flex gap-5">
             <img src={User_1} alt="" width={40} height={40} className='rounded-full' />
@@ -37,27 +36,24 @@ const Post = ({ post }) => {
           <MoreHorizIcon />
         </div>
         <div className="my-5">
-          <p>huhuhuhuhuhuhu</p>
-          <img src={post_1} alt="" className="w-full h-full object-cover mt-5"/>
+          <p>Hey look at my library is it cool?</p>
+          <img src={post_1} alt="" className="w-full h-full object-cover mt-5" />
         </div>
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-3 cursor-pointer text-sm">
             {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-            12 
+            12
           </div>
           <div className="flex items-center gap-3 cursor-pointer text-sm" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            2 
+            2
           </div>
           <div className="flex items-center gap-3 cursor-pointer text-sm">
             <SendOutlinedIcon />
           </div>
-          </div>
-        {commentOpen && <Comments />}
         </div>
+        {commentOpen && <Comments />}
       </div>
-      
-
     </div>
   );
 };

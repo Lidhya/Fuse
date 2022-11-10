@@ -29,7 +29,7 @@ const Comments = () => {
     <div className="comments">
       <div className="flex items-center justify-between gap-5 my-5">
         <img src={User_1} alt="" className="w-10 h-10 rounded-full object-cover" />
-        <input className="flex-1 p-2.5 border-2 border-solid border-gray-400 rounded-md focus:outline-none" type="text" placeholder="write a comment" />
+        <input className="flex-1 p-2.5 border-2 border-solid border-gray-300 rounded-md focus:outline-none" type="text" placeholder="write a comment" />
         <button className="bg-blue-400 text-white p-2.5 cursor-pointer rounded">Send</button>
       </div>
       {comments.map((comment) => (
