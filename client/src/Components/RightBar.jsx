@@ -5,7 +5,7 @@ import User_1 from "../assets/Users/Profile-Pic-S.png"
 function RightBar() {
   return (
     
-<aside className="fixed w-1/5" aria-label="Sidebar">
+<aside className="fixed w-1/5 " aria-label="Sidebar">
    <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-900">
       <ul className="space-y-2">
          <li>
@@ -14,28 +14,28 @@ function RightBar() {
             </a>
          </li>
          <li>
-            <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
+            <a href="#" className="flex gap-1 items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
             <img src={User_1} alt="" className="w-10 h-10 rounded-full object-cover"/>
                <span className="flex-1 ml-3 whitespace-nowrap">User 1</span>
                <button className='border border-white text-sm p-1 rounded-md  hover:bg-gray-100 dark:hover:bg-gray-700'>Follow</button>
             </a>
          </li>
          <li>
-            <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
+            <a href="#" className="flex gap-1 items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
             <img src={User_1} alt="" className="w-10 h-10 rounded-full object-cover"/>
                <span className="flex-1 ml-3 whitespace-nowrap">User 2</span>
                <button className='border border-white text-sm p-1 rounded-md  hover:bg-gray-100 dark:hover:bg-gray-700'>Follow</button>
             </a>
          </li>
          <li>
-            <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
+            <a href="#" className="flex gap-1 items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
             <img src={User_1} alt="" className="w-10 h-10 rounded-full object-cover"/>
                <span className="flex-1 ml-3 whitespace-nowrap">User 3</span>
                <button className='border border-white text-sm p-1 rounded-md  hover:bg-gray-100 dark:hover:bg-gray-700'>Follow</button>
             </a>
          </li>
          <li>
-            <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
+            <a href="#" className="flex gap-1 items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
             <img src={User_1} alt="" className="w-10 h-10 rounded-full object-cover"/>
                <span className="flex-1 ml-3 whitespace-nowrap">User 4</span>
                <button className='border border-white text-sm p-1 rounded-md  hover:bg-gray-100 dark:hover:bg-gray-700'>Follow</button>

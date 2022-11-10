@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
@@ -47,16 +48,16 @@ function Navbar() {
       </div>
       <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:gap-6 md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
         <li>
-          <a href="#" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:bg-transparent md:text-purple-700 md:p-0 dark:text-purple-700 " aria-current="page"><HomeOutlinedIcon /><span className='md:hidden pl-3'>Home</span></a>
+          <Link to="/" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:bg-transparent md:text-purple-700 md:p-0 dark:text-purple-700 " aria-current="page"><HomeOutlinedIcon /><span className='md:hidden pl-3'>Home</span></Link>
         </li>
         <li>
-          <a href="#" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 md:dark:hover:text-white dark:text-purple-700 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"><TextsmsOutlinedIcon/><span className='md:hidden pl-3'>Message</span></a>
+          <Link to="/inbox" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0  "><TextsmsOutlinedIcon/><span className='md:hidden pl-3'>Message</span></Link>
         </li>
         <li>
-          <a href="#" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 dark:text-purple-700 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"><NotificationsNoneOutlinedIcon/><span className='md:hidden pl-3'>Notificatoins</span></a>
+          <Link to="/notifications" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><NotificationsNoneOutlinedIcon/><span className='md:hidden pl-3'>Notificatoins</span></Link>
         </li>
         <li>
-          <a href="#" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 dark:text-purple-700 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"><PersonOutlineOutlinedIcon/><span className='md:hidden pl-3'>Profile</span></a>
+          <Link to="/profile/sdfsf32" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><PersonOutlineOutlinedIcon/><span className='md:hidden pl-3'>Profile</span></Link>
         </li>
       </ul>
     </div>

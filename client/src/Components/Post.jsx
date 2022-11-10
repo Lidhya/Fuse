@@ -13,13 +13,14 @@ import Comments from "./Comments";
 
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
-
-  //TEMPORARY
+  const arr=['https://www.westend61.de/images/0001152661pw/golden-retriever-looking-away-while-standing-on-rock-in-lake-against-mountain-during-winter-CAVF61777.jpg','https://cdn.britannica.com/67/19367-050-885866B4/Valley-Taurus-Mountains-Turkey.jpg']
+  
   const liked = false;
 
   return (
-    <div className="px-14 my-3">
-      <div className=" shadow-md p-8 rounded-lg">
+    arr.map((image)=>(
+    <div className="px-14 my-5">
+      <div className=" shadow-md p-8 rounded-lg border-gray-100  border-2">
         <div className="flex items-center justify-between">
           <div className="flex gap-5">
             <img src={User_1} alt="" width={40} height={40} className='rounded-full' />
@@ -37,9 +38,9 @@ const Post = ({ post }) => {
         </div>
         <div className="my-5">
           <p>Hey look at my library is it cool?</p>
-          <img src={post_1} alt="" className="w-full h-full object-cover mt-5" />
+          <img src={image} alt="" className="w-full h-full object-cover mt-5" />
         </div>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 flex-wrap">
           <div className="flex items-center gap-3 cursor-pointer text-sm">
             {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
             12
@@ -54,7 +55,7 @@ const Post = ({ post }) => {
         </div>
         {commentOpen && <Comments />}
       </div>
-    </div>
+    </div>))
   );
 };
 

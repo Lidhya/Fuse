@@ -1,6 +1,8 @@
 import React,{useState} from 'react';
 import { Routes, Route, RouterProvider, Navigate, createBrowserRouter } from 'react-router-dom';
 import './App.css';
+import Notifications from './Components/Notifications';
+import Error from './Pages/Error';
 import HomePage from './Pages/HomePage';
 import Layout from './Pages/Layout';
 import Profile from './Pages/Profile';
@@ -35,6 +37,10 @@ let currentUser=true
           path: "/profile/:id",
           element: <Profile />,
         },
+        {
+          path: "/notifications",
+          element: <Notifications />,
+        },
       ],
     },
     {
@@ -44,6 +50,10 @@ let currentUser=true
     {
       path: "/signup",
       element: <SignupPage />,
+    },
+    {
+      path: "*",
+      element: <Error />,
     },
   ]);
 

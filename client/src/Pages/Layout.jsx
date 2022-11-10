@@ -10,13 +10,15 @@ function Layout() {
     <div >
         <Navbar />
         <div className='flex m-3 mt-20 justify-center'>
-          <div className='w-1/5'>
-          <LeftBar /></div>
-          <div className='w-3/5'>
+          <div className='hidden 2xl:block xl:block md:block lg:block w-1/5'>
+          <LeftBar />
+          </div>
+          <div className='  md:w-3/5 '>
             <Outlet />
           </div>
-          <div className='w-1/5'>
-          <RightBar /></div>
+          <div className='hidden 2xl:block xl:block md:block lg:block w-1/5'>
+          <RightBar />
+          </div>
         </div>
       </div>
   )
