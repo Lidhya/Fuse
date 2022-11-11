@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import User_2 from "../assets/Users/Profile-Pic-S (1).png"
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import CallIcon from '@mui/icons-material/Call';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import SendIcon from '@mui/icons-material/Send';
+import Message from './Message';
 
 
 function Messenger() {
+    const [message, setMessage]=useState({})
     const handleHamClick = () => {
         document.getElementById('chat-list').classList.toggle('hidden')
     }
 
-    let arr = [1, 2, 3, 4, 5]
+    const arr = [1, 2, 3, 4, 5]
+    const m={text:'hello how are you?', createdAt: new Date()}
 
     return (
         <div className=' flex justify-center h-full'>
@@ -63,8 +66,12 @@ function Messenger() {
                         <div className='p-1 rounded-full bg-purple-400 text-white'><MoreVertOutlinedIcon /></div>
                     </div>
                 </div>
-                <div className='min-h-[90%] rounded-b-lg flex flex-col justify-end bg-white '>
-
+                <div className='min-h-[90%] rounded-b-lg flex flex-col justify-end bg-white overflow-auto '>
+                    <Message message={m} own={true}/>
+                    <Message message={m} own={false}/>
+                    <Message message={m} own={true}/>
+                    <Message message={m} own={true}/>
+                    
                     <div className='flex gap-2 m-2 items-center'>
                         <textarea name="message" id="" placeholder='Send something...' rows='2' className='border border-solid border-gray-400 p-2 focus:outline-none rounded-2xl w-full' >
 

@@ -62,8 +62,8 @@ function Navbar() {
         <li>
           <Link to="/profile/sdfsf32" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><PersonOutlineOutlinedIcon/><span className='md:hidden pl-3 text-white'>Profile</span></Link>
         </li>
-        <li className='md:hidden'>
-          <Link to="/news" className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><NewspaperOutlinedIcon/><span className=' pl-3 text-white'>News</span></Link>
+        <li>
+          <Link to="/news" className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><NewspaperOutlinedIcon/><span className='md:hidden pl-3 text-white'>News</span></Link>
         </li>
         <li className='md:hidden'>
           <Link to="/" className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><LightModeOutlinedIcon/><span className=' pl-3 text-white'>Theme</span></Link>
