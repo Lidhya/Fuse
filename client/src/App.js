@@ -1,16 +1,18 @@
-import React,{useState} from 'react';
-import { Routes, Route, RouterProvider, Navigate, createBrowserRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { RouterProvider, Navigate, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import Notifications from './Components/Notifications';
 import Error from './Pages/Error';
 import HomePage from './Pages/HomePage';
 import Layout from './Pages/Layout';
+import MessengerPage from './Pages/MessengerPage';
+import NewsPage from './Pages/NewsPage';
 import ProfilePage from './Pages/ProfilePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
 
 function App() {
-let currentUser=true
+  let currentUser = true
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
@@ -52,6 +54,20 @@ let currentUser=true
       element: <SignupPage />,
     },
     {
+      path: "/messenger",
+      element:
+        <ProtectedRoute>
+          <MessengerPage />
+        </ProtectedRoute>,
+    },
+    {
+      path: "/news",
+      element:
+        <ProtectedRoute>
+          <NewsPage />
+        </ProtectedRoute>,
+    },
+    {
       path: "*",
       element: <Error />,
     },
@@ -62,15 +78,6 @@ let currentUser=true
       <RouterProvider router={router} />
     </div>
   );
-  // return (
-  //   <>
-  //     <Routes>
-  //       <Route path='/' element={<HomePage/>}/>
-  //       <Route path='/signin' element={<SigninPage/>}/>
-  //       <Route path='/signup' element={<SignupPage/>}/>
-  //     </Routes>
-  //   </>
-  // );
 }
 
 export default App;

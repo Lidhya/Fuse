@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import User_1 from "../../assets/Users/Profile-Pic-S.png"
+import User_1 from "../assets/Users/Profile-Pic-S.png"
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -11,7 +11,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 function LeftBar() {
    return (
 
-      <div className='flex flex-col fixed w-1/5  '>
+      <div className='flex flex-col w-1/5 fixed  '>
          <div className="w-full p-3 mb-3 mt-6 max-w-sm  rounded-lg border  shadow-md bg-gray-900 border-gray-700">
             <div className="flex flex-col items-center pb-10 ">
                <img className=" w-38 relative -top-10 h-38 rounded-full shadow-lg" src={User_1} alt="Bonnie image" />
@@ -39,28 +39,28 @@ function LeftBar() {
             <div className="overflow-y-auto py-4 px-3 p-3 bg-gray-50 rounded dark:bg-gray-900">
                <ul className="space-y-2">
                   <li>
-                     <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                     <Link to="/news" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                      <NewspaperOutlinedIcon/>
                         <span className="ml-3">News</span>
-                     </a>
+                     </Link>
                   </li>
                   <li>
-                     <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                     <Link to="/messenger" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         < MailOutlinedIcon/>
                         <span className="flex-1 ml-3 whitespace-nowrap">Inbox</span>
-                     </a>
+                     </Link>
                   </li>
                   <li>
-                     <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                     <Link to="/profile/dafsfs" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <PersonOutlineOutlinedIcon/>
                         <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
-                     </a>
+                     </Link>
                   </li>
                   <li>
-                     <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                     <Link to="/" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <LightModeOutlinedIcon/>
                         <span className="flex-1 ml-3 whitespace-nowrap">Theme</span>
-                     </a>
+                     </Link>
                   </li>
                   <li>
                      <Link to={'/signin'} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">

@@ -48,7 +48,7 @@ function Profile() {
               
             />
           </div>
-          <div className='bg-purple-300 h-auto flex  justify-between items-center relative -top-16 rounded-b-3xl '>
+          <div className='bg-purple-300 h-auto flex flex-wrap content-evenly justify-between items-center relative -top-16 rounded-b-3xl '>
           <div className="flex flex-col items-center justify-center py-8 px-10 ">
               <h4 className="text-lg font-semibold">Bonnie Green</h4>
               <span className="font-light">Visual Designer</span>   

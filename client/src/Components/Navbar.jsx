@@ -54,7 +54,7 @@ function Navbar() {
           <Link to="/" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:bg-transparent md:text-purple-700 md:p-0 dark:text-purple-700 " aria-current="page"><HomeOutlinedIcon /><span className='md:hidden pl-3 text-white'>Home</span></Link>
         </li>
         <li>
-          <Link to="/inbox" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0  "><TextsmsOutlinedIcon/><span className='md:hidden pl-3 text-white'>Message</span></Link>
+          <Link to="/messenger" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0  "><TextsmsOutlinedIcon/><span className='md:hidden pl-3 text-white'>Message</span></Link>
         </li>
         <li>
           <Link to="/notifications" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><NotificationsNoneOutlinedIcon/><span className='md:hidden pl-3 text-white'>Notificatoins</span></Link>
