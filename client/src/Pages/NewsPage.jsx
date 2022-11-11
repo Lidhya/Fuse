@@ -10,7 +10,7 @@ function NewsPage() {
     <Navbar/>
     <div className='flex mt-20 m-3'>
     <div className='hidden md:block w-1/5 '><LeftBar/></div>
-    <div><News/></div>
+    <div className='w-4/5'><News/></div>
     </div>
     </>
   )
