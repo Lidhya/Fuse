@@ -5,7 +5,6 @@ function AuthBg() {
   return (
     <>
       <section >
-<h1 className='xl:hidden lg:hidden md:hidden py-32 font-extrabold text-gray-600 text-9xl text-center'>Lets's <span className='text-white'>FUSE!</span></h1>
 <div id="container-inside">
     <div id="circle-small"></div>
     <div id="circle-medium"></div>

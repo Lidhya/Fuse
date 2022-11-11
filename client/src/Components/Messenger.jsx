@@ -8,13 +8,14 @@ import Message from './Message';
 
 
 function Messenger() {
-    const [message, setMessage]=useState({})
+    const [messages, setMessages] = useState([])
+    const [message, setMessage] = useState('')
     const handleHamClick = () => {
         document.getElementById('chat-list').classList.toggle('hidden')
     }
 
     const arr = [1, 2, 3, 4, 5]
-    const m={text:'hello how are you?', createdAt: new Date()}
+    const m = { text: 'hello how are you?', createdAt: new Date() }
 
     return (
         <div className=' flex justify-center h-full'>
@@ -67,16 +68,25 @@ function Messenger() {
                     </div>
                 </div>
                 <div className='min-h-[90%] rounded-b-lg flex flex-col justify-end bg-white overflow-auto '>
-                    <Message message={m} own={true}/>
-                    <Message message={m} own={false}/>
-                    <Message message={m} own={true}/>
-                    <Message message={m} own={true}/>
-                    
+                    <div className='overflow-y-scroll h-96' style={{ minHeight: '32rem' }}>
+                        <Message message={m} own={false} />
+                        {messages.map((mess, index) => (
+                            <Message message={mess} own={true} />
+                        ))}
+                    </div>
                     <div className='flex gap-2 m-2 items-center'>
-                        <textarea name="message" id="" placeholder='Send something...' rows='2' className='border border-solid border-gray-400 p-2 focus:outline-none rounded-2xl w-full' >
+                        <textarea name="message" onChange={(e) => setMessage(e.target.value)} value={message} id="" placeholder='Send something...' rows='2' className='border border-solid border-gray-400 p-2 focus:outline-none rounded-2xl w-full' />
 
-                        </textarea>
-                        <div ><span className='rounded-lg p-4  text-white bg-purple-800'><SendIcon /></span></div>
+                        <span onClick={() => {
+                            setMessages(() => {
+                                if (message.length > 0) {
+                                    return [...messages, { createdAt: new Date(), text: message }]
+                                } else {
+                                    return [...messages]
+                                }
+                            });
+                            setMessage('')
+                        }} className='rounded-lg p-4  text-white bg-purple-800'><SendIcon /></span>
                     </div>
 
                 </div>

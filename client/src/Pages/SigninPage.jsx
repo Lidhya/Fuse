@@ -5,8 +5,8 @@ import Signin from '../Components/Signin'
 function SigninPage() {
   return (
    <>
-   <AuthBg/>
-   <Signin/>
+  <div className='hidden md:block'><AuthBg/></div>
+    <div ><Signin/></div>
    </>
   )
 }
