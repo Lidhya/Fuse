@@ -19,7 +19,7 @@ function Navbar() {
     
   return (
     
-<nav className="bg-white px-2 sm:px-4 py-1 top-0 fixed w-full dark:bg-gray-900 drop-shadow-md z-50">
+<nav className="bg-white px-2 sm:px-4 py-1 top-0 fixed w-full dark:bg-gray-900 drop-shadow-md z-40">
   <div className="container flex flex-wrap justify-between items-center mx-auto">
   <Link to="/" className="flex items-center">
       <span className="self-center text-3xl font-extrabold whitespace-nowrap text-yellow-500">FUSE<span className='text-purple-700'>.</span></span>
