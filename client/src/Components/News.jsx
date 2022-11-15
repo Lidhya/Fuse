@@ -14,7 +14,7 @@ const customStyles = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        width: 'auto',
+        width: '35rem',
         height: '38rem',
         backgroundColor: '#fffff',
         border: 'none'

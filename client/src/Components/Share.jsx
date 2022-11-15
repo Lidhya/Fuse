@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal'
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 // import LabelIcon from '@mui/icons-material/Label';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+// import LocationOnIcon from '@mui/icons-material/LocationOn';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+// import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import CloseIcon from '@mui/icons-material/Close';
 import User_1 from "../assets/Users/Profile-Pic-S.png"
-import icons from './Icons'
+// import icons from './Icons'
 
 const customStyles = {
     content: {
@@ -77,7 +77,7 @@ export default function Share() {
                 </div>
             </Modal>
 
-            <div className="w-full h-full rounded-xl shadow-md  bg-white">
+            <div className="w-full h-full rounded-xl shadow-md  bg-white mb-12">
                 <div className="p-2.5">
                     <div className="flex items-center">
                         <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={User_1} alt="" />

@@ -10,14 +10,14 @@ function RightBar() {
     
 <aside className="fixed w-1/5 " aria-label="Sidebar">
    <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-900">
-      <ul className="space-y-2">
+      <ul className="">
          <li>
-            <a href="#" className="flex items-center  p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
+            <a href="#" className=" items-center pl-0 p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
                <span className="ml-3 font-semibold">Suggestions for you</span>
             </a>
          </li>
          {arr.map((index)=>(
-         <li>
+         <li key={index}>
             <a href="#" className="flex gap-1 items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
             <img src={User_1} alt="" className="w-10 h-10 rounded-full object-cover"/>
                <span className="flex-1 ml-3 whitespace-nowrap">User 1</span>
@@ -28,7 +28,7 @@ function RightBar() {
       </ul>
       <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
       <li>
-            <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
+            <a href="#" className="flex items-center pl-0 p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
                <span className="ml-3 font-semibold">Messages</span>
             </a>
          </li>

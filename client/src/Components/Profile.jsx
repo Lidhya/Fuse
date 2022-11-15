@@ -31,10 +31,10 @@ function Profile() {
     const [value, setValue] = useState('')
 
   return (
-    <div className="px-14 my-5">
+    <div className="px-14 mt-5">
     <div className="flex justify-center">     
       <div className="w-full">
-        <div className="profileRightTop">
+        <div className="mb-0 pb-0">
           <div className="h-80 relative">
             <img
               className="w-full h-64 object-cover  rounded-t-3xl"
@@ -49,22 +49,22 @@ function Profile() {
             />
           </div>
           <div className='bg-purple-300 h-auto flex flex-wrap content-evenly justify-between items-center relative -top-16 rounded-b-3xl '>
-          <div className="flex flex-col items-center justify-center py-8 px-10 ">
+          <div className="flex flex-col  justify-center py-8 px-10 ">
               <h4 className="text-lg font-semibold">Bonnie Green</h4>
-              <span className="font-light">Visual Designer</span>   
-              <button className='border border-black text-sm p-1 mt-2  rounded-md' onClick={() => { setModal2(true) }}>Edit profile</button>         
+              <span className="font-normal">Visual Designer</span>   
+              <button className='border border-black text-md font-semibold p-1 mt-2  rounded-md' onClick={() => { setModal2(true) }}>Edit profile</button>         
           </div>
           <div className="flex  flex-wrap   mt-2 space-x-3 md:mt-3">
                   <div className='flex flex-col items-center'>
-                  <span className='text-black text-lg font-light'>Posts</span>
+                  <span className='text-black text-lg font-semibold'>Posts</span>
                   <span className='text-black font-mono'>20</span>
                   </div>
                   <div className='flex flex-col text-lg items-center' onClick={() =>{setModal1(true); setValue('Followers')} } >
-                  <span className='text-black font-light'>Followers</span>
+                  <span className='text-black font-semibold'>Followers</span>
                   <span className='text-black font-mono'>340</span>
                   </div>
                   <div className='flex flex-col text-lg items-center' onClick={() =>{setModal1(true); setValue('Following')} }>
-                  <span className='text-black font-light'>Following</span>
+                  <span className='text-black font-semibold'>Following</span>
                   <span className='text-black font-mono'>220</span>
                   </div>
                </div>
