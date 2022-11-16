@@ -11,12 +11,21 @@ const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 
-// db connection
-mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
+// db connection cloud
+// mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
+//   console.log('Connected to database');
+// }).catch((err) => {
+//   console.log(`Database connection ${err}`);
+// });
+
+// db connection local
+mongoose.connect('mongodb://localhost:27017/Fuse', { useNewUrlParser: true }).then((response) => {
   console.log('Connected to database');
 }).catch((err) => {
   console.log(`Database connection ${err}`);
 });
+
+
 
 app.use(cors());
 app.use(logger('dev'));

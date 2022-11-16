@@ -30,13 +30,13 @@ module.exports.userLogin =async function (req, res) {
     try {
         const { error, value } = validateLogin(req.body)
         if (error)  return res.status(422).json({ errors: error.details })
-        const checkUser= await userModel.findOne({username:value.username})           
-        if(checkUser?.username){
-            const {password, ...details}=checkUser._doc
-            bcrypt.compare(value.password, checkUser.password)
+       userModel.findOne({username:value.username}).then((user)=>{
+          if(user?.username){
+            const {password, ...details}=user._doc
+            bcrypt.compare(value.password, password)
             .then(status => {
                if(status) {
-                const id = checkUser._id
+                const id = user._id
                 const token = jwt.sign({id}, process.env.JWT_SECRET, {
                     expiresIn: 3000,
                 })
@@ -45,8 +45,10 @@ module.exports.userLogin =async function (req, res) {
                else res.status(422).json({auth: false, message:'Incorrect password' })})       
             .catch(error => res.status(500).json({auth: false, message: error.message }))
         }
-        else return res.status(422).json({auth: false, message:"User not found" })
-        
+        else return res.status(422).json({auth: false, message:"User not found" }) 
+       }).catch((error)=>{
+        res.status(501).json({ message: error.message });
+    })                     
     } catch (error) {
         res.status(500).json({auth: false, message: error.message });
     }
