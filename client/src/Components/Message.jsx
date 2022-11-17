@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment';
 
 function Message({ message, own }) {
     const {text, createdAt}=message
@@ -12,7 +13,7 @@ function Message({ message, own }) {
       />
       <p className={own? "p-2.5 rounded-2xl bg-gray-400 text-black max-w-xs": "p-2.5 rounded-2xl bg-purple-700 text-white max-w-xs"}>{text}</p>
     </div>
-    <div className="text-xs mt-2.5">{createdAt}</div>
+    <div className="text-xs mt-2.5">{moment(createdAt).fromNow()}</div>
   </div>
   )
 }
