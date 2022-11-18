@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouterProvider, Navigate, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import Notifications from './Components/Notifications';
@@ -10,19 +10,34 @@ import NewsPage from './Pages/NewsPage';
 import ProfilePage from './Pages/ProfilePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
+import { UserContext } from './store/UserContext';
 
 function App() {
-  let currentUser = true
+  const {currentUser}=useContext(UserContext)
 
   const ProtectedRoute = ({ children }) => {
-    if (!currentUser) {
+    if (!currentUser?.fname) {
       return <Navigate to="/signin" />;
     }
-
     return children;
   };
 
+  const AuthRoute = ({ children }) => {
+    if (!currentUser) {
+      return children;
+    }
+    return <Navigate to="/" />;
+  };
+
   const router = createBrowserRouter([
+    {
+      path: "/signin",
+      element: <AuthRoute> <SigninPage /></AuthRoute>,
+    },
+    {
+      path: "/signup",
+      element: <AuthRoute><SignupPage /></AuthRoute>,
+    },
     {
       path: "/",
       element: (
@@ -44,15 +59,7 @@ function App() {
           element: <Notifications />,
         },
       ],
-    },
-    {
-      path: "/signin",
-      element: <SigninPage />,
-    },
-    {
-      path: "/signup",
-      element: <SignupPage />,
-    },
+    },  
     {
       path: "/messenger",
       element:
@@ -74,9 +81,9 @@ function App() {
   ]);
 
   return (
-    <div >
+    < >
       <RouterProvider router={router} />
-    </div>
+    </>
   );
 }
 

@@ -1,5 +1,6 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
+import React, { useContext } from 'react'
+import {Link, useNavigate} from 'react-router-dom'
+import { UserContext } from '../store/UserContext';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
@@ -9,6 +10,15 @@ import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 function Navbar() {
+  const { setCurrentUser }=useContext(UserContext)
+  const navigate = useNavigate()
+
+ const handleLogout=()=>{
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    setCurrentUser(null)
+    navigate('/signin')
+}
     const handleHamClick = () => {
         document.getElementById('navbar-hamburger').classList.toggle('hidden')
       }
@@ -69,7 +79,7 @@ function Navbar() {
           <Link to="/" className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><LightModeOutlinedIcon/><span className=' pl-3 text-white'>Theme</span></Link>
         </li>
         <li className='md:hidden'>
-          <Link to="/" className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><LogoutOutlinedIcon/><span className=' pl-3 text-white'>Sign out</span></Link>
+          <button onClick={handleLogout} className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><LogoutOutlinedIcon/><span className=' pl-3 text-white'>Sign out</span></button>
         </li>
       </ul>
     </div>

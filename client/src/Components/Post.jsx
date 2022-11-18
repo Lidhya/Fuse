@@ -11,19 +11,19 @@ import Comments from "./Comments";
 
 // import Comments from "../comments/Comments";
 
-const Post = ({ post }) => {
+const Post = () => {
   const [commentOpen, setCommentOpen] = useState(false);
   const arr = ['https://www.westend61.de/images/0001152661pw/golden-retriever-looking-away-while-standing-on-rock-in-lake-against-mountain-during-winter-CAVF61777.jpg', 'https://cdn.britannica.com/67/19367-050-885866B4/Valley-Taurus-Mountains-Turkey.jpg']
 
   const liked = false;
 
   return (
-    arr.map((image) => (
-      <div className="px-14 mb-12">
+    arr.map((image, index) => (
+      <div key={index} className="px-14 mb-12">
         <div className="bg-white shadow-md p-8 rounded-lg ">
           <div className="flex items-center justify-between">
             <div className="flex gap-5">
-              <img src={User_1} alt="" width={40} height={40} className='rounded-full' />
+              <img src={User_1} alt="users" width={40} height={40} className='rounded-full' />
               <div className="flex flex-col">
                 <Link
                   to={`/profile/1234tyui`}
@@ -38,7 +38,7 @@ const Post = ({ post }) => {
           </div>
           <div className="my-5">
             <p>Hey look at my library is it cool?</p>
-            <img src={image} alt="" className="w-full h-full object-cover mt-5" />
+            <img src={image} alt="post" className="w-full h-full object-cover mt-5" />
           </div>
           <div className="flex items-center gap-5 flex-wrap">
             <div className="flex items-center gap-3 cursor-pointer text-sm">

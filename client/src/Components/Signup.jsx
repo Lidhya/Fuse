@@ -29,7 +29,7 @@ function Signup() {
         .then((response)=>{
             navigate('/signin')}  )
         .catch((error)=>{
-            setErrorMessage(error.response.data.message)
+            setErrorMessage(error.response?.data.message)
         })
     }
 }, [formErrors]);
@@ -140,7 +140,7 @@ const validate = (values) => {
                                     <p className='text-red-400 text-xs'>{formErrors.password}</p>
                                 </div>
 
-                                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign in</button>
+                                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign un</button>
                                 <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                                     Already registered? <Link to={'/signin'} className="text-blue-700 hover:underline dark:text-blue-500">Sign in to your account</Link>
                                 </div>
