@@ -8,11 +8,9 @@ router.post("/register", userRegister);
 //login
 router.post("/login", userLogin);
 
-
 router.get('/isUserAuth', verifyJWT , (req, res) => {
     res.send("You are authenticated Congrats:")
 })
-
 
 
 module.exports = router;

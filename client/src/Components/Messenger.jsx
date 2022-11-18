@@ -10,13 +10,12 @@ import Message from './Message';
 function Messenger() {
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState('')
-    const handleHamClick = () => {
-        document.getElementById('chat-list').classList.toggle('hidden')
-    }
-
     const arr = [1, 2, 3, 4, 5]
     const m = { text: 'hello how are you?', createdAt: new Date() }
 
+    const handleHamClick = () => {
+        document.getElementById('chat-list').classList.toggle('hidden')
+    }
     return (
         <div className=' flex justify-center h-full'>
             <aside className="md:w-1/5 hidden md:block absolute sm:w-full md:static w-screen " id='chat-list'>
@@ -85,7 +84,7 @@ function Messenger() {
                                     return [...messages]
                                 }
                             });
-                            setMessage('')
+                            setMessage('');
                         }} className='rounded-lg p-4  text-white bg-purple-800'><SendIcon /></span>
                     </div>
 

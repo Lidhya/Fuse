@@ -6,15 +6,14 @@ import User_1 from "../assets/Users/Profile-Pic-S.png"
 function RightBar() {
    let arr = [1, 2, 3, 4]
 
-  return (
-    
+  return (   
 <aside className="fixed w-1/5 " aria-label="Sidebar">
    <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-900">
-      <ul className="">
+      <ul className="space-y-2 ">
          <li>
-            <a href="#" className=" items-center pl-0 p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
-               <span className="ml-3 font-semibold">Suggestions for you</span>
-            </a>
+            <p className=" items-center  p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
+               <span className=" font-semibold">Suggestions for you</span>
+            </p>
          </li>
          {arr.map((index)=>(
          <li key={index}>
@@ -28,9 +27,9 @@ function RightBar() {
       </ul>
       <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
       <li>
-            <a href="#" className="flex items-center pl-0 p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
-               <span className="ml-3 font-semibold">Messages</span>
-            </a>
+            <p className="flex items-center  p-2 text-base font-normal text-white">
+               <span className=" font-semibold">Messages</span>
+            </p>
          </li>
          {arr.map((index)=>(
          <li key={index}>

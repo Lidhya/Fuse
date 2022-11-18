@@ -8,7 +8,7 @@ const { validateRegister, validateLogin } = require('../validations/authValidato
 module.exports.userRegister = function (req, res) {
     try {
         const { error, value } = validateRegister(req.body)
-        if (error)  return res.status(422).json({ errors: error.details })
+        if (error)  return res.status(422).json({ message: error.details })
         userModel.findOne({username:value.username}).then(async(user)=>{
             if(user?.username) return res.status(422).json({ message:"Username already exists" })
             value.password= await bcrypt.hash(value.password, 10)
@@ -29,7 +29,7 @@ module.exports.userRegister = function (req, res) {
 module.exports.userLogin =async function (req, res) {
     try {
         const { error, value } = validateLogin(req.body)
-        if (error)  return res.status(422).json({ errors: error.details })
+        if (error)  return res.status(422).json({message: error.details })
        userModel.findOne({username:value.username}).then((user)=>{
           if(user?.username){
             const {password, ...details}=user._doc
