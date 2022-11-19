@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { POST_COLLECTION} = require('../config/collections')
 
 const CommentSchema = new mongoose.Schema({
     authorId: {
@@ -42,5 +43,5 @@ const PostSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const PostModel = mongoose.model("Post", PostSchema);
+const PostModel = mongoose.model(POST_COLLECTION, PostSchema);
 module.exports =PostModel

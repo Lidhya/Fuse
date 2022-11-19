@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import {useQuery} from '@tanstack/react-query'
+import Axios from '../axios'
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Link } from "react-router-dom";
 import User_1 from "../assets/Users/Profile-Pic-S.png"
 import post_1 from "../assets/posts/library-06.jpg"
 import Comments from "./Comments";
@@ -14,8 +16,13 @@ import Comments from "./Comments";
 const Post = () => {
   const [commentOpen, setCommentOpen] = useState(false);
   const arr = ['https://www.westend61.de/images/0001152661pw/golden-retriever-looking-away-while-standing-on-rock-in-lake-against-mountain-during-winter-CAVF61777.jpg', 'https://cdn.britannica.com/67/19367-050-885866B4/Valley-Taurus-Mountains-Turkey.jpg']
-
   const liked = false;
+
+  // const {isLoading, error, data}=useQuery(['posts'],()=>{
+  // Axios.get('/posts').then((response)=>{
+  // return response.data
+  // })
+  // }) 
 
   return (
     arr.map((image, index) => (

@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 import { RouterProvider, Navigate, createBrowserRouter } from 'react-router-dom';
+import { UserContext } from './store/UserContext';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import './App.css';
 import Notifications from './Components/Notifications';
 import Error from './Pages/Error';
@@ -10,10 +12,12 @@ import NewsPage from './Pages/NewsPage';
 import ProfilePage from './Pages/ProfilePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
-import { UserContext } from './store/UserContext';
 
 function App() {
   const {currentUser}=useContext(UserContext)
+
+// Create a client
+const queryClient = new QueryClient()
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser?.fname) {
@@ -42,7 +46,9 @@ function App() {
       path: "/",
       element: (
         <ProtectedRoute>
+          <QueryClientProvider client={queryClient}>
           <Layout />
+          </QueryClientProvider>
         </ProtectedRoute>
       ),
       children: [

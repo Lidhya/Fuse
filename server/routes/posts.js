@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { createPost, updatePost, deletePost, likeDislike, getPost, timelinePosts } = require('../controllers/postControllers')
 const {verifyJWT}=require('../middlewares/jwtAuth')
 
+//get timeline posts
+router.get("/posts/:id", timelinePosts);
 
 //create a post
 router.post("/create/:id",verifyJWT, createPost);
@@ -18,7 +20,6 @@ router.put("/like/:id", likeDislike);
 //get a post
 router.get("/get/:id", getPost);
 
-//get timeline posts
-router.get("/timeline", timelinePosts);
+
 
 module.exports = router;

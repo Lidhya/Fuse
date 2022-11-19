@@ -1,31 +1,34 @@
 const UserModel = require('../models/userModel');
 const PostModel = require("../models/PostModel");
+const { USER_COLLECTION, POST_COLLECTION} = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
 
-module.exports.getPost=async (req, res) => {
+module.exports={
+  getPost:async (req, res) => {
     try {
-      const post = await PostModel.findById(req.params.id);
-      res.status(200).json(post);
+      PostModel.findById(req.params.id)
+      .then((response)=>res.status(200).json(post))
+      .catch((err)=>res.status(500).json(err))
     } catch (err) {
       res.status(500).json(err);
     }
-  }
+  },
 
-module.exports.createPost=async (req, res) => {
+createPost:async (req, res) => {
   const { error, value } = validatePost(req.body)
         if (error) {
             return res.status(422).json({ errors: error.details })
         }
         try {
-          console.log(req.body);
-      const newPost = PostModel.create(req.body);
-      res.status(200).json("Post created successfully");
+      PostModel.create(req.body)
+      .then((response)=>res.status(200).json("Post created successfully"))
+      .catch((err)=>res.status(500).json(err.message))
     } catch (error) {
       res.status(500).json(error.message);
     }
-  }
+  },
 
-  module.exports.updatePost=async (req, res) => {
+  updatePost:async (req, res) => {
     try {
       const post = await PostModel.findById(req.params.id);
       if (post.userId === req.body.userId) {
@@ -37,9 +40,9 @@ module.exports.createPost=async (req, res) => {
     } catch (err) {
       res.status(500).json(err);
     }
-  }
+  },
 
-  module.exports.deletePost=async (req, res) => {
+  deletePost:async (req, res) => {
     try {
       const post = await PostModel.findById(req.params.id);
       if (post.userId === req.body.userId) {
@@ -51,9 +54,9 @@ module.exports.createPost=async (req, res) => {
     } catch (err) {
       res.status(500).json(err);
     }
-  }
+  },
 
-  module.exports.likeDislike=async (req, res) => {
+  likeDislike:async (req, res) => {
     try {
       const post = await PostModel.findById(req.params.id);
       if (!post.likes.includes(req.body.userId)) {
@@ -66,11 +69,11 @@ module.exports.createPost=async (req, res) => {
     } catch (err) {
       res.status(500).json(err);
     }
-  }
+  },
 
-    module.exports.timelinePosts=async (req, res) => {
+    timelinePosts:async (req, res) => {
     try {
-      const currentUser = await UserModel.findById(req.body.userId);
+      const currentUser = await UserModel.findById(req.params.id);
       const userPosts = await PostModel.find({ userId: currentUser._id });
       const friendPosts = await Promise.all(
         currentUser.followings.map((friendId) => {
@@ -78,9 +81,23 @@ module.exports.createPost=async (req, res) => {
         })
       );
       res.json(userPosts.concat(...friendPosts))
+
+      //lidhya way
+      // UserModel.aggregate([
+      //   {$match:{_id:req.params.id}},
+      //   {
+      //     $lookup: {
+      //         from: POST_COLLECTION,
+      //         localField: 'followings',
+      //         foreignField: '_id',
+      //         as: 'f'
+      //     }
+      // },
+      // ])
+
     } catch (err) {
       res.status(500).json(err);
     }
   }
 
-  
+}

@@ -5,7 +5,8 @@ const { validateRegister, validateLogin } = require('../validations/authValidato
 
 
 
-module.exports.userRegister = function (req, res) {
+module.exports={
+userRegister : function (req, res) {
     try {
         const { error, value } = validateRegister(req.body)
         if (error)  return res.status(422).json({ message: error.details })
@@ -24,9 +25,9 @@ module.exports.userRegister = function (req, res) {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+},
 
-module.exports.userLogin =async function (req, res) {
+ userLogin :async function (req, res) {
     try {
         const { error, value } = validateLogin(req.body)
         if (error)  return res.status(422).json({message: error.details })
@@ -52,4 +53,5 @@ module.exports.userLogin =async function (req, res) {
     } catch (error) {
         res.status(500).json({auth: false, message: error.message });
     }
+}
 }
