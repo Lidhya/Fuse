@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { UserContext } from '../store/UserContext';
+import { UserContext } from '../context/UserContext';
 import User_1 from "../assets/Users/Profile-Pic-S.png"
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
@@ -24,7 +24,7 @@ function LeftBar() {
                <img className=" w-38 relative -top-10 h-38 rounded-full shadow-lg" src={User_1} alt="Bonnie image" />
                <Link to='/profile/sdfsadf' className=" text-xl font-medium text-gray-900 dark:text-white">Bonnie Green</Link>
                <span className="text-sm  text-gray-500 dark:text-gray-400">Visual Designer</span>
-               <div className="flex flex-wrap content-start mt-2 space-x-3 md:mt-3">
+               <div className="flex flex-wrap justify-center content-center mt-2 space-x-3 md:mt-3">
                   <div className='flex flex-col items-center'>
                      <span className='text-white font-light'>Posts</span>
                      <span className='text-white font-mono'>20</span>

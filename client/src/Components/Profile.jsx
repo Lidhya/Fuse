@@ -35,20 +35,20 @@ function Profile() {
     <div className="flex justify-center">     
       <div className="w-full">
         <div className="mb-0 pb-0">
-          <div className="h-80 relative">
+          <div className=" relative">
             <img
               className="w-full h-64 object-cover  rounded-t-3xl"
               src={post_1}
               alt=""
             />
             <img
-              className="w-36 h-36 rounded-full absolute object-cover left-0 right-0 ml-5 top-24 border-2 border-white border-solid "
+              className="w-36 h-36 rounded-full absolute object-cover left-0 right-0 ml-5 top-20 border-2 border-white border-solid "
               src={User_1}
               alt=""
               
             />
           </div>
-          <div className='bg-purple-300 h-auto flex flex-wrap content-evenly justify-between items-center relative -top-16 rounded-b-3xl '>
+          <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-evenly justify-between items-center relative rounded-3xl '>
           <div className="flex flex-col  justify-center py-8 px-10 ">
               <h4 className="text-lg font-semibold">Bonnie Green</h4>
               <span className="font-normal">Visual Designer</span>   
@@ -68,7 +68,9 @@ function Profile() {
                   <span className='text-black font-mono'>220</span>
                   </div>
                </div>
-              < MoreVertOutlinedIcon/>
+               <div className='px-10'>
+              < MoreVertOutlinedIcon />
+              </div>
           </div>
         </div>
         <div className="flex">

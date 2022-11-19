@@ -28,11 +28,9 @@ const PostSchema = new mongoose.Schema(
     },
     location:{
         type:String,
-        default:""
     },
     url: {
       type: String,
-      default:""
     },
     likes: {
       type: Array,

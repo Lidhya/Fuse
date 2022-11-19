@@ -4,8 +4,7 @@ const validator = (schema) => (payload) =>
     schema.validate(payload, { abortEarly: false })
 
 const postSchema = joi.object({
-    userId:joi.string().required(),
-    description: joi.string().required(),
+    description: joi.string(),
     url: joi.string(),
     location: joi.string()
 });

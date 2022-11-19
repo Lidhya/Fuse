@@ -3,6 +3,7 @@ const PostModel = require("../models/PostModel");
 const { USER_COLLECTION, POST_COLLECTION} = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
 
+
 module.exports={
   getPost:async (req, res) => {
     try {
@@ -16,10 +17,10 @@ module.exports={
 
 createPost:async (req, res) => {
   const { error, value } = validatePost(req.body)
-        if (error) {
-            return res.status(422).json({ errors: error.details })
-        }
+        if (error)   return res.status(422).json(error.details)
         try {
+          console.log(req.body);
+          req.body.userId=req.params.id
       PostModel.create(req.body)
       .then((response)=>res.status(200).json("Post created successfully"))
       .catch((err)=>res.status(500).json(err.message))

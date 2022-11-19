@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { UserContext } from '../store/UserContext';
+import { UserContext } from '../context/UserContext';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';

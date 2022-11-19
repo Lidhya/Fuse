@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import User from './store/UserContext';
+import User from './context/UserContext';
 
 import './index.css';
 import App from './App';

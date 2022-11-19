@@ -39,7 +39,7 @@ userRegister : function (req, res) {
                if(status) {
                 const id = user._id
                 const token = jwt.sign({id}, process.env.JWT_SECRET, {
-                    expiresIn: 3000,
+                    expiresIn: '24h',
                 })
                 res.status(200).json({auth: true, token: token, user:details }) 
                }

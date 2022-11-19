@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-modal'
+import Axios from '../axios'
+import { UserContext } from '../context/UserContext';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 // import LabelIcon from '@mui/icons-material/Label';
 // import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -28,14 +30,41 @@ const customStyles = {
 };
 
 export default function Share() {
+    Modal.setAppElement('#root')
+    const {currentUser, token, logout}=useContext(UserContext)
     const [modal, setModal] = useState(false)
     const [image, setImage] = useState('')
     const [video, setVideo] = useState('')
+    const [description, setDescription] = useState('')
+    const id = currentUser._id
+
+    const formData= new FormData()
+    image && formData.append('image', image)
+    video && formData.append('video', video)
+    description && formData.append('description', description)
+
+    const config = {
+        headers: { 
+            'Authorization': `Bearer ${token}` ,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    };
+
+    const handleSubmit=()=>{
+        Axios.post(`/post/create-post/${id}`,formData, config).then((response)=>{
+            console.log(response);
+            setModal(false)
+        }).catch((error)=>{
+            console.log(error);
+            if(!error.response.data?.auth)  logout()
+        })
+    }
 
     useEffect(() => {
         if (!modal) {
             setImage('')
             setVideo('')
+            setDescription('')
         }
     }, [modal])
 
@@ -50,6 +79,8 @@ export default function Share() {
                             rows={3}
                             placeholder="Share what's on your mind"
                             className="border-none w-full focus:outline-none"
+                            value={description}
+                            onChange={(e)=>setDescription(e.target.value)}
                         />
                     </div>
                     <div>
@@ -63,15 +94,15 @@ export default function Share() {
                                 <div className="flex items-center mx-2 cursor-pointer" >
                                     <label htmlFor="image-upload">
                                         <PermMediaIcon htmlColor="gray" className="text-lg mr-1" /></label>
-                                    <input className='hidden' onChange={(e) => { setImage(e.target.files[0]); setVideo(''); }} id='image-upload' type="file" accept="image/png, image/jpeg" />
+                                    <input name='image' className='hidden' onChange={(e) => { setImage(e.target.files[0]); setVideo(''); }} id='image-upload' type="file" accept="image/png, image/jpeg" />
                                 </div>
                                 <div className="flex items-center mx-2 cursor-pointer">
                                     <label htmlFor="video-upload">
                                         <VideoCameraBackIcon htmlColor="gray" className="text-lg mr-1" /></label>
-                                    <input className='hidden' onChange={(e) => { setVideo(e.target.files[0]); setImage(''); }} id='video-upload' type="file" accept="video/mp4,video/x-m4v,video/*" />
+                                    <input name='video' className='hidden' onChange={(e) => { setVideo(e.target.files[0]); setImage(''); }} id='video-upload' type="file" accept="video/mp4,video/x-m4v,video/*" />
                                 </div>
                             </div>
-                            <button className="border-none p-1.5 px-3 rounded bg-green-600 font-medium mr-5 cursor-pointer text-white">Post</button>
+                            <button onClick={handleSubmit} className="border-none p-1.5 px-3 rounded bg-green-600 font-medium mr-5 cursor-pointer text-white">Post</button>
                         </div>
                     </div>
                 </div>
