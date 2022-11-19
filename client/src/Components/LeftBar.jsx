@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { UserContext } from '../store/UserContext';
 import User_1 from "../assets/Users/Profile-Pic-S.png"
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
@@ -10,14 +10,10 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 
 function LeftBar() {
-   const { setCurrentUser }=useContext(UserContext)
-   const navigate = useNavigate()
+   const { logout }=useContext(UserContext)
    
    const handleLogout = () => {
-      localStorage.removeItem('user')
-      localStorage.removeItem('token')
-      setCurrentUser(null)
-      navigate('/signin')
+      logout()
    }
 
    return (
