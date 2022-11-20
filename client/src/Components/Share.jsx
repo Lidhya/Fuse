@@ -36,11 +36,12 @@ export default function Share() {
     const [image, setImage] = useState('')
     const [video, setVideo] = useState('')
     const [description, setDescription] = useState('')
+    const uploadMax=30000000
     const id = currentUser._id
 
     const formData= new FormData()
-    image && formData.append('image', image)
-    video && formData.append('video', video)
+    image && formData.append('file', image)
+    video && formData.append('file', video)
     description && formData.append('description', description)
 
     const config = {
@@ -51,12 +52,13 @@ export default function Share() {
     };
 
     const handleSubmit=()=>{
+        if(video&& video.size>uploadMax || image&& image.size>uploadMax) return  alert('File is too large ')
         Axios.post(`/post/create-post/${id}`,formData, config).then((response)=>{
             console.log(response);
             setModal(false)
         }).catch((error)=>{
+            if(!error.response.data?.auth)  return logout();
             console.log(error);
-            if(!error.response.data?.auth)  logout()
         })
     }
 

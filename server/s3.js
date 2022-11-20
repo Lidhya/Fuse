@@ -16,7 +16,8 @@ const s3=new S3({
 
 // uploads a file to s3
 function uploadFile(file) {
-    const fileStream = fs.createReadStream(file.path)
+  try {
+     const fileStream = fs.createReadStream(file.path)
   
     const uploadParams = {
       Bucket: bucketName,
@@ -25,6 +26,10 @@ function uploadFile(file) {
     }
   
     return s3.upload(uploadParams).promise()
+  } catch (error) {
+    return "Something went wrong"
+  }
+   
   }
 
   exports.uploadFile = uploadFile

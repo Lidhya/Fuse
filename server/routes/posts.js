@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 router.get("/posts/:id", timelinePosts);
 
 //create a post
-router.post("/create-post/:id",verifyJWT, upload.single('image'), createPost);
+router.post("/create-post/:id",verifyJWT, upload.single('file'), createPost);
 
 //update a post
 router.put("/update/:id",verifyJWT, updatePost);

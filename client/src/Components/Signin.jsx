@@ -65,7 +65,7 @@ function Signin() {
 
   return (
     <>
-      <div id="authentication-modal" tabindex="-1" aria-hidden="true" className=" flex justify-center absolute overflow-y-auto overflow-x-hidden  z-50 w-full md:inset-0  md:h-full">
+      <div id="authentication-modal" tabIndex="-1" aria-hidden="true" className=" flex justify-center absolute overflow-y-auto overflow-x-hidden  z-50 w-full md:inset-0  md:h-full">
         <div className=" relative w-full max-w-6xl md:max-w-md h-full md:h-auto bg-black lg:-mr-96">
 
           <div className=" h-screen flex justify-center items-center  bg-black  dark:bg-black">

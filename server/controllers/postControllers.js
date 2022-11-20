@@ -20,10 +20,13 @@ createPost:async (req, res) => {
   const { error, value } = validatePost(req.body)
         if (error)   return res.status(422).json(error.details)
         try {
-          const imgFile=req.file
-          const result= await uploadFile(imgFile)
-          console.log(imgFile);
+          if(req.file){
+          const file=req.file
+          const result= await uploadFile(file)
+          console.log(file);
           console.log(result);
+          req.body.url= result.Location
+          }      
           req.body.userId=req.params.id
       PostModel.create(req.body)
       .then((response)=>res.status(200).json("Post created successfully"))
