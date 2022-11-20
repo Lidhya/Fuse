@@ -36,6 +36,7 @@ export default function Share() {
     const [image, setImage] = useState('')
     const [video, setVideo] = useState('')
     const [description, setDescription] = useState('')
+  const [errorMessage, setErrorMessage] = useState('');
     const uploadMax=30000000
     const id = currentUser._id
 
@@ -52,7 +53,7 @@ export default function Share() {
     };
 
     const handleSubmit=()=>{
-        if(video&& video.size>uploadMax || image&& image.size>uploadMax) return  alert('File is too large ')
+        if(!image && !video && !description) return setErrorMessage("There is nothing to post")
         Axios.post(`/post/create-post/${id}`,formData, config).then((response)=>{
             console.log(response);
             setModal(false)
@@ -67,6 +68,7 @@ export default function Share() {
             setImage('')
             setVideo('')
             setDescription('')
+            setErrorMessage('')
         }
     }, [modal])
 
@@ -85,6 +87,7 @@ export default function Share() {
                             onChange={(e)=>setDescription(e.target.value)}
                         />
                     </div>
+                {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
                     <div>
                         {image ? <img src={image ? URL.createObjectURL(image) : ''} alt="logo" /> :
                             video && <video controls className=' w-full' src={video ? URL.createObjectURL(video) : ''}></video>}
@@ -96,12 +99,24 @@ export default function Share() {
                                 <div className="flex items-center mx-2 cursor-pointer" >
                                     <label htmlFor="image-upload">
                                         <PermMediaIcon htmlColor="gray" className="text-lg mr-1" /></label>
-                                    <input name='image' className='hidden' onChange={(e) => { setImage(e.target.files[0]); setVideo(''); }} id='image-upload' type="file" accept="image/png, image/jpeg" />
+                                    <input name='image' className='hidden' onChange={(e) => { 
+                                        setErrorMessage('')
+                                          if(e.target.files[0].size>uploadMax) return  setErrorMessage("File size should be less than 30MB")
+                                          setImage(e.target.files[0]); 
+                                          setVideo('');
+                                           }} 
+                                           id='image-upload' type="file" accept="image/png, image/jpeg" />
                                 </div>
                                 <div className="flex items-center mx-2 cursor-pointer">
                                     <label htmlFor="video-upload">
                                         <VideoCameraBackIcon htmlColor="gray" className="text-lg mr-1" /></label>
-                                    <input name='video' className='hidden' onChange={(e) => { setVideo(e.target.files[0]); setImage(''); }} id='video-upload' type="file" accept="video/mp4,video/x-m4v,video/*" />
+                                    <input name='video' className='hidden' onChange={(e) => { 
+                                        setErrorMessage('')
+                                        if(e.target.files[0].size>uploadMax) return  setErrorMessage("File size should be less than 30MB")
+                                        setVideo(e.target.files[0]); 
+                                        setImage(''); 
+                                        }} 
+                                        id='video-upload' type="file" accept="video/mp4,video/x-m4v,video/*" />
                                 </div>
                             </div>
                             <button onClick={handleSubmit} className="border-none p-1.5 px-3 rounded bg-green-600 font-medium mr-5 cursor-pointer text-white">Post</button>
