@@ -54,7 +54,7 @@ function Profile() {
               <span className="font-normal">Visual Designer</span>   
               <button className='border border-black text-md font-semibold p-1 mt-2  rounded-md' onClick={() => { setModal2(true) }}>Edit profile</button>         
           </div>
-          <div className="flex  flex-wrap   mt-2 space-x-3 md:mt-3">
+          <div className="flex  flex-wrap p-10  mt-2 space-x-3 md:mt-3">
                   <div className='flex flex-col items-center'>
                   <span className='text-black text-lg font-semibold'>Posts</span>
                   <span className='text-black font-mono'>20</span>
@@ -68,7 +68,7 @@ function Profile() {
                   <span className='text-black font-mono'>220</span>
                   </div>
                </div>
-               <div className='px-10'>
+               <div className='p-10 hidden lg:block'>
               < MoreVertOutlinedIcon />
               </div>
           </div>

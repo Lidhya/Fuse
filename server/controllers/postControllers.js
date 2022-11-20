@@ -19,7 +19,8 @@ createPost:async (req, res) => {
   const { error, value } = validatePost(req.body)
         if (error)   return res.status(422).json(error.details)
         try {
-          console.log(req.body);
+          const imgFile=req.file
+          console.log(req.body , imgFile);
           req.body.userId=req.params.id
       PostModel.create(req.body)
       .then((response)=>res.status(200).json("Post created successfully"))
