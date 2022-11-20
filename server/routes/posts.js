@@ -2,8 +2,20 @@ const router = require("express").Router();
 const { createPost, updatePost, deletePost, likeDislike, getPost, timelinePosts } = require('../controllers/postControllers')
 const {verifyJWT}=require('../middlewares/jwtAuth')
 const multer=require('multer')
+const path=require('path')
 
-const upload = multer({ dest: './public/posts/' })
+const storage = multer.diskStorage({
+    destination: './public/posts/',
+    filename: (req, file, cb) => {
+      cb(
+        null,
+        file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+      );
+    },
+  });
+  const upload = multer({
+    storage: storage,
+  });
 
 //get timeline posts
 router.get("/posts/:id", timelinePosts);
