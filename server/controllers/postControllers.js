@@ -2,6 +2,7 @@ const UserModel = require('../models/userModel');
 const PostModel = require("../models/PostModel");
 const { USER_COLLECTION, POST_COLLECTION} = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
+const {uploadFile, getFileStream}=require('../s3')
 
 
 module.exports={
@@ -20,7 +21,9 @@ createPost:async (req, res) => {
         if (error)   return res.status(422).json(error.details)
         try {
           const imgFile=req.file
-          console.log(req.body , imgFile);
+          const result= await uploadFile(imgFile)
+          console.log(imgFile);
+          console.log(result);
           req.body.userId=req.params.id
       PostModel.create(req.body)
       .then((response)=>res.status(200).json("Post created successfully"))
