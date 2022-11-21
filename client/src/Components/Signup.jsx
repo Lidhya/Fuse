@@ -116,31 +116,31 @@ const validate = (values) => {
                                 </div> */}
 
                                 <div>
-                                    <label for="fname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">First name</label>
+                                    <label htmlFor="fname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">First name</label>
                                     <input type="text" name="fname" id="fname" value={formValues.fname} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="John" />
                                 <p className='text-red-400 text-xs'>{formErrors.fname}</p>
                                 </div>
                                 <div>
-                                    <label for="lname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Last name</label>
+                                    <label htmlFor="lname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Last name</label>
                                     <input type="text" name="lname" id="lname" value={formValues.lname} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Doe" />
                                 </div>
                                 <div>
-                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your email</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your email</label>
                                     <input type="email" name="email" id="email" value={formValues.email} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="johndoe@gmail.com" />
                                     <p className='text-red-400 text-xs'>{formErrors.email}</p>
                                 </div>
                                 <div>
-                                    <label for="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your username</label>
+                                    <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your username</label>
                                     <input type="text" name="username" id="username" value={formValues.username} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="john_doe" />
                                     <p className='text-red-400 text-xs'>{formErrors.username}</p>
                                 </div>
                                 <div>
-                                    <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your password</label>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your password</label>
                                     <input type="password" name="password" id="password" value={formValues.password} onChange={handleChange} placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
                                     <p className='text-red-400 text-xs'>{formErrors.password}</p>
                                 </div>
 
-                                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign un</button>
+                                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign up</button>
                                 <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                                     Already registered? <Link to={'/signin'} className="text-blue-700 hover:underline dark:text-blue-500">Sign in to your account</Link>
                                 </div>

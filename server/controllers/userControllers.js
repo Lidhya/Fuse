@@ -39,7 +39,7 @@ module.exports.userUpdate=async (req, res) => {
   module.exports.getUser=async (req, res) => {
     try {
       const user = await userModel.findById(req.params.id);
-      const { password, updatedAt, ...other } = user._doc;
+      const { password, ...other } = user._doc;
       res.status(200).json(other);
     } catch (err) {
       res.status(500).json(err);

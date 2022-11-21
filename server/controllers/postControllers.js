@@ -2,8 +2,10 @@ const UserModel = require('../models/userModel');
 const PostModel = require("../models/PostModel");
 const { USER_COLLECTION, POST_COLLECTION} = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
-const {uploadFile, getFileStream}=require('../s3')
-
+const {uploadFile, deletePost}=require('../s3')
+const fs = require('fs')
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink)
 
 module.exports={
   getPost:async (req, res) => {
@@ -23,9 +25,11 @@ createPost:async (req, res) => {
           if(req.file){
           const file=req.file
           const result= await uploadFile(file)
+          await unlinkFile(file.path)
           console.log(file);
           console.log(result);
           req.body.url= result.Location
+          req.body.key= result.Key
           }      
           req.body.userId=req.params.id
       PostModel.create(req.body)

@@ -74,11 +74,11 @@ function Signin() {
               <form className="space-y-6" onSubmit={handleSubmit}>
                 {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
                 <div>
-                  <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your username</label>
+                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your username</label>
                   <input type="text" name="username" id="username" value={formValues.username} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="john_doe" required /></div>
                 <p className='text-red-400 text-xs'>{formErrors.username}</p>
                 <div>
-                  <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your password</label>
+                  <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your password</label>
                   <input type="password" name="password" id="password" value={formValues.password} onChange={handleChange} placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                   <p className='text-red-400 text-xs'>{formErrors.password}</p>
                 </div>
@@ -87,7 +87,7 @@ function Signin() {
                     <div className="flex items-center h-5">
                       <input id="remember" type="checkbox" value="" className="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800" />
                     </div>
-                    <label for="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+                    <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
                   </div>
                   <Link to="/" className="text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</Link>
                 </div>

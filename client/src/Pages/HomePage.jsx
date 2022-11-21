@@ -1,12 +1,12 @@
 import React from 'react'
-import Post from '../Components/Post'
+import Posts from '../Components/Posts'
 import Share from '../Components/Share'
 
 function HomePage() {
   return (
     <>
     <Share/>
-    <Post/>
+    <Posts/>
     </>
   )
 }

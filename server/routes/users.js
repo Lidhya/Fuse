@@ -4,7 +4,7 @@ const {verifyJWT}=require('../middlewares/jwtAuth')
 
 
 //get a user
-router.get("/get/:id", getUser );
+router.get("/get/:id",verifyJWT, getUser );
 
 //update user
 router.put("/update/:id",verifyJWT, userUpdate);

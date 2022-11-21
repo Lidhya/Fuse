@@ -6,6 +6,7 @@ import PermMediaIcon from '@mui/icons-material/PermMedia';
 // import LabelIcon from '@mui/icons-material/Label';
 // import LocationOnIcon from '@mui/icons-material/LocationOn';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
+import CircularProgress from '@mui/material/CircularProgress';
 // import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import CloseIcon from '@mui/icons-material/Close';
 import User_1 from "../assets/Users/Profile-Pic-S.png"
@@ -37,6 +38,7 @@ export default function Share() {
     const [video, setVideo] = useState('')
     const [description, setDescription] = useState('')
   const [errorMessage, setErrorMessage] = useState('');
+  const [Loading, setLoading] = useState(false);
     const uploadMax=30000000
     const id = currentUser._id
 
@@ -54,9 +56,11 @@ export default function Share() {
 
     const handleSubmit=()=>{
         if(!image && !video && !description) return setErrorMessage("There is nothing to post")
+        setModal(false)
+        setLoading(true)
         Axios.post(`/post/create-post/${id}`,formData, config).then((response)=>{
             console.log(response);
-            setModal(false)
+            setLoading(false)
         }).catch((error)=>{
             if(!error.response.data?.auth)  return logout();
             console.log(error);
@@ -73,7 +77,7 @@ export default function Share() {
     }, [modal])
 
     return (
-        <div className='px-14 my-3'>
+        <div className='px-14 my-3 text-center'>
             <Modal isOpen={modal} onRequestClose={() => { setModal(false) }} style={customStyles}>
                 <div className='text-end'><CloseIcon onClick={() => { setModal(false) }} /></div>
                 <div className="flex flex-col justify-between  h-5/6 mb-2">
@@ -164,6 +168,7 @@ export default function Share() {
                     </div>
                 </div>
             </div>
+            {Loading && <CircularProgress color="secondary" />}
         </div>
     );
 }

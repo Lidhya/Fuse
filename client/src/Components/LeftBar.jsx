@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { UserContext } from '../context/UserContext';
 import User_1 from "../assets/Users/Profile-Pic-S.png"
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
@@ -14,6 +14,7 @@ function LeftBar() {
    
    const handleLogout = () => {
       logout()
+    return  <Navigate to='/signin'/>
    }
 
    return (

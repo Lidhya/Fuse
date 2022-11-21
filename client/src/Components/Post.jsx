@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {useQuery} from '@tanstack/react-query'
 import Axios from '../axios'
+import moment from 'moment';
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
@@ -10,47 +10,57 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import User_1 from "../assets/Users/Profile-Pic-S.png"
 import post_1 from "../assets/posts/library-06.jpg"
 import Comments from "./Comments";
+import { UserContext } from "../context/UserContext";
 
 // import Comments from "../comments/Comments";
 
-const Post = () => {
+const Post = ({post}) => {
   const [commentOpen, setCommentOpen] = useState(false);
-  const arr = ['https://www.westend61.de/images/0001152661pw/golden-retriever-looking-away-while-standing-on-rock-in-lake-against-mountain-during-winter-CAVF61777.jpg', 'https://cdn.britannica.com/67/19367-050-885866B4/Valley-Taurus-Mountains-Turkey.jpg']
-  const liked = false;
+  const [video, setVideo] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
+  const { config }=useContext(UserContext)
 
-  // const {isLoading, error, data}=useQuery(['posts'],()=>{
-  // Axios.get('/posts').then((response)=>{
-  // return response.data
-  // })
-  // }) 
+  const { userId, _id, key, url, description, likes, createdAt }=post
+
+useEffect(()=>{
+  Axios.get(`/user/get/${userId}`, config).then((response)=>{
+    setUserInfo(response.data)
+  }).catch((error)=>{
+    console.log(error.message);
+  })
+
+  if(url){
+  const  extension = key.substring(key.lastIndexOf('.') + 1);
+  (extension==='mp4')? setVideo(true):setVideo(false)
+  }
+},[])
 
   return (
-    arr.map((image, index) => (
-      <div key={index} className="px-14 mb-12">
+      <div key={_id} className="px-14 mb-12">
         <div className="bg-white shadow-md p-8 rounded-lg ">
           <div className="flex items-center justify-between">
             <div className="flex gap-5">
-              <img src={User_1} alt="users" width={40} height={40} className='rounded-full' />
+              <img src={userInfo? userInfo.profilePicture : ''} alt="profile" width={40} height={40} className='rounded-full' />
               <div className="flex flex-col">
                 <Link
                   to={`/profile/1234tyui`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <span className="font-bold">Bonnie Green</span>
+                  <span className="font-bold">{userInfo && userInfo.fname + ' ' + userInfo.lname}</span>
                 </Link>
-                <span className="text-xs">1 min ago</span>
+                <span className="text-xs">{moment(createdAt).fromNow()}</span>
               </div>
             </div>
             <MoreHorizIcon />
           </div>
           <div className="my-5">
-            <p>Hey look at my library is it cool?</p>
-            <img src={image} alt="post" className="w-full h-full object-cover mt-5" />
+           <p>{description}</p>
+           {url && (video ? <video controls className=' w-full' src={url}></video>:<img src={url} alt="post" className="w-full h-full object-cover mt-5" />) }
           </div>
           <div className="flex items-center gap-5 flex-wrap">
             <div className="flex items-center gap-3 cursor-pointer text-sm">
-              {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-              12
+              {likes.length ? <FavoriteOutlinedIcon htmlColor="#7e22ce"/> : <FavoriteBorderOutlinedIcon  />}
+              {likes.length >0 && likes.length}
             </div>
             <div className="flex items-center gap-3 cursor-pointer text-sm" onClick={() => setCommentOpen(!commentOpen)}>
               <TextsmsOutlinedIcon />
@@ -62,8 +72,8 @@ const Post = () => {
           </div>
           {commentOpen && <Comments />}
         </div>
-      </div>))
-  );
+      </div>
+  )
 };
 
 export default Post;

@@ -32,17 +32,14 @@ function uploadFile(file) {
    
   }
 
-  exports.uploadFile = uploadFile
-
+  function deleteFile(filename){
+    try {
+    return s3.deleteObject({ Bucket: bucketName, Key: filename }).promise();
   
-// downloads a file to s3
-
-function getFileStream(fileKey) {
-    const downloadParams = {
-      Key: fileKey,
-      Bucket: bucketName
+    } catch (error) {
+    return "Something went wrong"
     }
-  
-    return s3.getObject(downloadParams).createReadStream()
+    
   }
-  exports.getFileStream = getFileStream
+  exports.uploadFile=uploadFile
+  exports.deleteFile=deleteFile

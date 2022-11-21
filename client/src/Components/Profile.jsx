@@ -98,27 +98,27 @@ function Profile() {
                 <div className='text-end'><CloseIcon onClick={() => { setModal2(false) }} /></div>
             <h1 className='text-2xl  text-purple-700 font-thin mb-3'>Edit profile</h1>
             <div>
-                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">First name</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">First name</label>
                                     <input type="text" name="fname" id="fname" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="John" required />
                                 </div>
                                 <div>
-                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Last name</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Last name</label>
                                     <input type="text" name="lname" id="lname" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="Doe" required />
                                 </div>
                                 <div>
-                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
                                     <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="johndoe@gmail.com" required />
                                 </div>
                                 <div>
-                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your username</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your username</label>
                                     <input type="text" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="john_doe" required />
                                 </div>
                                 <div>
-                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">About you</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">About you</label>
                                     <input type="text" name="about" id="about" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="I am ..." required />
                                 </div>
                                 <div>
-                                    <label for="password" className="block mb-2 text-sm font-medium text-gray-900 ">Your password</label>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Your password</label>
                                     <input type="password" name="password" id="password" placeholder="Enter current password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400" required />
                                 </div>
                                 <button type="submit" className="w-1/5 my-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
