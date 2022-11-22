@@ -1,11 +1,12 @@
 import { useContext } from "react";
 // import { AuthContext } from "../../context/authContext";
 import User_1 from "../assets/Users/Profile-Pic-S.png"
+import { UserContext } from "../context/UserContext";
 
 
 
 const Comments = () => {
-   const { currentUser } = useContext(AuthContext);
+   const { currentUser } = useContext(UserContext);
    
   //Temporary
   const comments = [
