@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
-import User_1 from "../assets/Users/Profile-Pic-S.png"
-import post_1 from "../assets/posts/library-06.jpg"
-import User_2 from "../assets/Users/Profile-Pic-S (1).png"
 import CloseIcon from '@mui/icons-material/Close';
+import blank_profile from "../assets/empty profile/blank_profile.png"
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 
 const customStyles = {
@@ -38,12 +36,12 @@ function Profile() {
           <div className=" relative">
             <img
               className="w-full h-64 object-cover  rounded-t-3xl"
-              src={post_1}
+              src="https://fiberopticassy.com/wp-content/uploads/sites/13/2021/09/white-image-copia.png"
               alt=""
             />
             <img
               className="w-36 h-36 rounded-full absolute object-cover left-0 right-0 ml-5 top-20 border-2 border-white border-solid "
-              src={User_1}
+              src={ blank_profile}
               alt=""
               
             />
@@ -84,7 +82,7 @@ function Profile() {
                 <div key={index} className=" bg-white my-3 rounded-xl shadow-md border-gray-100  border-2">
                     <div className=" flex flex-wrap justify-between items-center p-2.5">
                         <div className="flex items-center">
-                            <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={User_2} alt="" />
+                            <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={blank_profile} alt="" />
                             <p className='font-semibold'>Hellen Keller</p>
                         </div>
                         <button className='border border-red-500 text-sm p-1 rounded-md  hover:bg-gray-100 '>Unfollow</button>

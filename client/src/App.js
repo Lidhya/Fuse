@@ -70,7 +70,9 @@ const queryClient = new QueryClient()
       path: "/messenger",
       element:
         <ProtectedRoute>
+           <QueryClientProvider client={queryClient}>
           <MessengerPage />
+          </QueryClientProvider>
         </ProtectedRoute>,
     },
     {

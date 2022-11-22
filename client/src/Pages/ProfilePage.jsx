@@ -1,12 +1,12 @@
 import React from 'react'
-import Post from '../Components/Post'
+import Posts from '../Components/Posts'
 import Profile from '../Components/Profile'
 
 function ProfilePage() {
   return (
    <>
    <Profile/>
-   <Post/>
+   <Posts/>
    </>
   )
 }

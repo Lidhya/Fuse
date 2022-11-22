@@ -11,7 +11,7 @@ function Message({ message, own }) {
         src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
         alt=""
       />
-      <p className={own? "p-2.5 rounded-2xl bg-gray-400 text-black max-w-xs": "p-2.5 rounded-2xl bg-purple-700 text-white max-w-xs"}>{text}</p>
+      <p className={own? "p-2.5 rounded-2xl bg-gray-300 text-black max-w-xs": "p-2.5 rounded-2xl bg-purple-700 text-white max-w-xs"}>{text}</p>
     </div>
     <div className="text-xs mt-2.5">{moment(createdAt).fromNow()}</div>
   </div>

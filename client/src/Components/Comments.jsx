@@ -5,7 +5,8 @@ import User_1 from "../assets/Users/Profile-Pic-S.png"
 
 
 const Comments = () => {
-//   const { currentUser } = useContext(AuthContext);
+   const { currentUser } = useContext(AuthContext);
+   
   //Temporary
   const comments = [
     {

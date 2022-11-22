@@ -2,14 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-modal'
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import PermMediaIcon from '@mui/icons-material/PermMedia';
-// import LabelIcon from '@mui/icons-material/Label';
-// import LocationOnIcon from '@mui/icons-material/LocationOn';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import CircularProgress from '@mui/material/CircularProgress';
-// import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import CloseIcon from '@mui/icons-material/Close';
 import User_1 from "../assets/Users/Profile-Pic-S.png"
+// import LocationOnIcon from '@mui/icons-material/LocationOn';
+// import LabelIcon from '@mui/icons-material/Label';
+// import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 // import icons from './Icons'
 
 const customStyles = {
@@ -21,7 +22,6 @@ const customStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         width: '35rem',
-        height: '30rem',
         backgroundColor: '#fffff',
         border: 'none'
     },
@@ -32,39 +32,54 @@ const customStyles = {
 
 export default function Share() {
     Modal.setAppElement('#root')
-    const {currentUser, token, logout}=useContext(UserContext)
+    const { currentUser, token, logout } = useContext(UserContext)
     const [modal, setModal] = useState(false)
     const [image, setImage] = useState('')
     const [video, setVideo] = useState('')
     const [description, setDescription] = useState('')
-  const [errorMessage, setErrorMessage] = useState('');
-  const [Loading, setLoading] = useState(false);
-    const uploadMax=30000000
+    const [errorMessage, setErrorMessage] = useState('');
+    const [Loading, setLoading] = useState(false);
+
+    const uploadMax = 30000000
     const id = currentUser._id
 
-    const formData= new FormData()
-    image && formData.append('file', image)
-    video && formData.append('file', video)
-    description && formData.append('description', description)
-
     const config = {
-        headers: { 
-            'Authorization': `Bearer ${token}` ,
+        headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     };
 
-    const handleSubmit=()=>{
-        if(!image && !video && !description) return setErrorMessage("There is nothing to post")
-        setModal(false)
-        setLoading(true)
-        Axios.post(`/post/create-post/${id}`,formData, config).then((response)=>{
+    // Access the client
+    const queryClient = useQueryClient()
+
+    // Mutations
+    const mutation = useMutation((formData) => {
+        return Axios.post(`/post/create-post/${id}`, formData, config).then((response) => {
             console.log(response);
             setLoading(false)
-        }).catch((error)=>{
-            if(!error.response.data?.auth)  return logout();
+        }).catch((error) => {
+            if (!error.response.data?.auth) return logout();
             console.log(error);
         })
+    },
+        {
+            onSuccess: () => {
+                // Invalidate and refetch
+                queryClient.invalidateQueries({ queryKey: ['posts'] })
+            },
+        })
+
+
+    const handleSubmit = () => {
+        if (!image && !video && !description) return setErrorMessage("There is nothing to post")
+        const formData = new FormData()
+        image && formData.append('file', image)
+        video && formData.append('file', video)
+        description && formData.append('description', description)
+        setModal(false)
+        setLoading(true)
+        mutation.mutate(formData)
     }
 
     useEffect(() => {
@@ -88,10 +103,10 @@ export default function Share() {
                             placeholder="Share what's on your mind"
                             className="border-none w-full focus:outline-none"
                             value={description}
-                            onChange={(e)=>setDescription(e.target.value)}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>
-                {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
+                    {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
                     <div>
                         {image ? <img src={image ? URL.createObjectURL(image) : ''} alt="logo" /> :
                             video && <video controls className=' w-full' src={video ? URL.createObjectURL(video) : ''}></video>}
@@ -103,23 +118,23 @@ export default function Share() {
                                 <div className="flex items-center mx-2 cursor-pointer" >
                                     <label htmlFor="image-upload">
                                         <PermMediaIcon htmlColor="gray" className="text-lg mr-1" /></label>
-                                    <input name='image' className='hidden' onChange={(e) => { 
+                                    <input name='image' className='hidden' onChange={(e) => {
                                         setErrorMessage('')
-                                          if(e.target.files[0].size>uploadMax) return  setErrorMessage("File size should be less than 30MB")
-                                          setImage(e.target.files[0]); 
-                                          setVideo('');
-                                           }} 
-                                           id='image-upload' type="file" accept="image/png, image/jpeg" />
+                                        if (e.target.files[0].size > uploadMax) return setErrorMessage("File size should be less than 30MB")
+                                        setImage(e.target.files[0]);
+                                        setVideo('');
+                                    }}
+                                        id='image-upload' type="file" accept="image/png, image/jpeg" />
                                 </div>
                                 <div className="flex items-center mx-2 cursor-pointer">
                                     <label htmlFor="video-upload">
                                         <VideoCameraBackIcon htmlColor="gray" className="text-lg mr-1" /></label>
-                                    <input name='video' className='hidden' onChange={(e) => { 
+                                    <input name='video' className='hidden' onChange={(e) => {
                                         setErrorMessage('')
-                                        if(e.target.files[0].size>uploadMax) return  setErrorMessage("File size should be less than 30MB")
-                                        setVideo(e.target.files[0]); 
-                                        setImage(''); 
-                                        }} 
+                                        if (e.target.files[0].size > uploadMax) return setErrorMessage("File size should be less than 30MB")
+                                        setVideo(e.target.files[0]);
+                                        setImage('');
+                                    }}
                                         id='video-upload' type="file" accept="video/mp4,video/x-m4v,video/*" />
                                 </div>
                             </div>

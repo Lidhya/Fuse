@@ -70,13 +70,17 @@ createPost:async (req, res) => {
 
   likeDislike:async (req, res) => {
     try {
-      const post = await PostModel.findById(req.params.id);
-      if (!post.likes.includes(req.body.userId)) {
-        await post.updateOne({ $push: { likes: req.body.userId } });
-        res.status(200).json("The post has been liked");
+      const post = await PostModel.findById(req.body.postId);
+      if (!post.likes.includes(req.params.id)) {
+        post.updateOne({ $push: { likes: req.params.id } }).then((response)=>{
+          res.status(200).json( response);
+        }).catch((error)=> res.status(500).json(error.message))
+
       } else {
-        await post.updateOne({ $pull: { likes: req.body.userId } });
-        res.status(200).json("The post has been disliked");
+        post.updateOne({ $pull: { likes: req.params.id } }).then((response)=>{
+          res.status(200).json( response);
+        }).catch((error)=> res.status(500).json(error.message))
+
       }
     } catch (err) {
       res.status(500).json(err);
@@ -93,19 +97,6 @@ createPost:async (req, res) => {
         })
       );
       res.json(userPosts.concat(...friendPosts))
-
-      //lidhya way
-      // UserModel.aggregate([
-      //   {$match:{_id:req.params.id}},
-      //   {
-      //     $lookup: {
-      //         from: POST_COLLECTION,
-      //         localField: 'followings',
-      //         foreignField: '_id',
-      //         as: 'f'
-      //     }
-      // },
-      // ])
 
     } catch (err) {
       res.status(500).json(err);

@@ -30,10 +30,10 @@ router.put("/update/:id",verifyJWT, updatePost);
 router.delete("/delete/:id",verifyJWT, deletePost);
 
 //like / dislike a post
-router.put("/like/:id", likeDislike);
+router.put("/like/:id", verifyJWT, likeDislike);
 
 //get a post
-router.get("/get/:id", getPost);
+router.get("/get/:id", verifyJWT, getPost);
 
 
 
