@@ -60,7 +60,7 @@ function News() {
             <div className='flex flex-wrap justify-center gap-10 mt-5'>
                 {articles.length ? articles.map((article, index) => (
 
-                    <div class="max-w-sm max-h-sm bg-white rounded-lg border border-gray-200 shadow-md ">                       
+                    <div key={index} class="max-w-sm max-h-sm bg-white rounded-lg border border-gray-200 shadow-md ">                       
                             <img class="rounded-t-lg" src={article.urlToImage} alt="news img" />
                         <div class="p-5">
                             <a href="#">

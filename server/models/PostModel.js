@@ -9,12 +9,9 @@ const CommentSchema = new mongoose.Schema({
     comment: {
         type: String,
         default: null,
-    },
-    created_at: {
-        type: Date,
-        default: new Date(),
     }
-})
+  },
+  { timestamps: true })
 
 const PostSchema = new mongoose.Schema(
   {

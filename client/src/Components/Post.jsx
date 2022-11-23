@@ -93,7 +93,7 @@ const handleLike=()=>{
               <SendOutlinedIcon />
             </div>
           </div>
-          {commentOpen && <Comments />}
+          {commentOpen && <Comments postId={_id} />}
         </div>
       </div>
   )
