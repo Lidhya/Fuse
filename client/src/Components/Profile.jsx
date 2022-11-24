@@ -29,7 +29,7 @@ function Profile() {
     const [value, setValue] = useState('')
 
   return (
-    <div className="px-14 mt-5">
+    <div className="px-5 md:px-14 mt-5">
     <div className="flex justify-center">     
       <div className="w-full">
         <div className="mb-0 pb-0">
@@ -43,10 +43,9 @@ function Profile() {
               className="w-36 h-36 rounded-full absolute object-cover left-0 right-0 ml-5 top-20 border-2 border-white border-solid "
               src={ blank_profile}
               alt=""
-              
             />
           </div>
-          <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-evenly justify-between items-center relative rounded-3xl '>
+          <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
           <div className="flex flex-col  justify-center py-8 px-10 ">
               <h4 className="text-lg font-semibold">Bonnie Green</h4>
               <span className="font-normal">Visual Designer</span>   

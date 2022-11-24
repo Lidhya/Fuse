@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-modal'
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation,  useQueryClient } from '@tanstack/react-query'
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import CircularProgress from '@mui/material/CircularProgress';

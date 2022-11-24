@@ -79,7 +79,9 @@ const queryClient = new QueryClient()
       path: "/news",
       element:
         <ProtectedRoute>
+          <QueryClientProvider client={queryClient}>
           <NewsPage />
+          </QueryClientProvider>
         </ProtectedRoute>,
     },
     {

@@ -72,7 +72,7 @@ const handleLike=()=>{
                 >
                   <span className="font-bold">{userInfo && userInfo.fname + ' ' + userInfo.lname}</span>
                 </Link>
-                <span className="text-xs">{moment(createdAt).fromNow()}</span>
+                <span className="text-xs text-start">{moment(createdAt).fromNow()}</span>
               </div>
             </div>
             <MoreHorizIcon />

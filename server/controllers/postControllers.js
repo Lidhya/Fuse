@@ -1,46 +1,56 @@
 const UserModel = require('../models/userModel');
 const PostModel = require("../models/PostModel");
-const { USER_COLLECTION, POST_COLLECTION} = require('../config/collections')
+const { USER_COLLECTION, POST_COLLECTION } = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
-const {uploadFile, deletePost}=require('../s3')
+const { uploadFile, deletePost } = require('../s3')
 const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
 
-module.exports={
-  getPost:async (req, res) => {
+module.exports = {
+  getPost: async (req, res) => {
     try {
       PostModel.findById(req.params.id)
-      .then((response)=>res.status(200).json(post))
-      .catch((err)=>res.status(500).json(err))
+        .then((response) => res.status(200).json(response))
+        .catch((err) => res.status(500).json(err))
     } catch (err) {
       res.status(500).json(err);
     }
   },
 
-createPost:async (req, res) => {
-  const { error, value } = validatePost(req.body)
-        if (error)   return res.status(422).json(error.details)
-        try {
-          if(req.file){
-          const file=req.file
-          const result= await uploadFile(file)
-          await unlinkFile(file.path)
-          console.log(file);
-          console.log(result);
-          req.body.url= result.Location
-          req.body.key= result.Key
-          }      
-          req.body.userId=req.params.id
+  getCurrentUserPosts: (req, res) => {
+    try {
+      PostModel.find({ userId: req.params.id })
+        .then((response) =>{console.log(response); res.status(200).json(response);})
+        .catch((err) => res.status(500).json(err))
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
+  createPost: async (req, res) => {
+    const { error, value } = validatePost(req.body)
+    if (error) return res.status(422).json(error.details)
+    try {
+      if (req.file) {
+        const file = req.file
+        const result = await uploadFile(file)
+        await unlinkFile(file.path)
+        console.log(file);
+        console.log(result);
+        req.body.url = result.Location
+        req.body.key = result.Key
+      }
+      req.body.userId = req.params.id
       PostModel.create(req.body)
-      .then((response)=>res.status(200).json("Post created successfully"))
-      .catch((err)=>res.status(500).json(err.message))
+        .then((response) => res.status(200).json("Post created successfully"))
+        .catch((err) => res.status(500).json(err.message))
     } catch (error) {
       res.status(500).json(error.message);
     }
   },
 
-  updatePost:async (req, res) => {
+  updatePost: async (req, res) => {
     try {
       const post = await PostModel.findById(req.params.id);
       if (post.userId === req.body.userId) {
@@ -54,7 +64,7 @@ createPost:async (req, res) => {
     }
   },
 
-  deletePost:async (req, res) => {
+  deletePost: async (req, res) => {
     try {
       const post = await PostModel.findById(req.params.id);
       if (post.userId === req.body.userId) {
@@ -68,18 +78,18 @@ createPost:async (req, res) => {
     }
   },
 
-  likeDislike:async (req, res) => {
+  likeDislike: async (req, res) => {
     try {
       const post = await PostModel.findById(req.body.postId);
       if (!post.likes.includes(req.params.id)) {
-        post.updateOne({ $push: { likes: req.params.id } }).then((response)=>{
-          res.status(200).json( response);
-        }).catch((error)=> res.status(500).json(error.message))
+        post.updateOne({ $push: { likes: req.params.id } }).then((response) => {
+          res.status(200).json(response);
+        }).catch((error) => res.status(500).json(error.message))
 
       } else {
-        post.updateOne({ $pull: { likes: req.params.id } }).then((response)=>{
-          res.status(200).json( response);
-        }).catch((error)=> res.status(500).json(error.message))
+        post.updateOne({ $pull: { likes: req.params.id } }).then((response) => {
+          res.status(200).json(response);
+        }).catch((error) => res.status(500).json(error.message))
 
       }
     } catch (err) {
@@ -87,7 +97,7 @@ createPost:async (req, res) => {
     }
   },
 
-    timelinePosts:async (req, res) => {
+  timelinePosts: async (req, res) => {
     try {
       const currentUser = await UserModel.findById(req.params.id);
       const userPosts = await PostModel.find({ userId: currentUser._id });

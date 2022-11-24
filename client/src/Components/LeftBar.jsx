@@ -1,19 +1,33 @@
 import React, { useContext } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { UserContext } from '../context/UserContext';
+import Axios from '../axios'
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import User_1 from "../assets/Users/Profile-Pic-S.png"
-
+import { useQuery, useQueryErrorResetBoundary } from '@tanstack/react-query';
 
 
 function LeftBar() {
    const { logout, currentUser }=useContext(UserContext)
    const {fname, lname, profilePicture, description, followings, followers }=currentUser
+
+   const { isLoading, error, data } = useQuery(["userPosts"], () =>{
+  return Axios.get(`/post/${currentUser._id}`).then(({data}) => {
+      console.log(data);
+     const sortedData=data.sort(function(a,b){
+       return new Date(b.createdAt) - new Date(a.createdAt);
+     });
+       return sortedData;
+     }).catch((error)=> {
+       console.log(error);
+     })
+ }
+   );
+
    const handleLogout = () => {
       logout()
     return  <Navigate to='/signin'/>
@@ -30,7 +44,7 @@ function LeftBar() {
                <div className="flex flex-wrap justify-center content-center mt-2 space-x-3 md:mt-3">
                   <div className='flex flex-col items-center'>
                      <span className='text-white font-light'>Posts</span>
-                     <span className='text-white font-mono'>20</span>
+                     <span className='text-white font-mono'>{data && data.length}</span>
                   </div>
                   <div className='flex flex-col items-center'>
                      <span className='text-white font-light'>Followers</span>
