@@ -92,7 +92,7 @@ export default function Share() {
     }, [modal])
 
     return (
-        <div className='px-14 my-3 text-center'>
+        <div className='px-5 md:px-14 my-3 text-center'>
             <Modal isOpen={modal} onRequestClose={() => { setModal(false) }} style={customStyles}>
                 <div className='text-end'><CloseIcon onClick={() => { setModal(false) }} /></div>
                 <div className="flex flex-col justify-between  h-5/6 mb-2">

@@ -17,10 +17,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 const Post = ({post}) => {
   const [commentOpen, setCommentOpen] = useState(false);
   const [video, setVideo] = useState(false);
+  const [postId, setPostId] = useState(post._id);
   const [userInfo, setUserInfo] = useState({});
   const { config, currentUser, logout}=useContext(UserContext)
 
-  const { userId, _id, key, url, description, likes, createdAt }=post
+  const { userId, _id, key, url, description, comments, likes, createdAt }=post
 
 // Access the client
 const queryClient = useQueryClient()
@@ -59,7 +60,7 @@ const handleLike=()=>{
 }
 
   return (
-      <div key={_id} className="px-14 mb-12">
+      <div className="px-5 md:px-14 mb-12">
         <div className="bg-white shadow-md p-8 rounded-lg ">
           <div className="flex items-center justify-between">
             <div className="flex gap-5">
@@ -87,7 +88,7 @@ const handleLike=()=>{
             </div>
             <div className="flex items-center gap-3 cursor-pointer text-sm" onClick={() => setCommentOpen(!commentOpen)}>
               <TextsmsOutlinedIcon />
-              2
+              {comments.length >0 && comments.length}
             </div>
             <div className="flex items-center gap-3 cursor-pointer text-sm">
               <SendOutlinedIcon />

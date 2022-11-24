@@ -10,11 +10,11 @@ module.exports = {
                 .then(async ({ comments }) => {
                     const commentDetails = await Promise.all(
                         comments.map(async (comment) => {
-                            let author = await UserModel.findOne({ _id: comment.authorId }, "fname lname profilePicture ")
+                            let author = await UserModel.findOne({ _id: comment.authorId }, "fname lname profilePicture -_id")
                             return  {...comment._doc, ...author._doc}
                         })
                     );
-                    console.log(commentDetails);
+                    // console.log(commentDetails);
                     res.status(200).json(commentDetails)
                 })
                 .catch((error) => { console.log(error); res.status(500).json(error.message); })
@@ -30,6 +30,19 @@ module.exports = {
             if (error) return res.status(422).json(error.details)
             const postId = req.params.postId
             PostModel.updateOne({ _id: postId }, { $addToSet: { comments: value } })
+                .then((response) => res.status(200).json(response))
+                .catch((error) => res.status(500).json(error.message))
+        } catch (error) {
+            res.status(500).json(error.message)
+        }
+    },
+
+    deleteComment:(req, res)=>{
+        try {
+            const postId = req.params.postId
+            const {commentId}=req.body
+            console.log(req.body);
+            PostModel.updateOne({ _id: postId }, { $pull: { comments: { _id: commentId } }})
                 .then((response) => res.status(200).json(response))
                 .catch((error) => res.status(500).json(error.message))
         } catch (error) {

@@ -1,8 +1,9 @@
 const router=require('express').Router()
 const {verifyJWT}=require('../middlewares/jwtAuth')
-const {getComments, addComment}=require('../controllers/commentControllers')
+const {getComments, addComment, deleteComment}=require('../controllers/commentControllers')
 
-router.get('/all-comments/:postId',verifyJWT, getComments);
-router.post('/add-comment/:postId',verifyJWT, addComment);
+router.get('/:postId', verifyJWT, getComments);
+router.post('/:postId', verifyJWT, addComment);
+router.put('/delete/:postId', verifyJWT, deleteComment);
 
 module.exports=router
