@@ -98,13 +98,15 @@ const Post = ({ post }) => {
 
   const handleDelete=(e)=>{
     e.preventDefault()
-    alert('Are you sure?')
-      Axios.delete(`/post/delete/${_id}`, config)
+    if(window.confirm('Are you sure?')){
+       Axios.delete(`/post/delete/${_id}`, config)
         .then((response) => {
           console.log(response);
           queryClient.invalidateQueries({ queryKey: ['posts', 'userPosts'] })
         })
         .catch((error) => console.log(error))
+    }
+     
       
   }
 
