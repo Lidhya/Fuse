@@ -96,6 +96,18 @@ const Post = ({ post }) => {
     }
   }
 
+  const handleDelete=(e)=>{
+    e.preventDefault()
+    alert('Are you sure?')
+      Axios.delete(`/post/delete/${_id}`, config)
+        .then((response) => {
+          console.log(response);
+          queryClient.invalidateQueries({ queryKey: ['posts'] })
+        })
+        .catch((error) => console.log(error))
+      
+  }
+
   return (
     <div className="px-5 md:px-14 mb-12">
       <div className="bg-white shadow-md p-8 rounded-lg ">
@@ -116,11 +128,11 @@ const Post = ({ post }) => {
             {currentUser._id === userId && <MoreHorizIcon onClick={() => setDrop(!drop)} />}
             {drop && <div id="dropdown" className="right-1 absolute z-1   bg-gray-600 rounded divide-y divide-gray-100 shadow">
               <ul className="py-1  text-sm text-white " aria-labelledby="dropdownDefault">
-                <li onClick={() => setEdit(!edit)} className="w-32 hover:bg-gray-500">
-                  <button className="text-center align  py-2 ">Edit</button>
+                <li  className="">
+                  <button onClick={() => setEdit(!edit)} className="text-center align w-32 hover:bg-gray-500 py-2 ">Edit</button>
                 </li>
-                <li onClick={() => setEdit(!edit)} className="w-32 hover:bg-gray-500">
-                  <button className="text-center align  py-2 ">Delete</button>
+                <li  className="">
+                  <button onClick={handleDelete} className="text-center align w-32 hover:bg-gray-500  py-2 ">Delete</button>
                 </li>
               </ul>
             </div>}

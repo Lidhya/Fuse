@@ -68,12 +68,13 @@ module.exports = {
 
   deletePost: async (req, res) => {
     try {
-      const post = await PostModel.findById(req.params.id);
-      if (post.userId === req.body.userId) {
-        await post.deleteOne();
-        res.status(200).json("the post has been deleted");
+      const post = await PostModel.findById(req.params.postId);
+      if (post.userId === req.userId) {
+        post.deleteOne()
+       .then((response)=> res.status(200).json("Post deleted successfully"))
+       .catch((error)=>res.status(500).json(error))
       } else {
-        res.status(403).json("you can delete only your post");
+        res.status(403).json("You can delete only your post");
       }
     } catch (err) {
       res.status(500).json(err);

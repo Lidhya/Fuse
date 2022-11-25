@@ -31,7 +31,7 @@ router.post("/create-post/:id",verifyJWT, upload.single('file'), createPost);
 router.put("/update/:postId", verifyJWT, updatePost);
 
 //delete a post
-router.delete("/delete/:id",verifyJWT, deletePost);
+router.delete("/delete/:postId",verifyJWT, deletePost);
 
 //like / dislike a post
 router.put("/like/:id", verifyJWT, likeDislike);
