@@ -178,13 +178,6 @@ function Profile() {
                 </Modal>
             </div>
             {currentUser?._id === profileUser?._id && <Share/>}
-            <div className="posts text-center">
-      {error
-        ? "Something went wrong!"
-        : isLoading
-        ? <CircularProgress color="secondary" />
-        : data.map((post) => <Post post={post} key={post._id} />)}
-    </div>
         </>
     )
 }
