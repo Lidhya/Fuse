@@ -1,4 +1,5 @@
 import {createContext , useState} from 'react'
+import Axios from '../axios'
 
 export const UserContext= createContext()
 
@@ -19,8 +20,15 @@ function User({children})
         setCurrentUser(null)
     }
 
+    const updateCurrentUser=()=>{
+        Axios.get(`/user/get/${currentUser._id}`, config).then(({data})=>{
+            localStorage.setItem('user', JSON.stringify(data))
+            setCurrentUser(data)
+        }).catch((error)=>console.log(error))
+    }
+
     return(
-        <UserContext.Provider value={{currentUser, setCurrentUser, logout, token, config}}>
+        <UserContext.Provider value={{currentUser, setCurrentUser, logout, token, config, updateCurrentUser}}>
             {children}
         </UserContext.Provider>
     )

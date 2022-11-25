@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { userUpdate, userDelete, getUser, follow, unfollow } = require('../controllers/userControllers')
+const { userUpdate, userDelete, getUser, followUnfollow, unfollow } = require('../controllers/userControllers')
 const { verifyJWT } = require('../middlewares/jwtAuth')
 
 
@@ -13,7 +13,7 @@ router.put("/update/:id", verifyJWT, userUpdate);
 router.delete("/delete/:id", verifyJWT, userDelete);
 
 //follow a user
-router.put("/follow/:id", verifyJWT, follow);
+router.put("/follow-unfollow/:id", verifyJWT, followUnfollow);
 
 //unfollow a user
 router.put("/unfollow/:id", verifyJWT, unfollow);

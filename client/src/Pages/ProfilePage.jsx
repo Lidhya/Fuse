@@ -6,7 +6,6 @@ function ProfilePage() {
   return (
    <>
    <Profile/>
-   <Posts/>
    </>
   )
 }

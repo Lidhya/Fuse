@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
   });
 
 //get timeline posts
-router.get("/posts/:id", timelinePosts);
+router.get("/timeline/:id", timelinePosts);
 
 // get current users posts
 router.get("/:id", getUserPosts);

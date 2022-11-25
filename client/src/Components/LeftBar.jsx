@@ -13,7 +13,7 @@ import { useQuery, useQueryErrorResetBoundary } from '@tanstack/react-query';
 
 function LeftBar() {
    const { logout, currentUser }=useContext(UserContext)
-   const {fname, lname, profilePicture, description, followings, followers }=currentUser
+   const {fname, lname, profilePicture, description, followings, followers, _id }=currentUser
 
    const { isLoading, error, data } = useQuery(["userPosts"], () =>{
   return Axios.get(`/post/${currentUser._id}`).then(({data}) => {
@@ -38,7 +38,7 @@ function LeftBar() {
          <div className="w-full p-3 mb-3 mt-6 max-w-sm  rounded-lg border  shadow-md bg-gray-900 border-gray-700">
             <div className="flex flex-col items-center pb-10 ">
                <img className=" w-44 relative -top-10 h-44 rounded-full shadow-lg" src={profilePicture? profilePicture : blank_profile} alt={fname} />
-               <Link to='/profile/sdfsadf' className=" text-xl font-medium text-gray-900 dark:text-white">{fname+' '+lname}</Link>
+               <Link to={`/profile/${_id}`} className=" text-xl font-medium text-gray-900 dark:text-white">{fname+' '+lname}</Link>
                <span className="text-sm  text-gray-500 dark:text-gray-400">{description}</span>
                <div className="flex flex-wrap justify-center content-center mt-2 space-x-3 md:mt-3">
                   <div className='flex flex-col items-center'>
@@ -74,7 +74,7 @@ function LeftBar() {
                      </Link>
                   </li>
                   <li>
-                     <Link to="/profile/dafsfs" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                     <Link to={`/profile/${currentUser._id}`} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <PersonOutlineOutlinedIcon />
                         <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
                      </Link>

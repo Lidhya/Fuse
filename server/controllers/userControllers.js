@@ -46,17 +46,30 @@ module.exports.userUpdate=async (req, res) => {
     }
   }
 
-  module.exports.follow=async (req, res) => {
-    if (req.body.userId !== req.params.id) {
+  module.exports.followUnfollow=async (req, res) => {
+    const currentUserId=req.body.currentUser
+    const userId=req.params.id
+    if (currentUserId !== userId) {
       try {
-        const user = await userModel.findById(req.params.id);
-        const currentUser = await userModel.findById(req.body.userId);
-        if (!user.followers.includes(req.body.userId)) {
-          await user.updateOne({ $push: { followers: req.body.userId } });
-          await currentUser.updateOne({ $push: { followings: req.params.id } });
-          res.status(200).json("user has been followed");
+        const user = await userModel.findById(userId);
+        const currentUser = await userModel.findById(currentUserId);
+        if (user.followers.includes(currentUserId) && currentUser.followings.includes(userId)) {
+          user.updateOne({ $pull: { followers: currentUserId } })
+          .then(()=>{
+           currentUser.updateOne({ $pull: { followings: userId } })
+           .then(()=> res.status(200).json("User has been unfollowed"))
+           .catch((error)=>res.status(500).json(error))
+          })
+          .catch((error)=>res.status(500).json(error))
+         
         } else {
-          res.status(403).json("you allready follow this user");
+          user.updateOne({ $push: { followers: currentUserId } })
+          .then(()=>{
+           currentUser.updateOne({ $push: { followings: userId } })
+           .then(()=> res.status(200).json("User has been followed"))
+           .catch((error)=>res.status(500).json(error))
+          })
+          .catch((error)=>res.status(500).json(error))
         }
       } catch (err) {
         res.status(500).json(err);

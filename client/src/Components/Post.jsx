@@ -118,7 +118,7 @@ const Post = ({ post }) => {
             <img src={userInfo?.profilePicture ? userInfo.profilePicture : blank_profile} alt="profile" width={40} height={40} className='rounded-full' />
             <div className="flex flex-col">
               <Link
-                to={`/profile/1234tyui`}
+                to={`/profile/${userInfo._id}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <span className="font-bold">{userInfo && userInfo.fname + ' ' + userInfo.lname}</span>
@@ -131,7 +131,7 @@ const Post = ({ post }) => {
             {drop && <div id="dropdown" className="right-1 absolute z-1   bg-gray-600 rounded divide-y divide-gray-100 shadow">
               <ul className="py-1  text-sm text-white " aria-labelledby="dropdownDefault">
                 <li  className="">
-                  <button onClick={() => setEdit(!edit)} className="text-center align w-32 hover:bg-gray-500 py-2 ">Edit</button>
+               <button onClick={() => setEdit(!edit)} className="text-center align w-32 hover:bg-gray-500 py-2 ">Edit</button>
                 </li>
                 <li  className="">
                   <button onClick={handleDelete} className="text-center align w-32 hover:bg-gray-500  py-2 ">Delete</button>
