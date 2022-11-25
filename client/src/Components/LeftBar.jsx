@@ -17,7 +17,6 @@ function LeftBar() {
 
    const { isLoading, error, data } = useQuery(["userPosts"], () =>{
   return Axios.get(`/post/${currentUser._id}`).then(({data}) => {
-      console.log(data);
      const sortedData=data.sort(function(a,b){
        return new Date(b.createdAt) - new Date(a.createdAt);
      });
