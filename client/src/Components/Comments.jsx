@@ -8,7 +8,7 @@ import Axios from '../axios'
 import moment from 'moment';
 
 const Comments = ({ postId }) => {
-  const { currentUser, config, logout } = useContext(UserContext);
+  const { currentUser, config} = useContext(UserContext);
   const [newComment, setNewComment] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const { _id, fname, profilePicture } = currentUser

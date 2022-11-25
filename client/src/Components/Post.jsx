@@ -102,7 +102,7 @@ const Post = ({ post }) => {
       Axios.delete(`/post/delete/${_id}`, config)
         .then((response) => {
           console.log(response);
-          queryClient.invalidateQueries({ queryKey: ['posts'] })
+          queryClient.invalidateQueries({ queryKey: ['posts', 'userPosts'] })
         })
         .catch((error) => console.log(error))
       
@@ -140,7 +140,7 @@ const Post = ({ post }) => {
         </div>
         <div className="my-5">
           <p className="text-start">{description && description}</p>
-          {url && (video ? <video controls className=' w-full h-full -z-10' src={url}></video>
+          {url && (video ? <video controls className=' w-full h-full -z-10 mt-5' src={url}></video>
             : <img src={url} alt="post" className="w-full h-full object-cover mt-5" />)}
         </div>
         <div className="flex items-center gap-5 flex-wrap">

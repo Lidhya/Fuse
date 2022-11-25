@@ -6,6 +6,7 @@ import { useMutation,  useQueryClient } from '@tanstack/react-query'
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import CloseIcon from '@mui/icons-material/Close';
 import User_1 from "../assets/Users/Profile-Pic-S.png"
 // import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -67,6 +68,7 @@ export default function Share() {
             onSuccess: () => {
                 // Invalidate and refetch
                 queryClient.invalidateQueries({ queryKey: ['posts'] })
+                queryClient.invalidateQueries({ queryKey: ['userPosts'] })
             },
         })
 
@@ -108,7 +110,7 @@ export default function Share() {
                     </div>
                     {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
                     <div>
-                        {image ? <img src={image ? URL.createObjectURL(image) : ''} alt="logo" /> :
+                        {image ? <img className='w-full max-h-96' src={image ? URL.createObjectURL(image) : ''} alt="logo" /> :
                             video && <video controls className=' w-full' src={video ? URL.createObjectURL(video) : ''}></video>}
                     </div>
                     <div className='mb-2'>
@@ -183,7 +185,7 @@ export default function Share() {
                     </div>
                 </div>
             </div>
-            {Loading && <CircularProgress color="secondary" />}
+            {Loading && <LinearProgress color="secondary" />}
         </div>
     );
 }

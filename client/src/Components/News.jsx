@@ -35,8 +35,6 @@ function News() {
     useEffect(() => {
         Axios.get(`https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${apiKey}`).then(({ data }) => {
             setArticles(data.articles)
-            console.log(data.articles);
-               console.log(data);
         }).catch((error) => {
             setError(error.message)
         })
