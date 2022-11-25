@@ -18,7 +18,7 @@ module.exports = {
     }
   },
 
-  getCurrentUserPosts: (req, res) => {
+  getUserPosts: (req, res) => {
     try {
       PostModel.find({ userId: req.params.id })
         .then((response) =>{console.log(response); res.status(200).json(response);})

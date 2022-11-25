@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { createPost, updatePost, deletePost, likeDislike, getPost, timelinePosts, getCurrentUserPosts } = require('../controllers/postControllers')
+const { createPost, updatePost, deletePost, likeDislike, getPost, timelinePosts, getUserPosts } = require('../controllers/postControllers')
 const {verifyJWT}=require('../middlewares/jwtAuth')
 const multer=require('multer')
 const path=require('path')
@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 router.get("/posts/:id", timelinePosts);
 
 // get current users posts
-router.get("/:id", getCurrentUserPosts);
+router.get("/:id", getUserPosts);
 
 //create a post
 router.post("/create-post/:id",verifyJWT, upload.single('file'), createPost);
