@@ -28,7 +28,7 @@ router.get("/:id", getCurrentUserPosts);
 router.post("/create-post/:id",verifyJWT, upload.single('file'), createPost);
 
 //update a post
-router.put("/update/:id",verifyJWT, updatePost);
+router.put("/update/:postId", verifyJWT, updatePost);
 
 //delete a post
 router.delete("/delete/:id",verifyJWT, deletePost);
