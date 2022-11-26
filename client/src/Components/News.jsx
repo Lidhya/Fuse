@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Axios from '../axios'
 import Modal from 'react-modal'
-import { countries } from './Countries'
+import { countries } from './constantData/Countries'
 import CloseIcon from '@mui/icons-material/Close';
 import errImg from '../assets/error/404 Error Page not Found with people connecting a plug-amico.png'
 

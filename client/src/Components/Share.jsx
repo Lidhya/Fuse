@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-modal'
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
-import { useMutation,  useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -31,7 +31,7 @@ const customStyles = {
     },
 };
 
-export default function Share() {
+export default function Share({ profileUpdate }) {
     Modal.setAppElement('#root')
     const { currentUser, token, logout } = useContext(UserContext)
     const [modal, setModal] = useState(false)
@@ -59,6 +59,7 @@ export default function Share() {
         return Axios.post(`/post/create-post/${id}`, formData, config).then((response) => {
             console.log(response);
             setLoading(false)
+            profileUpdate()
         }).catch((error) => {
             if (!error.response.data?.auth) return logout();
             console.log(error);

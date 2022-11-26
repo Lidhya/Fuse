@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import CloseIcon from '@mui/icons-material/Close';
 import blank_profile from "../assets/empty profile/blank_profile.png"
@@ -8,26 +8,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
 import Share from '../Components/Share'
+import Post from "./Post";
+import { customStyles } from './constantData/ModalStyle'
 import CircularProgress from '@mui/material/CircularProgress';
 
-
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        width: '35rem',
-        maxHeight: '38rem',
-        backgroundColor: '#fffff',
-        border: 'none'
-    },
-    overlay: {
-        backgroundColor: 'rgba(0,0,0,0.2)',
-    }
-};
 
 function Profile() {
     let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -36,18 +20,24 @@ function Profile() {
     const [modal2, setModal2] = useState(false)
     const [value, setValue] = useState('')
     const [profileUser, setProfileUser] = useState({})
+    const [profilePosts, setProfilePosts] = useState([])
 
     const userId = useLocation().pathname.split("/")[2]
 
-    const { isLoading, error, data } = useQuery(["user"], () => {
-        return Axios.get(`/user/get/${userId}`, config).then(({ data }) => {
-            setProfileUser(data)
-            return data
-        }).catch((error) => {
-            console.log(error.data)
-            return error.data
-        })
-    }
+    const { isLoading, error, refetch } = useQuery(["user"],
+        () => {
+            return Axios.get(`/user/get/${userId}`, config).then(({ data }) => {
+                setProfileUser(data)
+                return data
+            }).catch((error) => {
+                console.log(error.data)
+                return error.data
+            })
+        },
+        {
+            refetchOnWindowFocus: false,
+            enabled: false
+        }
     );
 
     const queryClient = useQueryClient()
@@ -68,15 +58,27 @@ function Profile() {
             },
         })
 
+    const getUserPosts = () => {
+        Axios.get(`/post/${userId}`).then(({ data }) => {
+            const sortedData = data.sort(function (a, b) {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+            setProfilePosts(sortedData);
+            currentUser._id === userId && refetch()
+        }).catch((error) => console.log(error))
+    }
+
+    useEffect(() => {
+        getUserPosts()
+    }, [userId])
+
     const handleFollow = () => {
         mutation.mutate(profileUser?._id)
     }
-
     const handleUnfollow = () => {
-        if(window.confirm(`Do you want to unfollow ${profileUser?.fname}?`)) return mutation.mutate(profileUser?._id)     
+        if (window.confirm(`Do you want to unfollow ${profileUser?.fname}?`)) return mutation.mutate(profileUser?._id)
         return;
     }
-
 
     return (
         <>
@@ -84,49 +86,44 @@ function Profile() {
                 <div className="flex justify-center">
                     <div className="w-full">
                         <div className="mb-0 pb-0">
-                            {/* {isLoading ?
-                                <CircularProgress color="secondary" />
-                                : <>    */}
-                                <div className=" relative">
-                                    <img
-                                        className="w-full h-64 object-cover  rounded-t-3xl"
-                                        src={profileUser?.coverPicture ? data.coverPicture : cover_blank}
-                                        alt={profileUser?.fname}
-                                    />
-                                    <img
-                                        className="w-36 h-36 rounded-full absolute object-cover left-0 right-0 ml-5 top-20 border-2 border-white border-solid "
-                                        src={profileUser?.profilePicture ? data.profilePicture : blank_profile}
-                                        alt={profileUser?.fname}
-                                    />
+                            <div className=" relative">
+                                <img
+                                    className="w-full h-64 object-cover  rounded-t-3xl"
+                                    src={profileUser?.coverPicture ? profileUser.coverPicture : cover_blank}
+                                    alt={profileUser?.fname}
+                                />
+                                <img
+                                    className="w-36 h-36 rounded-full absolute object-cover left-0 right-0 ml-5 top-20 border-2 border-white border-solid "
+                                    src={profileUser?.profilePicture ? profileUser.profilePicture : blank_profile}
+                                    alt={profileUser?.fname}
+                                />
+                            </div>
+                            <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
+                                <div className="flex flex-col  justify-center py-8 px-10 ">
+                                    <h4 className="text-lg font-semibold">{profileUser?.fname + ' ' + profileUser?.lname}</h4>
+                                    <span className="font-normal">{profileUser?.description}</span>
+                                    {currentUser?._id === profileUser?._id ?
+                                        <button className='border border-black text-md font-semibold p-1 mt-2 rounded-md' onClick={() => { setModal2(true) }}>Edit profile</button>
+                                        : (currentUser?.followings.includes(profileUser?._id) ?
+                                            <button onClick={handleUnfollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
+                                            : <button onClick={handleFollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
+                                        )}
                                 </div>
-                                    <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
-                                        <div className="flex flex-col  justify-center py-8 px-10 ">
-                                            <h4 className="text-lg font-semibold">{profileUser?.fname + ' ' + profileUser?.lname}</h4>
-                                            <span className="font-normal">{profileUser?.description}</span>
-                                            {currentUser?._id === profileUser?._id ?
-                                                <button className='border border-black text-md font-semibold p-1 mt-2 rounded-md' onClick={() => { setModal2(true) }}>Edit profile</button>
-                                                : (currentUser?.followings.includes(profileUser?._id) ?
-                                                    <button onClick={handleUnfollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
-                                                    : <button onClick={handleFollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
-                                                )}
-                                        </div>
-                                        <div className="flex  flex-wrap p-10  mt-2 space-x-3 md:mt-3">
-                                            <div className='flex flex-col items-center'>
-                                                <span className='text-black text-lg font-semibold'>Posts</span>
-                                                <span className='text-black font-mono'>20</span>
-                                            </div>
-                                            <div className='flex flex-col text-lg items-center' onClick={() => { setModal1(true); setValue('Followers') }} >
-                                                <span className='text-black font-semibold'>Followers</span>
-                                                <span className='text-black font-mono'>{followers?.length}</span>
-                                            </div>
-                                            <div className='flex flex-col text-lg items-center' onClick={() => { setModal1(true); setValue('Following') }}>
-                                                <span className='text-black font-semibold'>Following</span>
-                                                <span className='text-black font-mono'>{followings?.length}</span>
-                                            </div>
-                                        </div>
+                                <div className="flex  flex-wrap p-10  mt-2 space-x-3 md:mt-3">
+                                    <div className='flex flex-col items-center'>
+                                        <span className='text-black text-lg font-semibold'>Posts</span>
+                                        <span className='text-black font-mono'>20</span>
                                     </div>
-                                    {/* </>
-                            } */}
+                                    <div className='flex flex-col text-lg items-center' onClick={() => { setModal1(true); setValue('Followers') }} >
+                                        <span className='text-black font-semibold'>Followers</span>
+                                        <span className='text-black font-mono'>{followers?.length}</span>
+                                    </div>
+                                    <div className='flex flex-col text-lg items-center' onClick={() => { setModal1(true); setValue('Following') }}>
+                                        <span className='text-black font-semibold'>Following</span>
+                                        <span className='text-black font-mono'>{followings?.length}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -177,7 +174,8 @@ function Profile() {
                     <button type="submit" className="w-1/5 my-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                 </Modal>
             </div>
-            {currentUser?._id === profileUser?._id && <Share/>}
+            {currentUser?._id === profileUser?._id && <Share profileUpdate={getUserPosts} />}
+            {profilePosts && profilePosts.map((post) => <Post post={post} key={post._id} />)}
         </>
     )
 }
