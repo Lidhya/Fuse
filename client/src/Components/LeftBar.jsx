@@ -8,7 +8,7 @@ import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { useQuery, useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 
 function LeftBar() {

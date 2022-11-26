@@ -74,6 +74,7 @@ function Profile() {
     const handleFollow = () => {
         mutation.mutate(profileUser?._id)
     }
+    
     const handleUnfollow = () => {
         if (window.confirm(`Do you want to unfollow ${profileUser?.fname}?`)) return mutation.mutate(profileUser?._id)
         return;
@@ -100,6 +101,7 @@ function Profile() {
                             <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
                                 <div className="flex flex-col  justify-center py-8 px-10 ">
                                     <h4 className="text-lg font-semibold">{profileUser?.fname + ' ' + profileUser?.lname}</h4>
+                                    <span className="font-serif text-xs text-center">@{profileUser?.username}</span>
                                     <span className="font-normal">{profileUser?.description}</span>
                                     {currentUser?._id === profileUser?._id ?
                                         <button className='border border-black text-md font-semibold p-1 mt-2 rounded-md' onClick={() => { setModal2(true) }}>Edit profile</button>
@@ -164,7 +166,7 @@ function Profile() {
                     </div>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">About you</label>
-                        <input type="text" name="about" id="about" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="I am ..." required />
+                        <input type="text" name="description" id="description" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="I am ..." required />
                     </div>
                     <div>
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Your password</label>

@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const { userUpdate, userDelete, getUser, followUnfollow, unfollow } = require('../controllers/userControllers')
+const { userUpdate, userDelete, getUser, followUnfollow, getSuggestions } = require('../controllers/userControllers')
 const { verifyJWT } = require('../middlewares/jwtAuth')
 
 
 //get a user
 router.get("/get/:id", verifyJWT, getUser);
+
+//get a user
+router.get("/suggestions/:id", verifyJWT, getSuggestions);
 
 //update user
 router.put("/update/:id", verifyJWT, userUpdate);
@@ -15,7 +18,6 @@ router.delete("/delete/:id", verifyJWT, userDelete);
 //follow a user
 router.put("/follow-unfollow/:id", verifyJWT, followUnfollow);
 
-//unfollow a user
-router.put("/unfollow/:id", verifyJWT, unfollow);
+
 
 module.exports = router;
