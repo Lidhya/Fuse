@@ -5,6 +5,7 @@ import { UserContext } from '../context/UserContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
+import blank_profile from "../assets/empty profile/blank_profile.png"
 import CircularProgress from '@mui/material/CircularProgress';
 import LinearProgress from '@mui/material/LinearProgress';
 import CloseIcon from '@mui/icons-material/Close';
@@ -150,7 +151,7 @@ export default function Share({ profileUpdate }) {
             <div className="w-full h-full rounded-xl shadow-md  bg-white mb-12">
                 <div className="p-2.5">
                     <div className="flex items-center">
-                        <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={User_1} alt="" />
+                        <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={currentUser?.profilePicture ? currentUser.profilePicture : blank_profile} alt={currentUser.username} />
                         <input
                             onClick={() => setModal(true)}
                             placeholder="Share a post"

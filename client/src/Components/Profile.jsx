@@ -10,25 +10,33 @@ import { UserContext } from '../context/UserContext';
 import Share from '../Components/Share'
 import Post from "./Post";
 import { customStyles } from './constantData/ModalStyle'
+import {validateUpdate} from './Validations/updateValidate'
 import CircularProgress from '@mui/material/CircularProgress';
 
 
 function Profile() {
     let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    const userId = useLocation().pathname.split("/")[2]
     const { currentUser, config, updateCurrentUser } = useContext(UserContext)
     const [modal1, setModal1] = useState(false)
     const [modal2, setModal2] = useState(false)
     const [value, setValue] = useState('')
     const [profileUser, setProfileUser] = useState({})
     const [profilePosts, setProfilePosts] = useState([])
+    const [formValues, setFormValues] = useState({});
+    const [formErrors, setFormErrors] = useState({});
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isSubmit, setIsSubmit] = useState(false);
 
-    const userId = useLocation().pathname.split("/")[2]
+    const queryClient = useQueryClient()
+    const { followers, followings } = profileUser
 
-    const { isLoading, error, refetch } = useQuery(["user"],
+    const { isLoading, error, data, refetch } = useQuery(["user"],
         () => {
             return Axios.get(`/user/get/${userId}`, config).then(({ data }) => {
                 setProfileUser(data)
-                return data
+                setFormValues(data)
+                return data;
             }).catch((error) => {
                 console.log(error.data)
                 return error.data
@@ -39,9 +47,6 @@ function Profile() {
             enabled: false
         }
     );
-
-    const queryClient = useQueryClient()
-    const { followers, followings } = profileUser
 
     // Mutations
     const mutation = useMutation((userId) => {
@@ -71,14 +76,36 @@ function Profile() {
         getUserPosts()
     }, [userId])
 
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormValues({ ...formValues, [name]: value });
+    };
+
     const handleFollow = () => {
         mutation.mutate(profileUser?._id)
     }
-    
+
     const handleUnfollow = () => {
         if (window.confirm(`Do you want to unfollow ${profileUser?.fname}?`)) return mutation.mutate(profileUser?._id)
         return;
     }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setFormErrors(validateUpdate(formValues));
+        setIsSubmit(true);
+      };
+
+      useEffect(()=>{
+        if (Object.keys(formErrors).length === 0 && isSubmit) {
+          Axios.put(`/user/update/${currentUser._id}`, formValues, config)
+            .then((response)=> updateCurrentUser() )
+            .catch(({response})=>{
+                setErrorMessage(response.data?.message)
+            })
+        }
+    }, [formErrors])
 
     return (
         <>
@@ -95,7 +122,7 @@ function Profile() {
                                 <img
                                     className="w-36 h-36 rounded-full absolute object-cover left-0 right-0 ml-5 top-20 border-2 border-white border-solid "
                                     src={profileUser?.profilePicture ? profileUser.profilePicture : blank_profile}
-                                    alt={profileUser?.fname}
+                                    alt={profileUser?.username}
                                 />
                             </div>
                             <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
@@ -128,8 +155,12 @@ function Profile() {
                         </div>
                     </div>
                 </div>
+            </div>
+            {currentUser?._id === profileUser?._id && <Share profileUpdate={getUserPosts} />}
+            {profilePosts && profilePosts.map((post) => <Post post={post} key={post._id} profileUpdate={getUserPosts} />)}
 
-                <Modal isOpen={modal1} onRequestClose={() => { setModal1(false) }} style={customStyles}>
+            /* --------------------------------- Modals --------------------------------- */
+            <Modal isOpen={modal1} onRequestClose={() => { setModal1(false) }} style={customStyles}>
                     <div className='text-end'><CloseIcon onClick={() => { setModal1(false) }} /></div>
                     <h1 className='text-2xl  text-purple-700 font-thin mb-3'>{value}</h1>
                     {arr.map((index) => (
@@ -147,36 +178,51 @@ function Profile() {
 
                 <Modal isOpen={modal2} onRequestClose={() => { setModal2(false) }} style={customStyles}>
                     <div className='text-end'><CloseIcon onClick={() => { setModal2(false) }} /></div>
-                    <h1 className='text-2xl  text-purple-700 font-thin mb-3'>Edit profile</h1>
-                    <div>
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">First name</label>
-                        <input type="text" name="fname" id="fname" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="John" required />
-                    </div>
-                    <div>
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Last name</label>
-                        <input type="text" name="lname" id="lname" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="Doe" required />
-                    </div>
-                    <div>
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
-                        <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="johndoe@gmail.com" required />
-                    </div>
-                    <div>
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your username</label>
-                        <input type="text" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="john_doe" required />
-                    </div>
-                    <div>
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">About you</label>
-                        <input type="text" name="description" id="description" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 " placeholder="I am ..." required />
-                    </div>
-                    <div>
-                        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Your password</label>
-                        <input type="password" name="password" id="password" placeholder="Enter current password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400" required />
-                    </div>
-                    <button type="submit" className="w-1/5 my-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                    <h1 className='text-2xl  text-purple-700 font-thin mb-4'>Edit profile</h1>
+
+                    <form onSubmit={handleSubmit}>
+                    {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
+
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 mb-6 w-full group">
+                                <input type="text" name="fname" id="floating_first_name" value={formValues?.fname} onChange={handleChange} class="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2  appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"  />
+                                <label for="first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First name</label>
+                                <p className='text-red-400 text-xs'>{formErrors.fname}</p>
+                            </div>
+                            <div class="relative z-0 mb-6 w-full group">
+                                <input type="text" name="lname" id="floating_last_name" value={formValues?.lname} onChange={handleChange} class="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2  appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                                <label for="last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name</label>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 mb-6 w-full group">
+                                <input type="text" name="username" id="username" value={formValues?.username} onChange={handleChange} class="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                                <label for="username" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Username</label>
+                                <p className='text-red-400 text-xs'>zxcvbnm,{formErrors.fname}</p>
+                            </div>
+                            <div class="relative z-0 mb-6 w-full group">
+                                <input type="text" name="city" id="City" value={formValues?.city} onChange={handleChange} class="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                                <label for="City" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">City</label>
+                            </div>
+                        </div>
+                        <div class="relative z-0 mb-6 w-full group">
+                            <input type="text" name="description" id="description" value={formValues?.description} onChange={handleChange} class="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                            <label for="description" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">About you</label>
+                        </div>
+                        <div class="relative z-0 mb-6 w-full group">
+                            <input type="email" name="email" id="floating_email" value={formValues?.email} onChange={handleChange} class="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                            <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
+                            <p className='text-red-400 text-xs'>{formErrors.email}</p>
+                        </div>
+                        <div class="relative z-0 mb-6 w-full group">
+                            <input type="password" name="password" id="floating_password"  value={formValues?.password} onChange={handleChange} class="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" />
+                            <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Current password</label>
+                            <p className='text-red-400 text-xs'>{formErrors.password}</p>
+                        </div>
+
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save changes</button>
+                    </form>
                 </Modal>
-            </div>
-            {currentUser?._id === profileUser?._id && <Share profileUpdate={getUserPosts} />}
-            {profilePosts && profilePosts.map((post) => <Post post={post} key={post._id} profileUpdate={getUserPosts}/>)}
         </>
     )
 }

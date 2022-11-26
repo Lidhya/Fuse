@@ -121,7 +121,7 @@ const Post = ({ post, profileUpdate }) => {
       <div className="bg-white shadow-md p-8 rounded-lg ">
         <div className="flex items-center justify-between">
           <div className="flex gap-5">
-            <img src={userInfo?.profilePicture ? userInfo.profilePicture : blank_profile} alt="profile" width={40} height={40} className='rounded-full' />
+            <img src={userInfo?.profilePicture ? userInfo.profilePicture : blank_profile} alt={userInfo?.username} width={40} height={40} className='rounded-full' />
             <div className="flex flex-col">
               <Link
                 to={`/profile/${userInfo._id}`}

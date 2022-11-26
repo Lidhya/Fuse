@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext'
+import {validateSignin} from './Validations/signinValidate'
 
 
 function Signin() {
@@ -20,7 +21,7 @@ function Signin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormErrors(validate(formValues));
+    setFormErrors(validateSignin(formValues));
     setIsSubmit(true);
   };
 
@@ -45,23 +46,6 @@ function Signin() {
       }
     }
   }, [formErrors]);
-
-  const validate = (values) => {
-    const errors = {};
-
-    if (!values.username) {
-      errors.username = "username is required";
-    }
-
-    if (!values.password) {
-      errors.password = "password is required";
-    } else if (values.password.length < 5) {
-      errors.password = "password must be more than 4 characters";
-    } else if (values.password.length > 10) {
-      errors.password = "password cannot exceed more than 10 characters";
-    }
-    return errors;
-  };
 
   return (
     <>

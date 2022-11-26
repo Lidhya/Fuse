@@ -38,7 +38,7 @@ module.exports = {
   getSuggestions: async (req, res) => {
     try {
       const currentUserId = req.params.id
-      userModel.find({ _id: {$ne:currentUserId}, followers:{ $nin: [currentUserId] } })
+      userModel.find({ _id: {$ne:currentUserId}, followers:{ $nin: [currentUserId] } }, "-password")
         .then((response) => {
           console.log(response);
           res.status(200).json(response);
