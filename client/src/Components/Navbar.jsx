@@ -13,8 +13,10 @@ function Navbar() {
   const { logout, currentUser} = useContext(UserContext)
 
   const handleLogout = () => {
+    if(window.confirm('Do you want to Signout?')){
     logout()
     return  <Navigate to='/signin'/>
+  }
   }
   const handleHamClick = () => {
     document.getElementById('navbar-hamburger').classList.toggle('hidden')

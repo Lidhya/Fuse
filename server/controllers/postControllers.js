@@ -2,7 +2,7 @@ const UserModel = require('../models/userModel');
 const PostModel = require("../models/PostModel");
 const { USER_COLLECTION, POST_COLLECTION } = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
-const { uploadFile, deletePost } = require('../s3')
+const { uploadFile, S3deletePost } = require('../s3')
 const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
@@ -70,9 +70,11 @@ module.exports = {
     try {
       const post = await PostModel.findById(req.params.postId);
       if (post.userId === req.userId) {
+        S3deletePost(post.key).then(()=>{
         post.deleteOne()
        .then((response)=> res.status(200).json("Post deleted successfully"))
        .catch((error)=>res.status(500).json(error))
+        }).catch((error)=>res.status(500).json(error))       
       } else {
         res.status(403).json("You can delete only your post");
       }

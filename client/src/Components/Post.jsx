@@ -31,7 +31,7 @@ const customStyles = {
   },
 };
 
-const Post = ({ post }) => {
+const Post = ({ post, profileUpdate }) => {
   const { userId, _id, key, url, description, comments, likes, createdAt } = post
   const [commentOpen, setCommentOpen] = useState(false);
   const [video, setVideo] = useState(false);
@@ -50,6 +50,7 @@ const Post = ({ post }) => {
   const mutation = useMutation(() => {
     return Axios.put(`/post/like/${currentUser._id}`, { postId: _id }, config).then((response) => {
       console.log(response);
+      profileUpdate && profileUpdate()
     }).catch((error) => {
       console.log(error.message);
     })
@@ -73,9 +74,11 @@ const Post = ({ post }) => {
       const extension = key.substring(key.lastIndexOf('.') + 1);
       (extension === 'mp4') ? setVideo(true) : setVideo(false)
     }
+  }, [])
+
+  useEffect(()=>{
     setNewDescription('')
     setErrorMessage('')
-    setDrop('')
   }, [edit])
 
   const handleLike = () => {
@@ -84,6 +87,7 @@ const Post = ({ post }) => {
 
   const handleEdit = (e) => {
     e.preventDefault()
+    setDrop('')
     newDescription ? setEdit(false) : (setErrorMessage('No changes are made'))
     if (newDescription) {
       const updatedValue = { userId: currentUser._id, newDescription: newDescription }
@@ -91,23 +95,25 @@ const Post = ({ post }) => {
         .then((response) => {
           console.log(response);
           queryClient.invalidateQueries({ queryKey: ['posts'] })
+          profileUpdate && profileUpdate()
         })
         .catch((error) => console.log(error))
     }
   }
 
   const handleDelete=(e)=>{
+    setDrop('')
     e.preventDefault()
     if(window.confirm('Are you sure?')){
        Axios.delete(`/post/delete/${_id}`, config)
         .then((response) => {
           console.log(response);
-          queryClient.invalidateQueries({ queryKey: ['posts', 'userPosts'] })
+          queryClient.invalidateQueries({ queryKey: ['posts'] })
+          queryClient.invalidateQueries({ queryKey: ['userPosts'] })
+          profileUpdate && profileUpdate()
         })
         .catch((error) => console.log(error))
     }
-     
-      
   }
 
   return (

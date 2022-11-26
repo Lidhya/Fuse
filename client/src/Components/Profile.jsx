@@ -53,7 +53,6 @@ function Profile() {
     },
         {
             onSuccess: () => {
-                // Invalidate and refetch
                 queryClient.invalidateQueries({ queryKey: ['user'] })
             },
         })
@@ -64,7 +63,7 @@ function Profile() {
                 return new Date(b.createdAt) - new Date(a.createdAt);
             });
             setProfilePosts(sortedData);
-            currentUser._id === userId && refetch()
+            refetch()
         }).catch((error) => console.log(error))
     }
 
@@ -112,7 +111,7 @@ function Profile() {
                                 <div className="flex  flex-wrap p-10  mt-2 space-x-3 md:mt-3">
                                     <div className='flex flex-col items-center'>
                                         <span className='text-black text-lg font-semibold'>Posts</span>
-                                        <span className='text-black font-mono'>20</span>
+                                        <span className='text-black font-mono'>{profilePosts.length}</span>
                                     </div>
                                     <div className='flex flex-col text-lg items-center' onClick={() => { setModal1(true); setValue('Followers') }} >
                                         <span className='text-black font-semibold'>Followers</span>
@@ -175,7 +174,7 @@ function Profile() {
                 </Modal>
             </div>
             {currentUser?._id === profileUser?._id && <Share profileUpdate={getUserPosts} />}
-            {profilePosts && profilePosts.map((post) => <Post post={post} key={post._id} />)}
+            {profilePosts && profilePosts.map((post) => <Post post={post} key={post._id} profileUpdate={getUserPosts}/>)}
         </>
     )
 }

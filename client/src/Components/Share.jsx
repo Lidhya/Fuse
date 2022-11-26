@@ -59,10 +59,10 @@ export default function Share({ profileUpdate }) {
         return Axios.post(`/post/create-post/${id}`, formData, config).then((response) => {
             console.log(response);
             setLoading(false)
-            profileUpdate()
-        }).catch((error) => {
-            if (!error.response.data?.auth) return logout();
-            console.log(error);
+            profileUpdate && profileUpdate()
+        }).catch(({response}) => {
+            if (!response?.data?.auth) return logout();
+            console.log(response);
         })
     },
         {

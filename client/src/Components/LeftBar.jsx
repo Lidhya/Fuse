@@ -28,8 +28,10 @@ function LeftBar() {
    );
 
    const handleLogout = () => {
-      logout()
-    return  <Navigate to='/signin'/>
+      if(window.confirm('Do you want to Signout?')){
+         logout()
+         return  <Navigate to='/signin'/>
+       }
    }
 
    return (

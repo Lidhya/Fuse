@@ -32,7 +32,7 @@ function uploadFile(file) {
    
   }
 
-  function deleteFile(filename){
+  function S3deletePost(filename){
     try {
     return s3.deleteObject({ Bucket: bucketName, Key: filename }).promise();
   
@@ -42,4 +42,4 @@ function uploadFile(file) {
     
   }
   exports.uploadFile=uploadFile
-  exports.deleteFile=deleteFile
+  exports.S3deletePost=S3deletePost

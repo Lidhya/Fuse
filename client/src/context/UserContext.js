@@ -14,11 +14,11 @@ function User({children})
         
     };    
     
-    const logout=()=>{
+    const logout=()=>{      
         localStorage.removeItem('user')
         localStorage.removeItem('token')
         setCurrentUser(null)
-    }
+ }
 
     const updateCurrentUser=()=>{
         Axios.get(`/user/get/${currentUser._id}`, config).then(({data})=>{
