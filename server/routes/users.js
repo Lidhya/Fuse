@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { userUpdate, userDelete, getUser, followUnfollow, getSuggestions, profileUpdate, coverUpdate } = require('../controllers/userControllers')
+const { userUpdate, userDelete, getUser, followUnfollow, getSuggestions, profileUpdate, coverUpdate,getFollowers, getFollowings } = require('../controllers/userControllers')
 const { verifyJWT } = require('../middlewares/jwtAuth')
 const multer=require('multer')
 const path=require('path')
@@ -41,6 +41,11 @@ router.delete("/delete/:id", verifyJWT, userDelete);
 //follow a user
 router.put("/follow-unfollow/:id", verifyJWT, followUnfollow);
 
+//followers list
+router.get('/followers/:id', verifyJWT, getFollowers)
+
+//followings list
+router.get('/followings/:id', verifyJWT, getFollowings)
 
 
 module.exports = router;

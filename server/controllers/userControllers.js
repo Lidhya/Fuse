@@ -134,6 +134,42 @@ module.exports = {
     } else {
       res.status(403).json("you cant follow yourself");
     }
+  },
+
+  getFollowers:async (req, res) => {
+    try {
+     userModel.findById(req.params.id)
+      .then(async (currentUser)=>{
+        console.log(currentUser);
+        const followers = await Promise.all(
+          currentUser.followers.map((followerId) => {
+            return userModel.findOne({ _id: followerId }, " _id fname lname profilePicture followers username");
+          })
+        );
+        res.status(200).json(followers)
+      })
+      .catch((error)=> res.status(500).json(error))  
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+getFollowings:async (req, res) => {
+  try {
+    userModel.findById(req.params.id)
+    .then(async (currentUser)=>{
+      console.log(currentUser);
+      const followings = await Promise.all(
+        currentUser.followings.map((followingId) => {
+          return userModel.findOne({ _id: followingId }, " _id fname lname profilePicture followers username");
+        })
+      );
+      res.status(200).json(followings)
+    })
+    .catch((error)=> res.status(500).json(error))  
+  } catch (err) {
+    res.status(500).json(err);
   }
+},
 
 }

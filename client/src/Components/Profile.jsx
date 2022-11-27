@@ -21,6 +21,7 @@ function Profile() {
     const { currentUser, config, updateCurrentUser, token } = useContext(UserContext)
     const [listModal, setListModal] = useState(false)
     const [list, setList] = useState('')
+    const [listData,  setListData] = useState([])
     const [updateModal, setUpdateModal] = useState(false)
     const [coverModal, setCoverModal] = useState(false)
     const [profileModal, setProfileModal] = useState(false)
@@ -34,8 +35,7 @@ function Profile() {
     const [profileImage, setProfileImage] = useState('');
 
     const queryClient = useQueryClient()
-    const { followers, followings } = profileUser
-    
+
     const pictureConfig = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -107,11 +107,25 @@ function Profile() {
 
     useEffect(() => {
         if (listModal) {
-            if (list === 'Followers') {
+            try {
+                if (list === 'Followers') {
+                    Axios.get(`/user/followers/${currentUser._id}`, config)
+                    .then(({data})=>{
+                        setListData(data)
+                        console.log(data)})
+                    .catch((error)=> console.log(error))
 
-            } else if (list === 'Following') {
-
+                } else if (list === 'Following') {
+                    Axios.get(`/user/followings/${currentUser._id}`, config)
+                    .then(({data})=>{
+                        setListData(data)
+                        console.log(data)})
+                    .catch((error)=> console.log(error))
+                }
+            } catch (error) {
+                console.log(error);
             }
+
         }
 
     }, [listModal])
@@ -144,7 +158,7 @@ function Profile() {
     }
 
     const handleUnfollow = () => {
-        if (window.confirm(`Do you want to unfollow ${profileUser?.fname}?`)) return mutation.mutate(profileUser?._id)
+        if (window.confirm(`Do you want to unfollow`)) return mutation.mutate(profileUser?._id)
         return;
     }
 
@@ -231,11 +245,11 @@ function Profile() {
                                     </div>
                                     <div className='flex flex-col text-lg items-center' onClick={() => { setListModal(true); setList('Followers') }} >
                                         <span className='text-black font-semibold'>Followers</span>
-                                        <span className='text-black font-mono'>{followers?.length}</span>
+                                        <span className='text-black font-mono'>{profileUser.followers?.length}</span>
                                     </div>
                                     <div className='flex flex-col text-lg items-center' onClick={() => { setListModal(true); setList('Following') }}>
                                         <span className='text-black font-semibold'>Following</span>
-                                        <span className='text-black font-mono'>{followings?.length}</span>
+                                        <span className='text-black font-mono'>{profileUser.followings?.length}</span>
                                     </div>
                                 </div>
                             </div>
@@ -285,17 +299,22 @@ function Profile() {
             <Modal isOpen={listModal} onRequestClose={() => { setListModal(false) }} style={customStyles}>
                 <div className='text-end'><CloseIcon onClick={() => { setListModal(false) }} /></div>
                 <h1 className='text-2xl  text-purple-700 font-thin mb-3'>{list}</h1>
-                {arr.map((index) => (
-                    <div key={index} className=" bg-white my-3 rounded-xl shadow-md border-gray-100  border-2">
+                {listData.length>0 ? listData.map((user) => (
+                    <div key={user._id} className=" bg-white my-3 rounded-xl shadow-md border-gray-100  border-2">
                         <div className=" flex flex-wrap justify-between items-center p-2.5">
                             <div className="flex items-center">
-                                <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={blank_profile} alt="" />
-                                <p className='font-semibold'>Hellen Keller</p>
+                                <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={user?.profilePicture ? user.profilePicture : blank_profile} alt={user.username} />
+                                <p className='font-semibold'>{user.fname + ' ' + user?.lname}</p>
                             </div>
-                            <button className='border border-red-500 text-sm p-1 rounded-md  hover:bg-gray-100 '>Unfollow</button>
+                            {currentUser?.followings.includes(user?._id) ?
+                                            <button onClick={handleUnfollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
+                                            : <button onClick={handleFollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
+                                        }
                         </div>
                     </div>
-                ))}
+                ))
+            : <p className='text-gray-600 m-3 text-lg'>You have no {list}</p>
+            }
             </Modal>
 
             <Modal isOpen={updateModal} onRequestClose={() => { setUpdateModal(false) }} style={customStyles}>
