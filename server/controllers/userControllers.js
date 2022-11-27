@@ -1,5 +1,7 @@
 const userModel = require('../models/userModel');
 const bcrypt = require('bcrypt')
+const { validateUpdate } = require('../validations/profileUpdateValidators');
+
 
 module.exports = {
 
@@ -14,19 +16,20 @@ module.exports = {
   },
 
   userUpdate: async (req, res) => {
-    if (req.body.userId === req.params.id) {
-      if (req.body.password) {
-        try {
-          req.body.password = await bcrypt.hash(req.body.password, 10);
-        } catch (err) {
-          return res.status(500).json(err);
-        }
-      }
+    const { error, value } = validateUpdate(req.body)
+    if (error) return res.status(422).json(error.details)
+    const { _id, ...details } = value
+    if (_id === req.params.id) {
       try {
-        const user = await userModel.findByIdAndUpdate(req.params.id, {
-          $set: req.body,
-        });
-        res.status(200).json("Account has been updated");
+        userModel.findOne({ _id: { $ne: _id }, username: details.username })
+          .then(async (user) => {
+            console.log(user);
+            if (user?.username) return res.status(422).json({ message: "Username already in use" })
+            details.password = await bcrypt.hash(details.password, 10)
+            userModel.findByIdAndUpdate(_id, { $set: details })
+              .then((response) => res.status(200).json("Successfully updated"))
+              .catch((error) => res.status(501).json(error.message))
+          }).catch((error) => res.status(501).json(error.message))
       } catch (err) {
         return res.status(500).json(err);
       }
@@ -38,7 +41,7 @@ module.exports = {
   getSuggestions: async (req, res) => {
     try {
       const currentUserId = req.params.id
-      userModel.find({ _id: {$ne:currentUserId}, followers:{ $nin: [currentUserId] } }, "-password")
+      userModel.find({ _id: { $ne: currentUserId }, followers: { $nin: [currentUserId] } }, "-password")
         .then((response) => {
           console.log(response);
           res.status(200).json(response);
