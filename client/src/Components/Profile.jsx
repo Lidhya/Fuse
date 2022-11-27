@@ -93,6 +93,18 @@ function Profile() {
         }
     }, [updateModal])
 
+    useEffect(() => {
+        if (Object.keys(formErrors).length === 0 && isSubmit) {
+            Axios.put(`/user/update/${currentUser._id}`, formValues, config)
+                .then((response) => {
+                    console.log(response);
+                    updateCurrentUser()
+                })
+                .catch(({ response }) => {
+                    setErrorMessage(response.data)
+                })
+        }
+    }, [formErrors])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -114,18 +126,14 @@ function Profile() {
         setIsSubmit(true);
     };
 
-    useEffect(() => {
-        if (Object.keys(formErrors).length === 0 && isSubmit) {
-            Axios.put(`/user/update/${currentUser._id}`, formValues, config)
-                .then((response) => {
-                    console.log(response);
-                    updateCurrentUser()
-                })
-                .catch(({ response }) => {
-                    setErrorMessage(response.data?.message)
-                })
-        }
-    }, [formErrors])
+    const handleCoverUpload = (e) => {
+        e.preventDefault()
+    }
+
+    const handleProfileUpload = (e) => {
+        e.preventDefault()
+
+    }
 
     return (
         <>
@@ -139,7 +147,7 @@ function Profile() {
                                     src={profileUser?.coverPicture ? profileUser.coverPicture : cover_blank}
                                     alt={profileUser?.fname}
                                 />
-                                <div onClick={()=>setCoverModal(true)} className='z-0 absolute right-3 bottom-6 shadow bg-white rounded-full p-1'>
+                                <div onClick={() => setCoverModal(true)} className='z-0 absolute right-3 bottom-6 shadow bg-white rounded-full p-1'>
                                     <EditIcon />
                                 </div>
                                 <img
@@ -147,7 +155,7 @@ function Profile() {
                                     src={profileUser?.profilePicture ? profileUser.profilePicture : blank_profile}
                                     alt={profileUser?.username}
                                 />
-                                <EditIcon  onClick={()=>setProfileModal(true)} className='z-0 absolute left-32 bottom-11 shadow bg-white rounded-full p-1' />
+                                <EditIcon onClick={() => setProfileModal(true)} className='z-0 absolute left-32 bottom-11 shadow bg-white rounded-full p-1' />
                             </div>
                             <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
                                 <div className="flex flex-col  justify-center py-8 px-10 ">
@@ -194,26 +202,26 @@ function Profile() {
                 />
                 <div className="flex justify-between items-center my-2 mx-2" >
                     <label htmlFor="cover-upload"> <PermMediaIcon htmlColor="gray" className="text-lg mr-1 cursor-pointer" />Choose cover picture</label>
-                    <input name='coverImage' className='hidden' id='cover-upload' onChange={(e)=>setCoverImage(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
-                    <button type="submit" className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Update</button>
+                    <input name='coverImage' className='hidden' id='cover-upload' onChange={(e) => setCoverImage(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
+                    <button onClick={handleCoverUpload} className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Upload</button>
                 </div>
             </Modal>
 
             <Modal isOpen={profileModal} onRequestClose={() => { setProfileModal(false) }} style={customStyles}>
                 <div className='text-end'><CloseIcon onClick={() => { setProfileModal(false) }} /></div>
                 <h1 className='text-2xl  text-purple-700 font-thin mb-3'>Edit profile picture</h1>
-               <div className='flex justify-center items-center'> 
-                <img
-                    className="w-52 h-52 rounded-full object-cover"
-                    src={profileImage ? URL.createObjectURL(profileImage) : (profileUser?.profilePicture ? profileUser.profilePicture : blank_profile)}
-                    alt={profileUser?.fname}
-                />
+                <div className='flex justify-center items-center'>
+                    <img
+                        className="w-52 h-52 rounded-full object-cover"
+                        src={profileImage ? URL.createObjectURL(profileImage) : (profileUser?.profilePicture ? profileUser.profilePicture : blank_profile)}
+                        alt={profileUser?.fname}
+                    />
                 </div>
                 <div className="flex justify-between items-center my-2 mx-2 " >
                     <label htmlFor="profile-upload"> <PermMediaIcon htmlColor="gray" className="text-lg mr-1 cursor-pointer" />Choose profile picture</label>
-                    <input name='profileImage' className='hidden' id='profile-upload' onChange={(e)=>setProfileImage(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
+                    <input name='profileImage' className='hidden' id='profile-upload' onChange={(e) => setProfileImage(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
                     {/* <button className="text-gray-500 border-gray-500 border-2 font-medium rounded-xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Remove</button> */}
-                    <button type="submit" className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Update</button>
+                    <button onClick={handleProfileUpload} className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Upload</button>
                 </div>
             </Modal>
 

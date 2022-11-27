@@ -18,24 +18,27 @@ module.exports = {
   userUpdate: async (req, res) => {
     const { error, value } = validateUpdate(req.body)
     if (error) return res.status(422).json(error.details)
-    const { _id, ...details } = value
+    const { _id, password, ...details } = value
     if (_id === req.params.id) {
       try {
         userModel.findOne({ _id: { $ne: _id }, username: details.username })
-          .then(async (user) => {
-            console.log(user);
-            if (user?.username) return res.status(422).json({ message: "Username already in use" })
-            details.password = await bcrypt.hash(details.password, 10)
-            userModel.findByIdAndUpdate(_id, { $set: details })
-              .then((response) => res.status(200).json("Successfully updated"))
+          .then(async (userCheck) => {
+            if (userCheck?.username) return res.status(422).json("Username already in use")
+            const currentUser = await userModel.findById(_id)
+            bcrypt.compare(value.password, currentUser.password)
+              .then((status) => {
+                if (status) {
+                  userModel.findByIdAndUpdate(_id, { $set: details })
+                    .then((response) => res.status(200).json("Successfully updated"))
+                    .catch((error) => res.status(501).json(error.message))
+                } else  return res.status(403).json("Incorrect password")
+              })
               .catch((error) => res.status(501).json(error.message))
           }).catch((error) => res.status(501).json(error.message))
       } catch (err) {
         return res.status(500).json(err);
       }
-    } else {
-      return res.status(403).json("You can update only your account!");
-    }
+    } else return res.status(403).json("You can update only your account!");
   },
 
   getSuggestions: async (req, res) => {
