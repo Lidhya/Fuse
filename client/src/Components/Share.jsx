@@ -101,7 +101,7 @@ export default function Share({ profileUpdate }) {
                 <div className='text-end'><CloseIcon onClick={() => { setModal(false) }} /></div>
                 <div className="flex flex-col justify-between  h-5/6 mb-2">
                     <div className="flex ">
-                        <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={User_1} alt="" />
+                        <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={currentUser?.profilePicture ? currentUser.profilePicture : blank_profile} alt={currentUser.username} />
                         <textarea
                             rows={3}
                             placeholder="Share what's on your mind"
@@ -150,8 +150,8 @@ export default function Share({ profileUpdate }) {
 
             <div className="w-full h-full rounded-xl shadow-md  bg-white mb-12">
                 <div className="p-2.5">
-                    <div className="flex items-center">
-                        <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={currentUser?.profilePicture ? currentUser.profilePicture : blank_profile} alt={currentUser.username} />
+                    <div className="flex gap-3 items-center">
+                        <img  src={currentUser?.profilePicture ? currentUser.profilePicture : blank_profile} alt={currentUser.username} className="rounded-full w-12 h-12 "/>
                         <input
                             onClick={() => setModal(true)}
                             placeholder="Share a post"

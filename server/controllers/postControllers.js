@@ -36,8 +36,6 @@ module.exports = {
         const file = req.file
         const result = await uploadFile(file)
         await unlinkFile(file.path)
-        console.log(file);
-        console.log(result);
         req.body.url = result.Location
         req.body.key = result.Key
       }

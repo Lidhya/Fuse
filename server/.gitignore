@@ -4,3 +4,4 @@ jspm_packages/
 .env
 package-lock.json
 public/posts
+public/user

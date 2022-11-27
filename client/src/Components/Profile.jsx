@@ -18,12 +18,12 @@ import PermMediaIcon from '@mui/icons-material/PermMedia';
 function Profile() {
     let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     const userId = useLocation().pathname.split("/")[2]
-    const { currentUser, config, updateCurrentUser } = useContext(UserContext)
+    const { currentUser, config, updateCurrentUser, token } = useContext(UserContext)
     const [listModal, setListModal] = useState(false)
+    const [list, setList] = useState('')
     const [updateModal, setUpdateModal] = useState(false)
     const [coverModal, setCoverModal] = useState(false)
     const [profileModal, setProfileModal] = useState(false)
-    const [value, setValue] = useState('')
     const [profileUser, setProfileUser] = useState({})
     const [profilePosts, setProfilePosts] = useState([])
     const [formValues, setFormValues] = useState({});
@@ -35,6 +35,13 @@ function Profile() {
 
     const queryClient = useQueryClient()
     const { followers, followings } = profileUser
+    
+    const pictureConfig = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    };
 
     const { isLoading, error, data, refetch } = useQuery(["user"],
         () => {
@@ -67,13 +74,17 @@ function Profile() {
         })
 
     const getUserPosts = () => {
-        Axios.get(`/post/${userId}`).then(({ data }) => {
-            const sortedData = data.sort(function (a, b) {
-                return new Date(b.createdAt) - new Date(a.createdAt);
-            });
-            setProfilePosts(sortedData);
-            refetch()
-        }).catch((error) => console.log(error))
+        try {
+            Axios.get(`/post/${userId}`).then(({ data }) => {
+                const sortedData = data.sort(function (a, b) {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+                setProfilePosts(sortedData);
+                refetch()
+            }).catch((error) => console.log(error))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     useEffect(() => {
@@ -83,6 +94,7 @@ function Profile() {
     useEffect(() => {
         setCoverImage('')
         setProfileImage('')
+        setErrorMessage('')
     }, [coverModal, profileModal])
 
     useEffect(() => {
@@ -94,15 +106,31 @@ function Profile() {
     }, [updateModal])
 
     useEffect(() => {
+        if (listModal) {
+            if (list === 'Followers') {
+
+            } else if (list === 'Following') {
+
+            }
+        }
+
+    }, [listModal])
+
+    useEffect(() => {
         if (Object.keys(formErrors).length === 0 && isSubmit) {
-            Axios.put(`/user/update/${currentUser._id}`, formValues, config)
-                .then((response) => {
-                    console.log(response);
-                    updateCurrentUser()
-                })
-                .catch(({ response }) => {
-                    setErrorMessage(response.data)
-                })
+            try {
+                Axios.put(`/user/update/${currentUser._id}`, formValues, config)
+                    .then((response) => {
+                        console.log(response);
+                        updateCurrentUser()
+                    })
+                    .catch(({ response }) => {
+                        setErrorMessage(response.data)
+                    })
+            } catch (error) {
+                setErrorMessage(error.message)
+            }
+
         }
     }, [formErrors])
 
@@ -128,11 +156,38 @@ function Profile() {
 
     const handleCoverUpload = (e) => {
         e.preventDefault()
+        if (!coverImage) return setErrorMessage("No changes are made")
+        const formdata = new FormData()
+        formdata.append('cover', coverImage)
+        try {
+            Axios.put(`/user/cover-update/${currentUser._id}`, formdata, pictureConfig)
+                .then((response) => {
+                    console.log(response);
+                    setCoverModal(false)
+                    updateCurrentUser()
+                })
+                .catch((error) => setErrorMessage(error.message))
+        } catch (error) {
+            setErrorMessage(error.message)
+        }
     }
 
     const handleProfileUpload = (e) => {
         e.preventDefault()
-
+        if (!profileImage) return setErrorMessage("No changes are made")
+        const formdata = new FormData()
+        formdata.append('profile', profileImage)
+        try {
+            Axios.put(`/user/profile-update/${currentUser._id}`, formdata, pictureConfig)
+                .then((response) => {
+                    console.log(response);
+                    setProfileModal(false)
+                    updateCurrentUser()
+                })
+                .catch((error) => setErrorMessage(error.message))
+        } catch (error) {
+            setErrorMessage(error.message)
+        }
     }
 
     return (
@@ -174,11 +229,11 @@ function Profile() {
                                         <span className='text-black text-lg font-semibold'>Posts</span>
                                         <span className='text-black font-mono'>{profilePosts.length}</span>
                                     </div>
-                                    <div className='flex flex-col text-lg items-center' onClick={() => { setListModal(true); setValue('Followers') }} >
+                                    <div className='flex flex-col text-lg items-center' onClick={() => { setListModal(true); setList('Followers') }} >
                                         <span className='text-black font-semibold'>Followers</span>
                                         <span className='text-black font-mono'>{followers?.length}</span>
                                     </div>
-                                    <div className='flex flex-col text-lg items-center' onClick={() => { setListModal(true); setValue('Following') }}>
+                                    <div className='flex flex-col text-lg items-center' onClick={() => { setListModal(true); setList('Following') }}>
                                         <span className='text-black font-semibold'>Following</span>
                                         <span className='text-black font-mono'>{followings?.length}</span>
                                     </div>
@@ -195,6 +250,7 @@ function Profile() {
             <Modal isOpen={coverModal} onRequestClose={() => { setCoverModal(false) }} style={customStyles}>
                 <div className='text-end'><CloseIcon onClick={() => { setCoverModal(false) }} /></div>
                 <h1 className='text-2xl  text-purple-700 font-thin mb-3'>Edit cover picture</h1>
+                {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
                 <img
                     className="w-full max-h-96 object-cover"
                     src={coverImage ? URL.createObjectURL(coverImage) : (profileUser?.coverPicture ? profileUser.coverPicture : cover_blank)}
@@ -210,6 +266,7 @@ function Profile() {
             <Modal isOpen={profileModal} onRequestClose={() => { setProfileModal(false) }} style={customStyles}>
                 <div className='text-end'><CloseIcon onClick={() => { setProfileModal(false) }} /></div>
                 <h1 className='text-2xl  text-purple-700 font-thin mb-3'>Edit profile picture</h1>
+                {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
                 <div className='flex justify-center items-center'>
                     <img
                         className="w-52 h-52 rounded-full object-cover"
@@ -227,7 +284,7 @@ function Profile() {
 
             <Modal isOpen={listModal} onRequestClose={() => { setListModal(false) }} style={customStyles}>
                 <div className='text-end'><CloseIcon onClick={() => { setListModal(false) }} /></div>
-                <h1 className='text-2xl  text-purple-700 font-thin mb-3'>{value}</h1>
+                <h1 className='text-2xl  text-purple-700 font-thin mb-3'>{list}</h1>
                 {arr.map((index) => (
                     <div key={index} className=" bg-white my-3 rounded-xl shadow-md border-gray-100  border-2">
                         <div className=" flex flex-wrap justify-between items-center p-2.5">

@@ -1,6 +1,10 @@
 const userModel = require('../models/userModel');
 const bcrypt = require('bcrypt')
 const { validateUpdate } = require('../validations/profileUpdateValidators');
+const { uploadFile, S3deletePost } = require('../s3')
+const fs = require('fs')
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink)
 
 
 module.exports = {
@@ -39,6 +43,39 @@ module.exports = {
         return res.status(500).json(err);
       }
     } else return res.status(403).json("You can update only your account!");
+  },
+
+  profileUpdate:async (req, res) => {
+    try {
+      if (req.file) {
+        const file = req.file
+        const result = await uploadFile(file)
+        await unlinkFile(file.path)
+        const newProfile={profilePicture :result.Location}
+        userModel.findByIdAndUpdate(req.params.id, {$set: newProfile})
+        .then((response)=> res.status(200).json("Successfully updated"))
+        .catch((error)=> res.status(403).json(error))
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
+    }
+  },
+
+  coverUpdate:async (req, res) => {
+    try {
+       if (req.file) {
+        const file = req.file
+        const result = await uploadFile(file)
+        await unlinkFile(file.path)
+        const newCover={coverPicture :result.Location}
+        userModel.findByIdAndUpdate(req.params.id, {$set: newCover})
+        .then((response)=> res.status(200).json("Successfully updated"))
+        .catch((error)=> res.status(403).json(error))
+      }
+    } catch (error) {
+      res.status(500).json(error);
+    }
   },
 
   getSuggestions: async (req, res) => {
