@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Axios from '../axios'
 import moment from 'moment';
 import Modal from 'react-modal'
@@ -11,8 +13,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import CloseIcon from '@mui/icons-material/Close';
 import Comments from "./Comments";
-import { UserContext } from "../context/UserContext";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const customStyles = {
   content: {

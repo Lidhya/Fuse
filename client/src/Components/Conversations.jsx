@@ -4,7 +4,7 @@ import { UserContext } from '../context/UserContext';
 import Axios from '../axios'
 
 
-function Conversations({ toggle, conversation }) {
+function Conversations({ conversation }) {
     const [user, setUser] = useState(null);
     const { currentUser, config } = useContext(UserContext)
     useEffect(() => {
@@ -27,7 +27,7 @@ function Conversations({ toggle, conversation }) {
     return (
         <>
             <li key={user?._id} className='m-2 p-2  rounded-lg hover:bg-gray-700 '>
-                <div className="flex items-center " onClick={() => toggle()}>
+                <div className="flex items-center ">
                     <div className="inline-block relative shrink-0">
                         <img className="w-12 h-12 rounded-full" src={user?.profilePicture? user.profilePicture : blank_profile} alt="user" />
                         <span className="inline-flex absolute right-0 bottom-0 justify-center items-center w-6 h-6 bg-blue-600 rounded-full">

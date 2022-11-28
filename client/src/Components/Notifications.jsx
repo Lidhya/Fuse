@@ -4,7 +4,7 @@ import User_2 from "../assets/Users/Profile-Pic-S (1).png"
 function Notifications() {
     let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     return (
-        <div className='px-14  my-3'>
+        <div className=' md:px-14  my-3 w-96 md:w-full'>
             <h1 className='text-2xl  text-purple-700 font-thin mb-3'>Notifications</h1>
             {arr.map((index) => (
                 <div key={index} className="w-full h-full bg-white my-3 rounded-xl shadow-md border-gray-100  border-2">

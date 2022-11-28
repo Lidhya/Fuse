@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import moment from 'moment';
+import { UserContext } from '../context/UserContext';
+import blank_profile from "../assets/empty profile/blank_profile.png"
 
-function Message({ message, own}) {
+function Message({ message, own, user}) {
+    const { currentUser} = useContext(UserContext)
     const {sender, text, createdAt}=message
 
   return (
@@ -9,8 +12,8 @@ function Message({ message, own}) {
     <div className="flex">
       <img
         className="h-8 w-8 rounded-full object-cover mr-2.5"
-        src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-        alt=""
+        src={own? (currentUser.profilePicture? currentUser.profilePicture : blank_profile) : (user?.profilePicture? user.profilePicture : blank_profile)}
+        alt="user"
       />
       <p className={own? "p-2.5 rounded-2xl bg-gray-300 text-black max-w-xs": "p-2.5 rounded-2xl bg-purple-700 text-white max-w-xs"}>{text}</p>
     </div>

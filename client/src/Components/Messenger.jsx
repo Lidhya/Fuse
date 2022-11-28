@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import User_2 from "../assets/Users/Profile-Pic-S (1).png"
+import { UserContext } from '../context/UserContext';
+import {io} from 'socket.io-client'
+import Axios from '../axios'
+import Message from './Message';
+import Conversation from './Conversations';
+import blank_profile from "../assets/empty profile/blank_profile.png"
+/* ---------------------------------- icons --------------------------------- */
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import CallIcon from '@mui/icons-material/Call';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import SendIcon from '@mui/icons-material/Send';
-import Message from './Message';
-import Conversation from './Conversations';
-import { UserContext } from '../context/UserContext';
-import Axios from '../axios'
-import blank_profile from "../assets/empty profile/blank_profile.png"
+
 
 
 function Messenger() {
@@ -17,15 +19,57 @@ function Messenger() {
     const [currentChat, setCurrentChat] = useState(null);
     const [user, setUser] = useState(null);
     const [messages, setMessages] = useState([])
+    const [arrivalMessage, setArrivalMessage] = useState(null);
+    const socket = useRef();
     const [newMessage, setNewMessage] = useState('')
-    const [message, setMessage] = useState('')
     const scrollRef = useRef();
 
+    useEffect(() => {
+        socket.current = io("ws://localhost:8000");
+        socket.current.on("getMessage", (data) => {
+          setArrivalMessage({
+            sender: data.senderId,
+            text: data.text,
+            createdAt: Date.now(),
+          });
+        });
+      }, []);
+    
+      useEffect(() => {
+        arrivalMessage &&
+          currentChat?.members.includes(arrivalMessage.sender) &&
+          setMessages((prev) => [...prev, arrivalMessage]);
+      }, [arrivalMessage, currentChat]);
+    
+      useEffect(() => {
+        socket.current.emit("addUser", currentUser._id);
+        socket.current.on("getUsers", (users) => {
+            console.log(users);
+        //   setOnlineUsers(
+        //     currentUser.followings.filter((f) => users.some((u) => u.userId === f))
+        //   );
+        });
+      }, [currentUser]);
 
+    useEffect(() => {
+        const getConversations = async () => {
+            try {
+                Axios.get(`/conversations/${currentUser?._id}`, config)
+                    .then(({ data }) => {
+                        setConversations(data);
+                    }).catch((error) => console.log(error))
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getConversations();
+    }, [currentUser._id]);
+
+    
     const getUser=()=>{
         try {
         const friendId = currentChat?.members.find((m) => m !== currentUser._id);
-             Axios.get(`/user/get/${friendId}`, config)
+          friendId &&   Axios.get(`/user/get/${friendId}`, config)
             .then(({ data }) => {
                 setUser(data);
             })
@@ -37,29 +81,14 @@ function Messenger() {
     }
 
     useEffect(() => {
-        const getConversations = async () => {
-            try {
-                Axios.get(`/conversations/${currentUser._id}`, config)
-                    .then(({ data }) => {
-                        setConversations(data);
-                    }).catch((error) => console.log(error))
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        getConversations();
-    }, [currentUser._id]);
-
-    useEffect(() => {
         const getMessages = async () => {
             try {
                 Axios.get(`/messages/${currentChat?._id}`, config)
                     .then(({ data }) => {
-                        console.log(data);
                         setMessages(data);
                         getUser()
+                    })
                     .catch((error) => console.log(error))
-                    }).catch((error) => console.log(error))
             } catch (err) {
                 console.log(err);
             }
@@ -79,19 +108,30 @@ function Messenger() {
             text: newMessage,
         };
 
+        const receiverId = currentChat.members.find(
+            (member) => member !== currentUser._id
+          );
+      
+          socket.current.emit("sendMessage", {
+            senderId: currentUser._id,
+            receiverId,
+            text: newMessage,
+          });
+
         try {
             Axios.post("/messages", message, config)
                 .then(({ data }) => {
                     setMessages([...messages, data]);
                     setNewMessage("");
                 })
+                .catch((error) => console.log(error))
         } catch (error) {
             console.log(error);
         }
     }
 
     const handleHamClick = (e) => {
-        e.preventDefault()
+       e && e.preventDefault()
         document.getElementById('chat-list').classList.toggle('hidden')
     }
 
@@ -106,8 +146,8 @@ function Messenger() {
                             </button>
                         </li>
                         {conversations && conversations.map((convo) => (
-                            <div onClick={() => setCurrentChat(convo)} className='border-b border-gray-600'>
-                                <Conversation key={convo._id} toggle={handleHamClick} conversation={convo} />
+                            <div onClick={(e) => {setCurrentChat(convo); handleHamClick(e);}} className='border-b border-gray-600'>
+                                <Conversation key={convo._id} conversation={convo} />
                             </div>
                         ))}
                     </ul>
@@ -140,7 +180,7 @@ function Messenger() {
                                     messages.length > 0 ?
                                         messages.map((m, index) => (
                                             <div ref={scrollRef}>
-                                            <Message key={index} message={m} own={m.sender === currentUser._id} />
+                                            <Message key={index} message={m} user={user} own={m.sender === currentUser._id} />
                                             </div>
                                         ))
                                         : <div className='flex justify-center items-center h-full'>
@@ -160,7 +200,7 @@ function Messenger() {
                     : (
                         <div className='flex justify-center gap-2 items-center h-96 md:h-full'>
                             <div className='md:hidden'>
-                                <button onClick={handleHamClick} type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 " aria-controls="navbar-search" aria-expanded="false">
+                                <button onClick={handleHamClick} className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 " aria-controls="navbar-search" aria-expanded="false">
                                     <span className="sr-only">Open menu</span>
                                     <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path></svg>
                                 </button></div>
