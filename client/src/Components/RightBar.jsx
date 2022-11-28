@@ -8,7 +8,6 @@ import Conversations from './Conversations';
 
 
 function RightBar() {
-   let arr = [1, 2, 3, 4]
    const { currentUser, config, logout, updateCurrentUser } = useContext(UserContext)
    const [suggestions, setSuggestion] = useState([])
    const [conversations, setConversations] = useState([]);
