@@ -4,12 +4,11 @@ import { UserContext } from '../context/UserContext';
 import Axios from '../axios'
 
 
-function Conversations({ conversation }) {
+function Conversations({ conversation, setCurrentChat }) {
     const [user, setUser] = useState(null);
     const { currentUser, config } = useContext(UserContext)
     useEffect(() => {
-        const friendId = conversation.members.find((m) => m !== currentUser._id);
-    
+        const friendId = conversation.members.find((m) => m !== currentUser._id); 
         const getUser = async () => {
           try {
            Axios.get(`/user/get/${friendId}`, config)

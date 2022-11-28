@@ -147,7 +147,7 @@ function Messenger() {
                         </li>
                         {conversations && conversations.map((convo) => (
                             <div onClick={(e) => {setCurrentChat(convo); handleHamClick(e);}} className='border-b border-gray-600'>
-                                <Conversation key={convo._id} conversation={convo} />
+                                <Conversation key={convo._id} setCurrentChat={setCurrentChat} conversation={convo} />
                             </div>
                         ))}
                     </ul>
