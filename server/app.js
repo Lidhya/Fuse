@@ -11,6 +11,8 @@ const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 const commentsRouter = require('./routes/comments');
+const conversationRouter = require("./routes/conversations");
+const messageRouter = require("./routes/messages");
 
 // db connection cloud
 // mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
@@ -45,6 +47,9 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', usersRouter);
 app.use('/api/post', postsRouter);
 app.use('/api/comments', commentsRouter);
+app.use("/api/conversations", conversationRouter);
+app.use("/api/messages", messageRouter);
+
 
 app.use(function (req, res, next) {
   res.status(404).json(`error: page not found`);
