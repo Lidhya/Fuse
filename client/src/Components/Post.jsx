@@ -102,8 +102,8 @@ const Post = ({ post, profileUpdate }) => {
   }
 
   const handleDelete=(e)=>{
-    setDrop('')
     e.preventDefault()
+    setDrop('')
     if(window.confirm('Are you sure?')){
        Axios.delete(`/post/delete/${_id}`, config)
         .then((response) => {

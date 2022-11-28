@@ -153,11 +153,13 @@ function Profile() {
         setFormValues({ ...formValues, [name]: value });
     };
 
-    const handleFollow = () => {
+    const handleFollow = (e) => {
+        e.preventDefault()
         mutation.mutate(profileUser?._id)
     }
 
-    const handleUnfollow = () => {
+    const handleUnfollow = (e) => {
+        e.preventDefault()
         if (window.confirm(`Do you want to unfollow`)) return mutation.mutate(profileUser?._id)
         return;
     }

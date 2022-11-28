@@ -17,7 +17,7 @@ module.exports = {
     getUserConvo: async (req, res) => {
         try {
             const conversation = await Conversation.find({
-                members: { $in: [req.params.userId] },
+                members: { $in: [req.params.id] },
             });
             res.status(200).json(conversation);
         } catch (err) {

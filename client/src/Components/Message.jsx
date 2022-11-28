@@ -1,8 +1,9 @@
 import React from 'react'
 import moment from 'moment';
 
-function Message({ message, own }) {
-    const {text, createdAt}=message
+function Message({ message, own}) {
+    const {sender, text, createdAt}=message
+
   return (
     <div className={own ? "flex flex-col mt-5 items-end m-3" : "flex flex-col mt-5 m-3"}>
     <div className="flex">

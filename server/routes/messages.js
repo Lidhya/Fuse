@@ -1,11 +1,12 @@
 const router = require("express").Router();
+const { verifyJWT } = require('../middlewares/jwtAuth')
 const { addMessage, getMessage } = require('../controllers/messageControllers')
 
 
-//add
-router.post("/", addMessage);
+//add message
+router.post("/", verifyJWT, addMessage);
 
-//get
-router.get("/:conversationId", getMessage);
+//get message
+router.get("/:conversationId", verifyJWT, getMessage);
 
 module.exports = router;
