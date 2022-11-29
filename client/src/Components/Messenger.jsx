@@ -179,8 +179,8 @@ function Messenger() {
                                 {
                                     messages.length > 0 ?
                                         messages.map((m, index) => (
-                                            <div ref={scrollRef}>
-                                            <Message key={index} message={m} user={user} own={m.sender === currentUser._id} />
+                                            <div key={index} ref={scrollRef}>
+                                            <Message  message={m} user={user} own={m.sender === currentUser._id} />
                                             </div>
                                         ))
                                         : <div className='flex justify-center items-center h-full'>

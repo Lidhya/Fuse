@@ -79,8 +79,8 @@ function RightBar() {
                </li>
                <li className='overflow-y-scroll over max-h-60'>
                   {conversations && conversations.map((convo) => (
-                     <Link to={'/messenger'} className='dark:hover:bg-gray-700 dark:text-white group'>
-                        <Conversations key={convo._id} conversation={convo} />
+                     <Link to={'/messenger'} key={convo._id} className='dark:hover:bg-gray-700 dark:text-white group'>
+                        <Conversations  conversation={convo} />
                      </Link>
                   ))}</li>
             </ul>

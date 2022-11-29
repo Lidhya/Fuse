@@ -6,7 +6,7 @@ const {getNotifications, updateNotifications } = require('../controllers/notific
 //get all notifications
 router.get('/:id', verifyJWT, getNotifications)
 
-//add notifications
+//update notifications
 router.put('/:id', verifyJWT, updateNotifications)
 
 

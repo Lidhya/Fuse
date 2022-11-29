@@ -25,7 +25,7 @@ function Conversations({ conversation, setCurrentChat }) {
 
     return (
         <>
-            <li key={user?._id} className='m-2 p-2  rounded-lg hover:bg-gray-700 '>
+            <div key={user?._id} className='m-2 p-2  rounded-lg hover:bg-gray-700 '>
                 <div className="flex items-center ">
                     <div className="inline-block relative shrink-0">
                         <img className="w-12 h-12 rounded-full" src={user?.profilePicture? user.profilePicture : blank_profile} alt="user" />
@@ -41,7 +41,7 @@ function Conversations({ conversation, setCurrentChat }) {
                     </div>
                     {/* <span className="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-200">2</span> */}
                 </div>
-            </li>
+            </div>
         </>
     )
 }

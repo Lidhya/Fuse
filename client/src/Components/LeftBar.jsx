@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { UserContext } from '../context/UserContext';
 import Axios from '../axios'
@@ -12,11 +12,12 @@ import { useQuery } from '@tanstack/react-query';
 
 
 function LeftBar() {
-   const { logout, currentUser }=useContext(UserContext)
-   const {fname, lname, profilePicture, description, followings, followers, _id }=currentUser
+   const { logout, currentUser, config }=useContext(UserContext)
+   const [profile, setProfile] = useState({})
+   const {fname, lname, profilePicture, description, followings, followers, _id }=profile
 
    const { isLoading, error, data } = useQuery(["userPosts"], () =>{
-  return Axios.get(`/post/${currentUser._id}`).then(({data}) => {
+  return Axios.get(`/post/${currentUser._id}`, config).then(({data}) => {
      const sortedData=data.sort(function(a,b){
        return new Date(b.createdAt) - new Date(a.createdAt);
      });
@@ -26,6 +27,19 @@ function LeftBar() {
      })
  }
    );
+   
+   useEffect(() => {
+     try {
+      Axios.get(`/user/get/${currentUser._id}`, config).then(({ data }) => {
+         setProfile(data)         
+     }).catch((error) => {
+         console.log(error.data)
+     })
+     } catch (error) {
+      console.log(error)
+     }
+   }, [])
+   
 
    const handleLogout = () => {
       if(window.confirm('Do you want to Signout?')){
@@ -49,11 +63,11 @@ function LeftBar() {
                   </div>
                   <div className='flex flex-col items-center'>
                      <span className='text-white font-light'>Followers</span>
-                     <span className='text-white font-mono'>{followers.length}</span>
+                     <span className='text-white font-mono'>{followers?.length}</span>
                   </div>
                   <div className='flex flex-col items-center'>
                      <span className='text-white font-light'>Following</span>
-                     <span className='text-white font-mono'>{followings.length}</span>
+                     <span className='text-white font-mono'>{followings?.length}</span>
                   </div>
                </div>
 

@@ -116,7 +116,13 @@ module.exports = {
           user.updateOne({ $pull: { followers: currentUserId } })
             .then(() => {
               currentUser.updateOne({ $pull: { followings: userId } })
-                .then(() => res.status(200).json("User has been unfollowed"))
+                .then(() => {
+                  NotificationModel.deleteOne({
+                    userId:userId,
+                    emiterId: currentUserId,
+                    text: 'started following you.'
+                  }).then(()=> res.status(200).json("User has been unfollowed"))                 
+                })
                 .catch((error) => res.status(500).json(error))
             })
             .catch((error) => res.status(500).json(error))

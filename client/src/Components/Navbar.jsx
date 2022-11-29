@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { UserContext } from '../context/UserContext';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -8,15 +8,36 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { useQuery } from '@tanstack/react-query';
+import Axios from '../axios'
 
 function Navbar() {
-  const { logout, currentUser} = useContext(UserContext)
+  const { logout, currentUser, config } = useContext(UserContext)
+  const [notifications, setNotifications] = useState([])
+  const [count, setCount] = useState(0)
+
+  const { isLoading, error, data } = useQuery(["notifications"], () => {
+    return Axios.get(`/notifications/${currentUser._id}`, config)
+      .then(({ data }) => {
+        setNotifications(data)
+        return data;
+      }).catch((error) => {
+        console.log(error.data);
+      })
+  }
+  );
+
+  useEffect(() => {
+    notifications &&
+      setCount(notifications.filter(e => e.isVisited === false).length)
+  }, [notifications])
+
 
   const handleLogout = () => {
-    if(window.confirm('Do you want to Signout?')){
-    logout()
-    return  <Navigate to='/signin'/>
-  }
+    if (window.confirm('Do you want to Signout?')) {
+      logout()
+      return <Navigate to='/signin' />
+    }
   }
   const handleHamClick = () => {
     document.getElementById('navbar-hamburger').classList.toggle('hidden')
@@ -66,7 +87,7 @@ function Navbar() {
               <Link to="/messenger" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0  "><TextsmsOutlinedIcon /><span className='md:hidden pl-3 text-white'>Message</span></Link>
             </li>
             <li>
-              <Link to="/notifications" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><NotificationsNoneOutlinedIcon /><span className='md:hidden pl-3 text-white'>Notificatoins</span></Link>
+              <Link to="/notifications" className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><NotificationsNoneOutlinedIcon />{count > 0 && <span className='-ml-2 absolute px-1.5 py-0.5 bg-red-600 text-white rounded-full text-xs'> {count}</span>}<span className='md:hidden pl-3 text-white'>Notificatoins</span></Link>
             </li>
             <li>
               <Link to={`/profile/${currentUser._id}`} className="block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><PersonOutlineOutlinedIcon /><span className='md:hidden pl-3 text-white'>Profile</span></Link>

@@ -19,10 +19,10 @@ const storage = multer.diskStorage({
   });
 
 //get timeline posts
-router.get("/timeline/:id", timelinePosts);
+router.get("/timeline/:id", verifyJWT, timelinePosts);
 
 // get current users posts
-router.get("/:id", getUserPosts);
+router.get("/:id",verifyJWT, getUserPosts);
 
 //create a post
 router.post("/create-post/:id",verifyJWT, upload.single('file'), createPost);

@@ -17,7 +17,7 @@ module.exports = {
 
     updateNotifications: (req, res) => {
         try {
-            NotificationModel.updateOne({userId: req.params.id},
+            NotificationModel.updateMany({userId: req.params.id, isVisited:false},
                 {
                     $set:{
                         isVisited:true

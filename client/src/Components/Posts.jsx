@@ -9,7 +9,7 @@ const Posts = ({userId}) => {
     const {currentUser, config, logout}=useContext(UserContext)
 
   const { isLoading, error, data } = useQuery(["posts"], () =>
-  Axios.get(`/post/timeline/${currentUser._id}`).then(({data}) => {
+  Axios.get(`/post/timeline/${currentUser._id}`, config).then(({data}) => {
     const sortedData=data.sort(function(a,b){
       return new Date(b.createdAt) - new Date(a.createdAt);
     });

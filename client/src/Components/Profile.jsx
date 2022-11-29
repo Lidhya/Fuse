@@ -16,7 +16,6 @@ import PermMediaIcon from '@mui/icons-material/PermMedia';
 
 
 function Profile() {
-    let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     const userId = useLocation().pathname.split("/")[2]
     const { currentUser, config, updateCurrentUser, token } = useContext(UserContext)
     const [listModal, setListModal] = useState(false)
@@ -75,7 +74,7 @@ function Profile() {
 
     const getUserPosts = () => {
         try {
-            Axios.get(`/post/${userId}`).then(({ data }) => {
+            Axios.get(`/post/${userId}`, config).then(({ data }) => {
                 const sortedData = data.sort(function (a, b) {
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
@@ -112,16 +111,12 @@ function Profile() {
             try {
                 if (list === 'Followers') {
                     Axios.get(`/user/followers/${profileUser._id}`, config)
-                    .then(({data})=>{
-                        setListData(data)
-                        console.log(data)})
+                    .then(({data})=> setListData(data))
                     .catch((error)=> console.log(error))
 
                 } else if (list === 'Following') {
                     Axios.get(`/user/followings/${profileUser._id}`, config)
-                    .then(({data})=>{
-                        setListData(data)
-                        console.log(data)})
+                    .then(({data})=> setListData(data))
                     .catch((error)=> console.log(error))
                 }
             } catch (error) {
