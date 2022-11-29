@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import CloseIcon from '@mui/icons-material/Close';
 import blank_profile from "../assets/empty profile/blank_profile.png"
-import cover_blank from "../assets/empty profile/cover-picture-blank.jpg"
+import cover_blank from "../assets/empty profile/cover-picture-blank.png"
 import { Link, useLocation } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Axios from '../axios'
@@ -258,7 +258,13 @@ function Profile() {
                 </div>
             </div>
             {currentUser?._id === profileUser?._id && <Share profileUpdate={getUserPosts} />}
-            {profilePosts && profilePosts.map((post) => <Post post={post} key={post._id} profileUpdate={getUserPosts} />)}
+            {profilePosts.length>0? profilePosts.map((post) => <Post post={post} key={post._id} profileUpdate={getUserPosts} />)
+            :(<div className='flex flex-col justify-center items-center'>
+            <span className="text-xl text-gray-400">
+                There are no posts yet.
+            </span>
+        </div>)
+            }
 
             { /* --------------------------------- Modals --------------------------------- */}
             <Modal isOpen={coverModal} onRequestClose={() => { setCoverModal(false) }} style={customStyles}>
