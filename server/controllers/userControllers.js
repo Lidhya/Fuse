@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel');
+const  NotificationModel = require("../models/Notification");
 const bcrypt = require('bcrypt')
 const { validateUpdate } = require('../validations/profileUpdateValidators');
 const { uploadFile, S3deletePost } = require('../s3')
@@ -123,7 +124,15 @@ module.exports = {
           user.updateOne({ $push: { followers: currentUserId } })
             .then(() => {
               currentUser.updateOne({ $push: { followings: userId } })
-                .then(() => res.status(200).json("User has been followed"))
+                .then(() => {
+                  NotificationModel.create({
+                    userId:userId,
+                    emiterId: currentUserId,
+                    text: 'started following you.'
+                  })
+                  .then((response)=> res.status(200).json("User has been followed"))
+                  .catch((error) => res.status(500).json(error))
+                })
                 .catch((error) => res.status(500).json(error))
             })
             .catch((error) => res.status(500).json(error))

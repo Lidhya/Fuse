@@ -109,14 +109,14 @@ function Profile() {
         if (listModal) {
             try {
                 if (list === 'Followers') {
-                    Axios.get(`/user/followers/${currentUser._id}`, config)
+                    Axios.get(`/user/followers/${profileUser._id}`, config)
                     .then(({data})=>{
                         setListData(data)
                         console.log(data)})
                     .catch((error)=> console.log(error))
 
                 } else if (list === 'Following') {
-                    Axios.get(`/user/followings/${currentUser._id}`, config)
+                    Axios.get(`/user/followings/${profileUser._id}`, config)
                     .then(({data})=>{
                         setListData(data)
                         console.log(data)})
@@ -153,14 +153,14 @@ function Profile() {
         setFormValues({ ...formValues, [name]: value });
     };
 
-    const handleFollow = (e) => {
+    const handleFollow = (e, userId) => {
         e.preventDefault()
-        mutation.mutate(profileUser?._id)
+        mutation.mutate(userId)
     }
 
-    const handleUnfollow = (e) => {
+    const handleUnfollow = (e, userId) => {
         e.preventDefault()
-        if (window.confirm(`Do you want to unfollow`)) return mutation.mutate(profileUser?._id)
+        if (window.confirm(`Do you want to unfollow`)) return mutation.mutate(userId)
         return;
     }
 
@@ -218,15 +218,16 @@ function Profile() {
                                     src={profileUser?.coverPicture ? profileUser.coverPicture : cover_blank}
                                     alt={profileUser?.fname}
                                 />
-                                <div onClick={() => setCoverModal(true)} className='z-0 absolute right-3 bottom-6 shadow bg-white rounded-full p-1'>
+                              { currentUser?._id === profileUser?._id && <div onClick={() => setCoverModal(true)} className='z-0 absolute right-3 bottom-6 shadow bg-white rounded-full p-1'>
                                     <EditIcon />
                                 </div>
+                                }
                                 <img
                                     className="w-36 h-36 rounded-full absolute object-cover left-0 right-0 ml-5 top-20 border-2 border-white border-solid "
                                     src={profileUser?.profilePicture ? profileUser.profilePicture : blank_profile}
                                     alt={profileUser?.username}
                                 />
-                                <EditIcon onClick={() => setProfileModal(true)} className='z-0 absolute left-32 bottom-11 shadow bg-white rounded-full p-1' />
+                               {currentUser?._id === profileUser?._id && <EditIcon onClick={() => setProfileModal(true)} className='z-0 absolute left-32 bottom-11 shadow bg-white rounded-full p-1' />}
                             </div>
                             <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
                                 <div className="flex flex-col  justify-center py-8 px-10 ">
@@ -236,8 +237,8 @@ function Profile() {
                                     {currentUser?._id === profileUser?._id ?
                                         <button className='border border-black text-md font-semibold p-1 mt-2 rounded-md' onClick={() => { setUpdateModal(true) }}>Edit profile</button>
                                         : (currentUser?.followings.includes(profileUser?._id) ?
-                                            <button onClick={handleUnfollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
-                                            : <button onClick={handleFollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
+                                            <button onClick={(e)=>handleUnfollow(e, profileUser._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
+                                            : <button onClick={(e)=>handleFollow(e, profileUser._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
                                         )}
                                 </div>
                                 <div className="flex  flex-wrap p-10  mt-2 space-x-3 md:mt-3">
@@ -308,14 +309,14 @@ function Profile() {
                                 <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={user?.profilePicture ? user.profilePicture : blank_profile} alt={user.username} />
                                 <p className='font-semibold'>{user.fname + ' ' + user?.lname}</p>
                             </div>
-                            {currentUser?.followings.includes(user?._id) ?
-                                            <button onClick={handleUnfollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
-                                            : <button onClick={handleFollow} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
+                            {currentUser?.followings.includes(user?._id)  ?
+                                            <button onClick={(e)=>handleUnfollow(e, user._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
+                                            : (user?._id !==currentUser._id && <button onClick={(e)=>handleFollow(e, user._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>)
                                         }
                         </div>
                     </div>
                 ))
-            : <p className='text-gray-600 m-3 text-lg'>You have no {list}</p>
+            : <p className='text-gray-600 m-3 text-lg'>No {list} yet</p>
             }
             </Modal>
 

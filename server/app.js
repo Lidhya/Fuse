@@ -13,6 +13,7 @@ const postsRouter = require('./routes/posts');
 const commentsRouter = require('./routes/comments');
 const conversationRouter = require("./routes/conversations");
 const messageRouter = require("./routes/messages");
+const notificationsRouter = require("./routes/notification");
 
 // db connection cloud
 // mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
@@ -49,6 +50,7 @@ app.use('/api/post', postsRouter);
 app.use('/api/comments', commentsRouter);
 app.use("/api/conversations", conversationRouter);
 app.use("/api/messages", messageRouter);
+app.use("/api/notifications", notificationsRouter);
 
 
 app.use(function (req, res, next) {
