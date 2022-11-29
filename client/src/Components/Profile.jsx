@@ -3,7 +3,7 @@ import Modal from 'react-modal'
 import CloseIcon from '@mui/icons-material/Close';
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import cover_blank from "../assets/empty profile/cover-picture-blank.jpg"
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
@@ -88,6 +88,8 @@ function Profile() {
     }
 
     useEffect(() => {
+        setListModal(false)
+        setListData([])
         getUserPosts()
     }, [userId])
 
@@ -307,7 +309,7 @@ function Profile() {
                         <div className=" flex flex-wrap justify-between items-center p-2.5">
                             <div className="flex items-center">
                                 <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={user?.profilePicture ? user.profilePicture : blank_profile} alt={user.username} />
-                                <p className='font-semibold'>{user.fname + ' ' + user?.lname}</p>
+                                <Link to={`/profile/${user._id}`} className='font-semibold'>{user.fname + ' ' + user?.lname}</Link>
                             </div>
                             {currentUser?.followings.includes(user?._id)  ?
                                             <button onClick={(e)=>handleUnfollow(e, user._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
