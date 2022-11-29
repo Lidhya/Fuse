@@ -11,6 +11,9 @@ const NotificationSchema = new mongoose.Schema(
     text: {
       type: String,
     },
+    postId: {
+      type: String,
+    },
     isVisited: {
       type: Boolean,
       default: false

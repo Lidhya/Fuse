@@ -2,6 +2,7 @@ const UserModel = require('../models/userModel');
 const PostModel = require("../models/PostModel");
 const { USER_COLLECTION, POST_COLLECTION } = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
+const  NotificationModel = require("../models/Notification");
 const { uploadFile, S3deletePost } = require('../s3')
 const fs = require('fs')
 const util = require('util')
@@ -86,14 +87,27 @@ module.exports = {
       const post = await PostModel.findById(req.body.postId);
       if (!post.likes.includes(req.params.id)) {
         post.updateOne({ $push: { likes: req.params.id } }).then((response) => {
-          res.status(200).json(response);
+          NotificationModel.create({
+            userId: post.userId,
+            emiterId: req.params.id,
+            text: 'liked your post.',
+            postId:req.body.postId
+          })
+          .then((response)=> res.status(200).json("post liked"))
+          .catch((error) => res.status(500).json(error))
         }).catch((error) => res.status(500).json(error.message))
 
       } else {
         post.updateOne({ $pull: { likes: req.params.id } }).then((response) => {
-          res.status(200).json(response);
+          NotificationModel.deleteOne({
+            userId: post.userId,
+            emiterId: req.params.id,
+            text: 'liked your post.',
+            postId:req.body.postId
+          })
+          .then((response)=> res.status(200).json("post disliked"))
+          .catch((error) => res.status(500).json(error))
         }).catch((error) => res.status(500).json(error.message))
-
       }
     } catch (err) {
       res.status(500).json(err);
