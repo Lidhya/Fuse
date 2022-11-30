@@ -3,10 +3,10 @@ const PostModel = require("../models/PostModel");
 const { USER_COLLECTION, POST_COLLECTION } = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
 const NotificationModel = require("../models/Notification");
-const { uploadFile, S3deletePost } = require('../s3')
-const fs = require('fs')
-const util = require('util')
-const unlinkFile = util.promisify(fs.unlink)
+const { uploadFile, S3deletePost } = require('../s3');
+const fs = require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
 
 module.exports = {
   getPost: async (req, res) => {

@@ -6,14 +6,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import blank_profile from "../assets/empty profile/blank_profile.png"
-import CircularProgress from '@mui/material/CircularProgress';
 import LinearProgress from '@mui/material/LinearProgress';
 import CloseIcon from '@mui/icons-material/Close';
-import User_1 from "../assets/Users/Profile-Pic-S.png"
-// import LocationOnIcon from '@mui/icons-material/LocationOn';
-// import LabelIcon from '@mui/icons-material/Label';
-// import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-// import icons from './Icons'
 
 const customStyles = {
     content: {
