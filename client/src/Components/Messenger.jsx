@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext } from '../context/UserContext';
-import {io} from 'socket.io-client'
+import { io } from 'socket.io-client'
 import Axios from '../axios'
 import Message from './Message';
 import Conversation from './Conversations';
 import blank_profile from "../assets/empty profile/blank_profile.png"
+import EmojiPicker from 'emoji-picker-react';
 /* ---------------------------------- icons --------------------------------- */
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import CallIcon from '@mui/icons-material/Call';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import SendIcon from '@mui/icons-material/Send';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 
 
 
@@ -23,33 +25,34 @@ function Messenger() {
     const socket = useRef();
     const [newMessage, setNewMessage] = useState('')
     const scrollRef = useRef();
+    const [showPicker, setShowPicker] = useState(false);
 
     useEffect(() => {
         socket.current = io("ws://localhost:8000");
         socket.current.on("getMessage", (data) => {
-          setArrivalMessage({
-            sender: data.senderId,
-            text: data.text,
-            createdAt: Date.now(),
-          });
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text,
+                createdAt: Date.now(),
+            });
         });
-      }, []);
-    
-      useEffect(() => {
+    }, []);
+
+    useEffect(() => {
         arrivalMessage &&
-          currentChat?.members.includes(arrivalMessage.sender) &&
-          setMessages((prev) => [...prev, arrivalMessage]);
-      }, [arrivalMessage, currentChat]);
-    
-      useEffect(() => {
+            currentChat?.members.includes(arrivalMessage.sender) &&
+            setMessages((prev) => [...prev, arrivalMessage]);
+    }, [arrivalMessage, currentChat]);
+
+    useEffect(() => {
         socket.current.emit("addUser", currentUser._id);
         socket.current.on("getUsers", (users) => {
             console.log(users);
-        //   setOnlineUsers(
-        //     currentUser.followings.filter((f) => users.some((u) => u.userId === f))
-        //   );
+            //   setOnlineUsers(
+            //     currentUser.followings.filter((f) => users.some((u) => u.userId === f))
+            //   );
         });
-      }, [currentUser]);
+    }, [currentUser]);
 
     useEffect(() => {
         const getConversations = async () => {
@@ -65,19 +68,19 @@ function Messenger() {
         getConversations();
     }, [currentUser._id]);
 
-    
-    const getUser=()=>{
+
+    const getUser = () => {
         try {
-        const friendId = currentChat?.members.find((m) => m !== currentUser._id);
-          friendId &&   Axios.get(`/user/get/${friendId}`, config)
-            .then(({ data }) => {
-                setUser(data);
-            })
-            .catch((error)=> console.log(error))
+            const friendId = currentChat?.members.find((m) => m !== currentUser._id);
+            friendId && Axios.get(`/user/get/${friendId}`, config)
+                .then(({ data }) => {
+                    setUser(data);
+                })
+                .catch((error) => console.log(error))
         } catch (error) {
             console.log(error);
         }
-       
+
     }
 
     useEffect(() => {
@@ -98,8 +101,8 @@ function Messenger() {
 
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, [messages]);
-    
+    }, [messages]);
+
     const handleSend = async (e) => {
         e.preventDefault()
         const message = {
@@ -110,13 +113,13 @@ function Messenger() {
 
         const receiverId = currentChat.members.find(
             (member) => member !== currentUser._id
-          );
-      
-          socket.current.emit("sendMessage", {
+        );
+
+        socket.current.emit("sendMessage", {
             senderId: currentUser._id,
             receiverId,
             text: newMessage,
-          });
+        });
 
         try {
             Axios.post("/messages", message, config)
@@ -130,8 +133,13 @@ function Messenger() {
         }
     }
 
+    const onEmojiClick = (event) => {
+        setNewMessage(prevInput => prevInput + event.emoji);
+        setShowPicker(false);
+    };
+
     const handleHamClick = (e) => {
-       e && e.preventDefault()
+        e && e.preventDefault()
         document.getElementById('chat-list').classList.toggle('hidden')
     }
 
@@ -146,7 +154,7 @@ function Messenger() {
                             </button>
                         </li>
                         {conversations && conversations.map((convo) => (
-                            <div onClick={(e) => {setCurrentChat(convo); handleHamClick(e);}} className='border-b border-gray-600'>
+                            <div onClick={(e) => { setCurrentChat(convo); handleHamClick(e); }} className='border-b border-gray-600'>
                                 <Conversation key={convo._id} setCurrentChat={setCurrentChat} conversation={convo} />
                             </div>
                         ))}
@@ -163,8 +171,8 @@ function Messenger() {
                                         <span className="sr-only">Open menu</span>
                                         <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path></svg>
                                     </button></div>
-                                <img className="w-12 h-12 rounded-full" src={user?.profilePicture? user.profilePicture : blank_profile} alt="user" />
-                                <div className="text-sm font-semibold text-white ">{user?.fname+" "+user?.lname}</div>
+                                <img className="w-12 h-12 rounded-full" src={user?.profilePicture ? user.profilePicture : blank_profile} alt="user" />
+                                <div className="text-sm font-semibold text-white ">{user?.fname + " " + user?.lname}</div>
                             </div>
                             <div className='flex gap-4 items-center'>
                                 <div className='p-1 rounded-full bg-purple-400 text-white'><CallIcon /></div>
@@ -180,7 +188,7 @@ function Messenger() {
                                     messages.length > 0 ?
                                         messages.map((m, index) => (
                                             <div key={index} ref={scrollRef}>
-                                            <Message  message={m} user={user} own={m.sender === currentUser._id} />
+                                                <Message message={m} user={user} own={m.sender === currentUser._id} />
                                             </div>
                                         ))
                                         : <div className='flex justify-center items-center h-full'>
@@ -190,8 +198,15 @@ function Messenger() {
                                         </div>
                                 }
                             </div>
+                            <div className='absolute bottom-24'>
+                                {showPicker && <EmojiPicker
+                                onEmojiClick={onEmojiClick} emojiStyle={{position:'absolute'}} />}
+                            </div>
+                            
                             <div className='flex gap-2 m-2 items-center'>
-                                <textarea name="message" onChange={(e) => setNewMessage(e.target.value)} value={newMessage} id="" placeholder='Send something...' rows='2' className='border border-solid border-gray-400 p-2 focus:outline-none rounded-2xl w-full' />
+                                <InsertEmoticonIcon className='text-gray-600'
+                                    onClick={() => setShowPicker(val => !val)} />
+                                <textarea name="message" rows={2} onChange={(e) => setNewMessage(e.target.value)} value={newMessage} id="" placeholder='Send something...' className='border border-solid border-gray-400 p-2 focus:outline-none rounded-2xl w-full' />
                                 <button onClick={handleSend} type='submit' className='rounded-lg p-4  text-white bg-purple-800'><SendIcon />
                                 </button>
                             </div>
