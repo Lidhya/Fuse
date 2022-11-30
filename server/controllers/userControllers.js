@@ -20,6 +20,15 @@ module.exports = {
     }
   },
 
+  getAllUsers: async (req, res) => {
+    try {
+     userModel.find({_id:{$ne:req.params.id}}, "_id fname lname username profilePicture")
+     .then((response)=> res.status(200).json(response))
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
   userUpdate: async (req, res) => {
     const { error, value } = validateUpdate(req.body)
     if (error) return res.status(422).json(error.details)

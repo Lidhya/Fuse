@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { userUpdate, userDelete, getUser, followUnfollow, getSuggestions, profileUpdate, coverUpdate,getFollowers, getFollowings } = require('../controllers/userControllers')
+const { userUpdate, getAllUsers, userDelete, getUser, followUnfollow, getSuggestions, profileUpdate, coverUpdate,getFollowers, getFollowings } = require('../controllers/userControllers')
 const { verifyJWT } = require('../middlewares/jwtAuth')
 const multer=require('multer')
 const path=require('path')
@@ -23,7 +23,10 @@ const storage = multer.diskStorage({
 //get a user
 router.get("/get/:id", verifyJWT, getUser);
 
-//get a user
+//get all users
+router.get("/all-users/:id", verifyJWT, getAllUsers);
+
+//get Suggestions
 router.get("/suggestions/:id", verifyJWT, getSuggestions);
 
 //update user
