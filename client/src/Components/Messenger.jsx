@@ -140,6 +140,7 @@ function Messenger() {
 
     const handleHamClick = (e) => {
         e && e.preventDefault()
+        setShowPicker(false)
         document.getElementById('chat-list').classList.toggle('hidden')
     }
 
@@ -175,8 +176,8 @@ function Messenger() {
                                 <div className="text-sm font-semibold text-white ">{user?.fname + " " + user?.lname}</div>
                             </div>
                             <div className='flex gap-4 items-center'>
-                                <div className='p-1 rounded-full bg-purple-400 text-white'><CallIcon /></div>
-                                <div className='p-1 rounded-full bg-purple-400 text-white'><VideocamIcon /></div>
+                                {/* <div className='p-1 rounded-full bg-purple-400 text-white'><CallIcon /></div>
+                                <div className='p-1 rounded-full bg-purple-400 text-white'><VideocamIcon /></div> */}
                                 <div className='p-1 rounded-full bg-purple-400 text-white'><MoreVertOutlinedIcon /></div>
                             </div>
                         </div>
@@ -200,9 +201,9 @@ function Messenger() {
                             </div>
                             <div className='absolute bottom-24'>
                                 {showPicker && <EmojiPicker
-                                onEmojiClick={onEmojiClick} emojiStyle={{position:'absolute'}} />}
+                                    onEmojiClick={onEmojiClick} emojiStyle={{ position: 'absolute' }} />}
                             </div>
-                            
+
                             <div className='flex gap-2 m-2 items-center'>
                                 <InsertEmoticonIcon className='text-gray-600'
                                     onClick={() => setShowPicker(val => !val)} />

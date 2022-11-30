@@ -2,7 +2,7 @@ const UserModel = require('../models/userModel');
 const PostModel = require("../models/PostModel");
 const { USER_COLLECTION, POST_COLLECTION } = require('../config/collections')
 const { validatePost } = require('../validations/postValidators.js');
-const  NotificationModel = require("../models/Notification");
+const NotificationModel = require("../models/Notification");
 const { uploadFile, S3deletePost } = require('../s3')
 const fs = require('fs')
 const util = require('util')
@@ -22,7 +22,7 @@ module.exports = {
   getUserPosts: (req, res) => {
     try {
       PostModel.find({ userId: req.params.id })
-        .then((response) =>{console.log(response); res.status(200).json(response);})
+        .then((response) => { console.log(response); res.status(200).json(response); })
         .catch((err) => res.status(500).json(err))
     } catch (error) {
       res.status(500).json(error);
@@ -52,11 +52,11 @@ module.exports = {
   updatePost: async (req, res) => {
     try {
       const post = await PostModel.findById(req.params.postId);
-      const {userId, newDescription}=req.body
+      const { userId, newDescription } = req.body
       if (post.userId === userId) {
-        post.updateOne({ $set: {description:newDescription} })
-        .then(()=>  res.status(200).json("Post updated successfully"))
-        .catch((err) => res.status(500).json(err.message))
+        post.updateOne({ $set: { description: newDescription } })
+          .then(() => res.status(200).json("Post updated successfully"))
+          .catch((err) => res.status(500).json(err.message))
       } else {
         res.status(403).json("you can update only your post");
       }
@@ -69,11 +69,11 @@ module.exports = {
     try {
       const post = await PostModel.findById(req.params.postId);
       if (post.userId === req.userId) {
-        S3deletePost(post.key).then(()=>{
-        post.deleteOne()
-       .then((response)=> res.status(200).json("Post deleted successfully"))
-       .catch((error)=>res.status(500).json(error))
-        }).catch((error)=>res.status(500).json(error))       
+        S3deletePost(post.key).then(() => {
+          post.deleteOne()
+            .then((response) => res.status(200).json("Post deleted successfully"))
+            .catch((error) => res.status(500).json(error))
+        }).catch((error) => res.status(500).json(error))
       } else {
         res.status(403).json("You can delete only your post");
       }
@@ -87,26 +87,29 @@ module.exports = {
       const post = await PostModel.findById(req.body.postId);
       if (!post.likes.includes(req.params.id)) {
         post.updateOne({ $push: { likes: req.params.id } }).then((response) => {
-          NotificationModel.create({
-            userId: post.userId,
-            emiterId: req.params.id,
-            text: 'liked your post.',
-            postId:req.body.postId
-          })
-          .then((response)=> res.status(200).json("post liked"))
-          .catch((error) => res.status(500).json(error))
+          if (post.userId != req.params.id) {
+            NotificationModel.create({
+              userId: post.userId,
+              emiterId: req.params.id,
+              text: 'liked your post.',
+              postId: req.body.postId
+            })
+              .then((response) => res.status(200).json("post liked"))
+              .catch((error) => res.status(500).json(error))
+          } else res.status(200).json("post liked")
         }).catch((error) => res.status(500).json(error.message))
-
       } else {
         post.updateOne({ $pull: { likes: req.params.id } }).then((response) => {
-          NotificationModel.deleteOne({
-            userId: post.userId,
-            emiterId: req.params.id,
-            text: 'liked your post.',
-            postId:req.body.postId
-          })
-          .then((response)=> res.status(200).json("post disliked"))
-          .catch((error) => res.status(500).json(error))
+          if (post.userId != req.params.id) {
+            NotificationModel.deleteOne({
+              userId: post.userId,
+              emiterId: req.params.id,
+              text: 'liked your post.',
+              postId: req.body.postId
+            })
+              .then((response) => res.status(200).json("post disliked"))
+              .catch((error) => res.status(500).json(error))
+          } else res.status(200).json("post liked")
         }).catch((error) => res.status(500).json(error.message))
       }
     } catch (err) {
