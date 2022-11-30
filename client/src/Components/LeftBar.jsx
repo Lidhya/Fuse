@@ -2,13 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { UserContext } from '../context/UserContext';
 import Axios from '../axios'
+import { useQuery } from '@tanstack/react-query';
+import { errorHandler } from './javascripts/errorHandler'
+/* ---------------------------- icons and images ---------------------------- */
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { useQuery } from '@tanstack/react-query';
 
 
 function LeftBar() {
@@ -22,9 +24,7 @@ function LeftBar() {
        return new Date(b.createdAt) - new Date(a.createdAt);
      });
        return sortedData;
-     }).catch((error)=> {
-       console.log(error);
-     })
+     }).catch((error)=> errorHandler())
  }
    );
    
@@ -32,11 +32,9 @@ function LeftBar() {
      try {
       Axios.get(`/user/get/${currentUser._id}`, config).then(({ data }) => {
          setProfile(data)         
-     }).catch((error) => {
-         console.log(error.data)
-     })
+     }).catch((error) => errorHandler())
      } catch (error) {
-      console.log(error)
+      errorHandler()
      }
    }, [])
    

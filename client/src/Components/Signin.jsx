@@ -38,7 +38,6 @@ function Signin() {
             navigate('/')
           })
           .catch((error) => {
-            console.log(error);
             setErrorMessage(error.response?.data.message)
           })
       } catch (err) {

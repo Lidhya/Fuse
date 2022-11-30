@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { UserContext } from '../context/UserContext'
 import no_notifications from "../assets/error/Notify-amico.png"
 import Axios from '../axios'
 import Notification from './Notification'
+import { errorHandler } from './javascripts/errorHandler'
 
 
 function Notifications() {
@@ -11,7 +12,6 @@ function Notifications() {
     const [notifications, setNotifications] = useState([])
 
     const queryClient = useQueryClient()
-
 
     const getNotifications = () => {
         Axios.get(`/notifications/${currentUser._id}`, config)
@@ -21,9 +21,7 @@ function Notifications() {
                 });
                 setNotifications(sortedData)
                 return sortedData;
-            }).catch((error) => {
-                console.log(error.data);
-            })
+            }).catch((error) => errorHandler())
     }
 
     useEffect(() => {
@@ -34,11 +32,9 @@ function Notifications() {
                     .then((response) => {
                         console.log(response);
                         queryClient.invalidateQueries({ queryKey: ['notifications'] })
-                    }).catch((error) => {
-                        console.log(error.message);
-                    })
+                    }).catch((error) => errorHandler())
             } catch (error) {
-                console.log(error);
+                errorHandler()
             }
         }
         updateStatus()

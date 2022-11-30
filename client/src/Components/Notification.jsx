@@ -4,6 +4,7 @@ import moment from 'moment';
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import Axios from '../axios'
 import { Link } from 'react-router-dom';
+import { errorHandler } from './javascripts/errorHandler'
 
 
 function Notification({ notification }) {
@@ -15,7 +16,7 @@ function Notification({ notification }) {
         Axios.get(`/user/get/${emiterId}`, config).then(({ data }) => {
             setUser(data)
         }).catch((error) => {
-            console.log(error.data)
+            errorHandler()
         })
     }, [notification])
 

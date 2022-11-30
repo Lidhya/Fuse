@@ -4,14 +4,15 @@ import { io } from 'socket.io-client'
 import Axios from '../axios'
 import Message from './Message';
 import Conversation from './Conversations';
-import blank_profile from "../assets/empty profile/blank_profile.png"
 import EmojiPicker from 'emoji-picker-react';
+import { errorHandler } from './javascripts/errorHandler'
 /* ---------------------------------- icons --------------------------------- */
+import blank_profile from "../assets/empty profile/blank_profile.png"
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
-import CallIcon from '@mui/icons-material/Call';
-import VideocamIcon from '@mui/icons-material/Videocam';
 import SendIcon from '@mui/icons-material/Send';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+// import CallIcon from '@mui/icons-material/Call';
+// import VideocamIcon from '@mui/icons-material/Videocam';
 
 
 
@@ -60,9 +61,9 @@ function Messenger() {
                 Axios.get(`/conversations/${currentUser?._id}`, config)
                     .then(({ data }) => {
                         setConversations(data);
-                    }).catch((error) => console.log(error))
+                    }).catch((error) => errorHandler())
             } catch (err) {
-                console.log(err);
+                errorHandler()
             }
         };
         getConversations();
@@ -76,9 +77,9 @@ function Messenger() {
                 .then(({ data }) => {
                     setUser(data);
                 })
-                .catch((error) => console.log(error))
+                .catch((error) => errorHandler())
         } catch (error) {
-            console.log(error);
+            errorHandler()
         }
 
     }
@@ -91,9 +92,9 @@ function Messenger() {
                         setMessages(data);
                         getUser()
                     })
-                    .catch((error) => console.log(error))
+                    .catch((error) => errorHandler())
             } catch (err) {
-                console.log(err);
+                errorHandler()
             }
         };
         getMessages();
@@ -127,9 +128,9 @@ function Messenger() {
                     setMessages([...messages, data]);
                     setNewMessage("");
                 })
-                .catch((error) => console.log(error))
+                .catch((error) => errorHandler())
         } catch (error) {
-            console.log(error);
+            errorHandler()
         }
     }
 

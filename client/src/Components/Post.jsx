@@ -5,6 +5,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Axios from '../axios'
 import moment from 'moment';
 import Modal from 'react-modal'
+import { errorHandler } from './javascripts/errorHandler'
+import Comments from "./Comments";
+import Swal from 'sweetalert2'
+/* ---------------------------- icons and images ---------------------------- */
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
@@ -12,7 +16,6 @@ import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import CloseIcon from '@mui/icons-material/Close';
-import Comments from "./Comments";
 
 const customStyles = {
   content: {
@@ -51,9 +54,7 @@ const Post = ({ post, profileUpdate }) => {
     return Axios.put(`/post/like/${currentUser._id}`, { postId: _id }, config).then((response) => {
       console.log(response);
       profileUpdate && profileUpdate()
-    }).catch((error) => {
-      console.log(error.message);
-    })
+    }).catch((error) => errorHandler())
   },
     {
       onSuccess: () => {
@@ -67,7 +68,7 @@ const Post = ({ post, profileUpdate }) => {
       setUserInfo(response.data)
     }).catch((error) => {
       if (!error.response.data?.auth) return logout();
-      console.log(error.data.message);
+      errorHandler()
     })
 
     if (url) {
@@ -76,7 +77,7 @@ const Post = ({ post, profileUpdate }) => {
     }
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     setNewDescription('')
     setErrorMessage('')
   }, [edit])
@@ -97,23 +98,33 @@ const Post = ({ post, profileUpdate }) => {
           queryClient.invalidateQueries({ queryKey: ['posts'] })
           profileUpdate && profileUpdate()
         })
-        .catch((error) => console.log(error))
+        .catch((error) => errorHandler())
     }
   }
 
-  const handleDelete=(e)=>{
+  const handleDelete = (e) => {
     e.preventDefault()
     setDrop('')
-    if(window.confirm('Are you sure?')){
-       Axios.delete(`/post/delete/${_id}`, config)
-        .then((response) => {
-          console.log(response);
-          queryClient.invalidateQueries({ queryKey: ['posts'] })
-          queryClient.invalidateQueries({ queryKey: ['userPosts'] })
-          profileUpdate && profileUpdate()
-        })
-        .catch((error) => console.log(error))
-    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You won't be able to revert this!`,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Axios.delete(`/post/delete/${_id}`, config)
+          .then((response) => {
+            console.log(response);
+            queryClient.invalidateQueries({ queryKey: ['posts'] })
+            queryClient.invalidateQueries({ queryKey: ['userPosts'] })
+            profileUpdate && profileUpdate()
+          })
+          .catch((error) => errorHandler())
+      } else return;
+    })
+    return;
   }
 
   return (
@@ -136,10 +147,10 @@ const Post = ({ post, profileUpdate }) => {
             {currentUser._id === userId && <MoreHorizIcon onClick={() => setDrop(!drop)} />}
             {drop && <div id="dropdown" className="right-1 absolute z-1   bg-gray-600 rounded divide-y divide-gray-100 shadow">
               <ul className="py-1  text-sm text-white " aria-labelledby="dropdownDefault">
-                <li  className="">
-               <button onClick={() => setEdit(!edit)} className="text-center align w-32 hover:bg-gray-500 py-2 ">Edit</button>
+                <li className="">
+                  <button onClick={() => setEdit(!edit)} className="text-center align w-32 hover:bg-gray-500 py-2 ">Edit</button>
                 </li>
-                <li  className="">
+                <li className="">
                   <button onClick={handleDelete} className="text-center align w-32 hover:bg-gray-500  py-2 ">Delete</button>
                 </li>
               </ul>

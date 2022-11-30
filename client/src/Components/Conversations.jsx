@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import { UserContext } from '../context/UserContext';
 import Axios from '../axios'
+import { errorHandler } from './javascripts/errorHandler'
 
 
 function Conversations({ conversation, setCurrentChat }) {
     const [user, setUser] = useState(null);
     const { currentUser, config } = useContext(UserContext)
+    
     useEffect(() => {
         const friendId = conversation.members.find((m) => m !== currentUser._id); 
         const getUser = async () => {
@@ -15,9 +17,9 @@ function Conversations({ conversation, setCurrentChat }) {
            .then(({data})=>{
                setUser(data);
            })
-           .catch((error)=> console.log(error))
+               .catch((error) => errorHandler())
           } catch (err) {
-            console.log(err);
+            errorHandler()
           }
         };
         getUser();

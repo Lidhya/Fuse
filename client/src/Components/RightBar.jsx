@@ -5,6 +5,9 @@ import { UserContext } from '../context/UserContext';
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import Axios from '../axios'
 import Conversations from './Conversations';
+import { errorHandler } from './javascripts/errorHandler'
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 function RightBar() {
@@ -13,15 +16,14 @@ function RightBar() {
    const [conversations, setConversations] = useState([]);
    const queryClient = useQueryClient()
 
-
-   const { isLoading, error, data } = useQuery(["suggestions"], () => {
+   const { isLoading } = useQuery(["suggestions"], () => {
       return Axios.get(`/user/suggestions/${currentUser._id}`, config).then(({ data }) => {
          const slicedData = data.slice(0, 5)
          setSuggestion(slicedData)
          return slicedData;
       }).catch(({ response }) => {
          if (!response?.data?.auth) return logout();
-         return response
+         errorHandler()
       })
    }
    );
@@ -31,11 +33,8 @@ function RightBar() {
          Axios.get(`/conversations/${currentUser?._id}`, config)
             .then(({ data }) => {
                setConversations(data);
-            }).catch((error) => console.log(error))
-      } catch (err) {
-         console.log(err);
-      }
-
+            }).catch((error) => errorHandler())
+      } catch (err) { errorHandler() }
    }, [currentUser._id]);
 
 
@@ -45,21 +44,20 @@ function RightBar() {
             console.log(data);
             updateCurrentUser()
             queryClient.invalidateQueries({ queryKey: ["suggestions"] })
-         }).catch((error) => {
-            console.log(error.message);
-         })
+         }).catch((error) => errorHandler())
    }
 
    return (
       <aside className="fixed w-1/5 " aria-label="Sidebar">
-         <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded-lg shadow-md dark:bg-gray-900">
+         <div className="overflow-y-auto py-4 px-3  rounded-lg shadow-md bg-gray-900">
+            {isLoading && <CircularProgress color="secondary" />}
             {suggestions.length > 0 && <ul className="space-y-2 ">
                <li>
                   <p className=" items-center  p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
                      <span className="font-semibold">Suggestions for you</span>
                   </p>
                </li>
-               {suggestions && suggestions.map((user, index) => (
+               {suggestions && suggestions.map((user) => (
                   <li key={user?._id}>
                      <div className="flex gap-1 items-center flex-wrap justify-between p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
                         <div className='flex items-center justify-start'>
@@ -80,7 +78,7 @@ function RightBar() {
                <li className='overflow-y-scroll over max-h-60'>
                   {conversations && conversations.map((convo) => (
                      <Link to={'/messenger'} key={convo._id} className='dark:hover:bg-gray-700 dark:text-white group'>
-                        <Conversations  conversation={convo} />
+                        <Conversations conversation={convo} />
                      </Link>
                   ))}</li>
             </ul>

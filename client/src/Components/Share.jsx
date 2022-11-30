@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Modal from 'react-modal'
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { errorHandler } from './javascripts/errorHandler'
+import Modal from 'react-modal'
+/* ---------------------------------- icons --------------------------------- */
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import blank_profile from "../assets/empty profile/blank_profile.png"
@@ -52,12 +54,11 @@ export default function Share({ profileUpdate }) {
     // Mutations
     const mutation = useMutation((formData) => {
         return Axios.post(`/post/create-post/${id}`, formData, config).then((response) => {
-            console.log(response);
             setLoading(false)
             profileUpdate && profileUpdate()
         }).catch(({response}) => {
             if (!response?.data?.auth) return logout();
-            console.log(response);
+            errorHandler()
         })
     },
         {
@@ -163,18 +164,6 @@ export default function Share({ profileUpdate }) {
                                 <VideoCameraBackIcon htmlColor="tomato" className="text-lg mr-1" />
                                 <span className="md:text-md sm:text-sm font-semibold">Video</span>
                             </div>
-                            {/* <div className="flex items-center m-2 cursor-pointer">
-                                <LabelIcon htmlColor="blue" className="text-lg mr-1" />
-                                <span className="md:text-md sm:text-sm font-medium">Tag</span>
-                            </div> */}
-                            {/* <div className="flex items-center m-2 cursor-pointer">
-                                <LocationOnIcon htmlColor="green" className="text-lg mr-1" />
-                                <span className="md:text-md sm:text-sm font-medium">Location</span>
-                            </div> */}
-                            {/* <div className="flex items-center m-2 cursor-pointer">
-                                <EmojiEmotionsIcon htmlColor="goldenrod" className="text-lg mr-1" />
-                                <span className="md:text-md sm:text-sm font-medium">Feelings</span>
-                            </div> */}
 
                         </div>
                         <button onClick={() => setModal(true)} className="border-none p-1.5 px-3 rounded bg-green-600 font-medium mr-5 cursor-pointer text-white">Post</button>

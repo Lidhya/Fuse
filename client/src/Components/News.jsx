@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Axios from '../axios'
 import Modal from 'react-modal'
-import { countries } from './constantData/Countries'
+import { countries } from './javascripts/Countries'
 import CloseIcon from '@mui/icons-material/Close';
 import errImg from '../assets/error/404 Error Page not Found with people connecting a plug-amico.png'
 
@@ -31,7 +31,7 @@ function News() {
     const [modal, setModal] = useState(false)
     const [item, setItem] = useState({})
     const [error, setError] = useState('')
-    console.log(item.content)
+
     useEffect(() => {
         Axios.get(`https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${apiKey}`).then(({ data }) => {
             setArticles(data.articles)
@@ -44,6 +44,7 @@ function News() {
         setItem(selected)
         setModal(true)
     }
+
     return (
         <div className='m-3 flex flex-col justify-around '>
             <div className='w-40'>

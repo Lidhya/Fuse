@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { UserContext } from '../context/UserContext';
+import { useQuery } from '@tanstack/react-query';
+import Axios from '../axios'
+import { errorHandler } from './javascripts/errorHandler'
+/* ---------------------------------- icons --------------------------------- */
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
@@ -8,8 +12,6 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { useQuery } from '@tanstack/react-query';
-import Axios from '../axios'
 
 function Navbar() {
   const { logout, currentUser, config } = useContext(UserContext)
@@ -21,9 +23,7 @@ function Navbar() {
       .then(({ data }) => {
         setNotifications(data)
         return data;
-      }).catch((error) => {
-        console.log(error.data);
-      })
+      }).catch((error) => errorHandler())
   }
   );
 
@@ -31,7 +31,6 @@ function Navbar() {
     notifications &&
       setCount(notifications.filter(e => e.isVisited === false).length)
   }, [notifications])
-
 
   const handleLogout = () => {
     if (window.confirm('Do you want to Signout?')) {

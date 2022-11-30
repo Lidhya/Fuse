@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Modal from 'react-modal'
-import CloseIcon from '@mui/icons-material/Close';
-import blank_profile from "../assets/empty profile/blank_profile.png"
-import cover_blank from "../assets/empty profile/cover-picture-blank.png"
 import { Link, useLocation } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
-import Share from '../Components/Share'
-import Post from "./Post";
-import { customStyles } from './constantData/profileModalStyle'
+import { customStyles } from './javascripts/profileModalStyle'
 import { validateUpdate } from './Validations/updateValidate'
+import { errorHandler } from './javascripts/errorHandler'
+import Swal from 'sweetalert2'
+import Modal from 'react-modal'
+import Post from "./Post";
+import Share from '../Components/Share'
+/* ----------------------------- icon and images ---------------------------- */
+import CloseIcon from '@mui/icons-material/Close';
+import blank_profile from "../assets/empty profile/blank_profile.png"
+import cover_blank from "../assets/empty profile/cover-picture-blank.png"
 import EditIcon from '@mui/icons-material/Edit';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 
@@ -20,7 +23,7 @@ function Profile() {
     const { currentUser, config, updateCurrentUser, token } = useContext(UserContext)
     const [listModal, setListModal] = useState(false)
     const [list, setList] = useState('')
-    const [listData,  setListData] = useState([])
+    const [listData, setListData] = useState([])
     const [updateModal, setUpdateModal] = useState(false)
     const [coverModal, setCoverModal] = useState(false)
     const [profileModal, setProfileModal] = useState(false)
@@ -48,7 +51,7 @@ function Profile() {
                 setProfileUser(data)
                 return data;
             }).catch((error) => {
-                console.log(error.data)
+                errorHandler()
                 return error.data
             })
         },
@@ -63,7 +66,7 @@ function Profile() {
         return Axios.put(`/user/follow-unfollow/${userId}`, { currentUser: currentUser._id }, config).then((response) => {
             updateCurrentUser()
         }).catch((error) => {
-            console.log(error.message);
+            errorHandler()
         })
     },
         {
@@ -80,10 +83,8 @@ function Profile() {
                 });
                 setProfilePosts(sortedData);
                 refetch()
-            }).catch((error) => console.log(error))
-        } catch (error) {
-            console.log(error)
-        }
+            }).catch((error) => errorHandler())
+        } catch (error) { errorHandler() }
     }
 
     useEffect(() => {
@@ -111,16 +112,16 @@ function Profile() {
             try {
                 if (list === 'Followers') {
                     Axios.get(`/user/followers/${profileUser._id}`, config)
-                    .then(({data})=> setListData(data))
-                    .catch((error)=> console.log(error))
+                        .then(({ data }) => setListData(data))
+                        .catch((error) => errorHandler())
 
                 } else if (list === 'Following') {
                     Axios.get(`/user/followings/${profileUser._id}`, config)
-                    .then(({data})=> setListData(data))
-                    .catch((error)=> console.log(error))
+                        .then(({ data }) => setListData(data))
+                        .catch((error) => errorHandler())
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler()
             }
 
         }
@@ -155,9 +156,20 @@ function Profile() {
         mutation.mutate(userId)
     }
 
-    const handleUnfollow = (e, userId) => {
+    const handleUnfollow = (e, userId, userName) => {
         e.preventDefault()
-        if (window.confirm(`Do you want to unfollow`)) return mutation.mutate(userId)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `Do you want unfollow ${userName}?`,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Unfollow'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                return mutation.mutate(userId)
+            } else return;
+        })
         return;
     }
 
@@ -215,7 +227,7 @@ function Profile() {
                                     src={profileUser?.coverPicture ? profileUser.coverPicture : cover_blank}
                                     alt={profileUser?.fname}
                                 />
-                              { currentUser?._id === profileUser?._id && <div onClick={() => setCoverModal(true)} className='z-0 absolute right-3 bottom-6 shadow bg-white rounded-full p-1'>
+                                {currentUser?._id === profileUser?._id && <div onClick={() => setCoverModal(true)} className='z-0 absolute right-3 bottom-6 shadow bg-white rounded-full p-1'>
                                     <EditIcon />
                                 </div>
                                 }
@@ -224,7 +236,7 @@ function Profile() {
                                     src={profileUser?.profilePicture ? profileUser.profilePicture : blank_profile}
                                     alt={profileUser?.username}
                                 />
-                               {currentUser?._id === profileUser?._id && <EditIcon onClick={() => setProfileModal(true)} className='z-0 absolute left-32 bottom-11 shadow bg-white rounded-full p-1' />}
+                                {currentUser?._id === profileUser?._id && <EditIcon onClick={() => setProfileModal(true)} className='z-0 absolute left-32 bottom-11 shadow bg-white rounded-full p-1' />}
                             </div>
                             <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
                                 <div className="flex flex-col  justify-center py-8 px-10 ">
@@ -234,8 +246,8 @@ function Profile() {
                                     {currentUser?._id === profileUser?._id ?
                                         <button className='border border-black text-md font-semibold p-1 mt-2 rounded-md' onClick={() => { setUpdateModal(true) }}>Edit profile</button>
                                         : (currentUser?.followings.includes(profileUser?._id) ?
-                                            <button onClick={(e)=>handleUnfollow(e, profileUser._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
-                                            : <button onClick={(e)=>handleFollow(e, profileUser._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
+                                            <button onClick={(e) => handleUnfollow(e, profileUser._id, profileUser.fname)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
+                                            : <button onClick={(e) => handleFollow(e, profileUser._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
                                         )}
                                 </div>
                                 <div className="flex  flex-wrap p-10  mt-2 space-x-3 md:mt-3">
@@ -258,12 +270,12 @@ function Profile() {
                 </div>
             </div>
             {currentUser?._id === profileUser?._id && <Share profileUpdate={getUserPosts} />}
-            {profilePosts.length>0? profilePosts.map((post) => <Post post={post} key={post._id} profileUpdate={getUserPosts} />)
-            :(<div className='flex flex-col justify-center items-center'>
-            <span className="text-xl text-gray-400">
-                There are no posts yet.
-            </span>
-        </div>)
+            {profilePosts.length > 0 ? profilePosts.map((post) => <Post post={post} key={post._id} profileUpdate={getUserPosts} />)
+                : (<div className='flex flex-col justify-center items-center'>
+                    <span className="text-xl text-gray-400">
+                        There are no posts yet.
+                    </span>
+                </div>)
             }
 
             { /* --------------------------------- Modals --------------------------------- */}
@@ -305,22 +317,22 @@ function Profile() {
             <Modal isOpen={listModal} onRequestClose={() => { setListModal(false) }} style={customStyles}>
                 <div className='text-end'><CloseIcon onClick={() => { setListModal(false) }} /></div>
                 <h1 className='text-2xl  text-purple-700 font-thin mb-3'>{list}</h1>
-                {listData.length>0 ? listData.map((user) => (
+                {listData.length > 0 ? listData.map((user) => (
                     <div key={user._id} className=" bg-white my-3 rounded-xl shadow-md border-gray-100  border-2">
                         <div className=" flex flex-wrap justify-between items-center p-2.5">
                             <div className="flex items-center">
                                 <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={user?.profilePicture ? user.profilePicture : blank_profile} alt={user.username} />
                                 <Link to={`/profile/${user._id}`} className='font-semibold'>{user.fname + ' ' + user?.lname}</Link>
                             </div>
-                            {currentUser?.followings.includes(user?._id)  ?
-                                            <button onClick={(e)=>handleUnfollow(e, user._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
-                                            : (user?._id !==currentUser._id && <button onClick={(e)=>handleFollow(e, user._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>)
-                                        }
+                            {currentUser?.followings.includes(user?._id) ?
+                                <button onClick={(e) => handleUnfollow(e, user._id, user.fname)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
+                                : (user?._id !== currentUser._id && <button onClick={(e) => handleFollow(e, user._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>)
+                            }
                         </div>
                     </div>
                 ))
-            : <p className='text-gray-600 m-3 text-lg'>No {list} yet</p>
-            }
+                    : <p className='text-gray-600 m-3 text-lg'>No {list} yet</p>
+                }
             </Modal>
 
             <Modal isOpen={updateModal} onRequestClose={() => { setUpdateModal(false) }} style={customStyles}>

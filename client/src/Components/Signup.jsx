@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import Axios from '../axios'
 import {validateSignup} from './Validations/signupValidate'
 
-// https://github.com/dmalvia/React_Forms_Tutorials/blob/use-native/src/App.js
 
 function Signup() {
     const navigate=useNavigate()
