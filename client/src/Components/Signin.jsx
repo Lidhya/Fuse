@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Axios from '../axios'
-import { SocketContext } from '../context/SocketContext'
 import { UserContext } from '../context/UserContext'
 import {validateSignin} from './Validations/signinValidate'
 
 
 function Signin() {
   const { setCurrentUser } = useContext(UserContext)
-  const {socket, setSocket}=useContext(SocketContext)
   const navigate = useNavigate()
   const initialValues = { username: "", password: "" };
   const [formValues, setFormValues] = useState(initialValues);
