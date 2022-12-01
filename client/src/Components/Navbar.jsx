@@ -4,6 +4,7 @@ import { UserContext } from '../context/UserContext';
 import { useQuery } from '@tanstack/react-query';
 import Axios from '../axios'
 import { errorHandler } from './javascripts/errorHandler'
+import Swal from 'sweetalert2'
 /* ---------------------------------- icons --------------------------------- */
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -55,10 +56,19 @@ function Navbar() {
   };
 
   const handleLogout = () => {
-    if (window.confirm('Do you want to Signout?')) {
-      logout()
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `Do you want to logout from FUSE?`,
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Logout'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout()
       return <Navigate to='/signin' />
-    }
+      } else return;
+    })
   }
   const handleHamClick = () => {
     document.getElementById('navbar-hamburger').classList.toggle('hidden')
