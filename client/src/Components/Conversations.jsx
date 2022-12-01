@@ -9,11 +9,9 @@ import { SocketContext } from '../context/SocketContext';
 function Conversations({ conversation, setCurrentChat }) {
     const [user, setUser] = useState(null);
     const { currentUser, config } = useContext(UserContext)
-    const {socket, onlineUsers} = useContext(SocketContext)
+    const { onlineUsers} = useContext(SocketContext)
     
     useEffect(() => {
-        console.log(socket);
-
         const friendId = conversation.members.find((m) => m !== currentUser._id); 
         const getUser = async () => {
           try {
