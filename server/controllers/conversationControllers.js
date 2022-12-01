@@ -2,10 +2,12 @@ const Conversation = require("../models/Conversation");
 
 module.exports = {
     addNewConvo: async (req, res) => {
+       const convo = await Conversation.findOne({members:  [req.body.senderId, req.body.receiverId] })
+       console.log(convo);
+        if(convo?.members) return   res.status(200).json({exist:true});
         const newConversation = new Conversation({
             members: [req.body.senderId, req.body.receiverId],
         });
-
         try {
             const savedConversation = await newConversation.save();
             res.status(200).json(savedConversation);

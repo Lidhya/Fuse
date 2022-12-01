@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
@@ -36,6 +36,7 @@ function Profile() {
     const [isSubmit, setIsSubmit] = useState(false);
     const [coverImage, setCoverImage] = useState('');
     const [profileImage, setProfileImage] = useState('');
+    const navigate=useNavigate()
 
     const queryClient = useQueryClient()
 
@@ -213,6 +214,24 @@ function Profile() {
         }
     }
 
+    const handleMessage=(e)=>{
+        e.preventDefault()
+        const data={
+            senderId: currentUser._id,
+            receiverId: profileUser?._id 
+            
+        }
+        try {
+            Axios.post(`/conversations`, data, config)
+                .then(({data}) => {
+                    navigate('/messenger')
+                })
+                .catch((error) => errorHandler())
+        } catch (error) {
+            errorHandler()
+        }
+    }
+
     const coverUploadModalProps = {
         setCoverImage, setCoverModal, coverImage, coverModal, handleCoverUpload, errorMessage, profileUser
     }
@@ -255,16 +274,21 @@ function Profile() {
                             </div>
                             <div className='bg-purple-300  -top-5 mb-6 h-auto flex flex-wrap content-center justify-between items-center relative rounded-3xl '>
                                 <div className="flex flex-col  justify-center py-8 px-10 ">
-                                    <h4 className="text-lg font-semibold">{profileUser?.fname + ' ' + profileUser?.lname}</h4>
+                                    <h4 className="text-lg text-center font-semibold">{profileUser?.fname + ' ' + profileUser?.lname}</h4>
                                     <span className="font-serif text-xs text-center">@{profileUser?.username}</span>
                                     <span className="font-normal text-center">{profileUser?.description}</span>
+                                    <div className='flex flex-wrap justify-center'>
                                     {currentUser?._id === profileUser?._id ?
-                                        <button className='border border-black text-md font-semibold p-1 mt-2 rounded-md' onClick={() => { setUpdateModal(true) }}>Edit profile</button>
+                                        <button className=' border border-black text-md font-semibold p-1 mt-2 rounded-md' onClick={() => { setUpdateModal(true) }}>Edit profile</button>
                                         : (currentUser?.followings.includes(profileUser?._id) ?
-                                            <button onClick={(e) => handleUnfollow(e, profileUser._id, profileUser.fname)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
-                                            : <button onClick={(e) => handleFollow(e, profileUser._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
+                                            <button onClick={(e) => handleUnfollow(e, profileUser._id, profileUser.fname)} className="m-1 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
+                                            : <button onClick={(e) => handleFollow(e, profileUser._id)} className="m-1 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>
                                         )}
+                               {  currentUser?._id !== profileUser?._id  && <button onClick={handleMessage} className='m-1 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2'>Message</button>    }
+                               </div>
                                 </div>
+                                
+                                
                                 <div className="flex  flex-wrap p-10  mt-2 space-x-3 md:mt-3">
                                     <div className='flex flex-col items-center'>
                                         <span className='text-black text-lg font-semibold'>Posts</span>
