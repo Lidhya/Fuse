@@ -17,7 +17,8 @@ function User({children})
     const logout=()=>{      
         localStorage.removeItem('user')
         localStorage.removeItem('token')
-        setCurrentUser(null)
+        setCurrentUser('')
+        window.location.reload()
  }
 
     const updateCurrentUser=()=>{

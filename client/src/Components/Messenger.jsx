@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext } from '../context/UserContext';
-import { io } from 'socket.io-client'
 import Axios from '../axios'
 import Message from './Message';
-import Conversation from './Conversations';
+import Conversations from './Conversations';
 import EmojiPicker from 'emoji-picker-react';
 import { errorHandler } from './javascripts/errorHandler'
 /* ---------------------------------- icons --------------------------------- */
@@ -11,6 +10,7 @@ import blank_profile from "../assets/empty profile/blank_profile.png"
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import SendIcon from '@mui/icons-material/Send';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import { SocketContext } from '../context/SocketContext';
 // import CallIcon from '@mui/icons-material/Call';
 // import VideocamIcon from '@mui/icons-material/Videocam';
 
@@ -23,14 +23,13 @@ function Messenger() {
     const [user, setUser] = useState(null);
     const [messages, setMessages] = useState([])
     const [arrivalMessage, setArrivalMessage] = useState(null);
-    const socket = useRef();
+    const {socket, onlineUsers} = useContext(SocketContext);
     const [newMessage, setNewMessage] = useState('')
     const scrollRef = useRef();
     const [showPicker, setShowPicker] = useState(false);
 
     useEffect(() => {
-        socket.current = io("ws://localhost:8000");
-        socket.current.on("getMessage", (data) => {
+        socket?.on("getMessage", (data) => {
             setArrivalMessage({
                 sender: data.senderId,
                 text: data.text,
@@ -45,15 +44,7 @@ function Messenger() {
             setMessages((prev) => [...prev, arrivalMessage]);
     }, [arrivalMessage, currentChat]);
 
-    useEffect(() => {
-        socket.current.emit("addUser", currentUser._id);
-        socket.current.on("getUsers", (users) => {
-            console.log(users);
-            //   setOnlineUsers(
-            //     currentUser.followings.filter((f) => users.some((u) => u.userId === f))
-            //   );
-        });
-    }, [currentUser]);
+        // console.log(onlineUsers);
 
     useEffect(() => {
         const getConversations = async () => {
@@ -116,7 +107,7 @@ function Messenger() {
             (member) => member !== currentUser._id
         );
 
-        socket.current.emit("sendMessage", {
+        socket.emit("sendMessage", {
             senderId: currentUser._id,
             receiverId,
             text: newMessage,
@@ -156,8 +147,8 @@ function Messenger() {
                             </button>
                         </li>
                         {conversations && conversations.map((convo) => (
-                            <div onClick={(e) => { setCurrentChat(convo); handleHamClick(e); }} className='border-b border-gray-600'>
-                                <Conversation key={convo._id} setCurrentChat={setCurrentChat} conversation={convo} />
+                            <div key={convo._id} onClick={(e) => { setCurrentChat(convo); handleHamClick(e); }} className='border-b border-gray-600'>
+                                <Conversations setCurrentChat={setCurrentChat} conversation={convo} />
                             </div>
                         ))}
                     </ul>
@@ -174,7 +165,10 @@ function Messenger() {
                                         <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path></svg>
                                     </button></div>
                                 <img className="w-12 h-12 rounded-full" src={user?.profilePicture ? user.profilePicture : blank_profile} alt="user" />
-                                <div className="text-sm font-semibold text-white ">{user?.fname + " " + user?.lname}</div>
+                                <div className="flex flex-col text-base font-semibold text-white ">
+                                    <span>{user?.fname + " " + user?.lname}</span>
+                                    {onlineUsers?.includes(user?._id) && <span className='text-sm font-light'>Online</span>}
+                                    </div>
                             </div>
                             <div className='flex gap-4 items-center'>
                                 {/* <div className='p-1 rounded-full bg-purple-400 text-white'><CallIcon /></div>

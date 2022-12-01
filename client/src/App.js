@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { RouterProvider, Navigate, createBrowserRouter } from 'react-router-dom';
 import { UserContext } from './context/UserContext';
+import { SocketContext } from './context/SocketContext';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import './App.css';
 import Notifications from './Components/Notifications';
