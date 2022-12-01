@@ -10,8 +10,7 @@ function User({children})
     const [currentUser, setCurrentUser]=useState(user)
 
     const config = {
-        headers: { Authorization: `Bearer ${token}` },
-        
+        headers: { Authorization: `Bearer ${token}` },      
     };    
     
     const logout=()=>{      

@@ -1,21 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
-import { customStyles } from './javascripts/profileModalStyle'
 import { validateUpdate } from './Validations/updateValidate'
 import { errorHandler } from './javascripts/errorHandler'
 import Swal from 'sweetalert2'
-import Modal from 'react-modal'
 import Post from "./Post";
 import Share from '../Components/Share'
 /* ----------------------------- icon and images ---------------------------- */
-import CloseIcon from '@mui/icons-material/Close';
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import cover_blank from "../assets/empty profile/cover-picture-blank.png"
 import EditIcon from '@mui/icons-material/Edit';
-import PermMediaIcon from '@mui/icons-material/PermMedia';
+import CoverUploadModal from './Modals/CoverUploadModal';
+import ProfileUploadModal from './Modals/ProfileUploadModal';
+import ListModal from './Modals/ListModal';
+import EditProfileModal from './Modals/EditProfileModal';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 function Profile() {
@@ -123,9 +124,7 @@ function Profile() {
             } catch (error) {
                 errorHandler()
             }
-
         }
-
     }, [listModal])
 
     useEffect(() => {
@@ -133,7 +132,6 @@ function Profile() {
             try {
                 Axios.put(`/user/update/${currentUser._id}`, formValues, config)
                     .then((response) => {
-                        console.log(response);
                         updateCurrentUser()
                     })
                     .catch(({ response }) => {
@@ -215,9 +213,26 @@ function Profile() {
         }
     }
 
+    const coverUploadModalProps = {
+        setCoverImage, setCoverModal, coverImage, coverModal, handleCoverUpload, errorMessage, profileUser
+    }
+
+    const profileUploadModalProps = {
+        profileImage, profileModal, setProfileImage, setProfileModal, profileUser, handleProfileUpload, errorMessage
+    }
+
+    const listModalProps = {
+        listModal, setListModal, listData, currentUser, handleFollow, handleUnfollow, list
+    }
+
+    const EditProfileModalProps = {
+        updateModal, setUpdateModal, errorMessage, formValues, formErrors, handleChange, handleSubmit
+    }
+
     return (
         <>
-            <div className="px-4 md:px-14 ">
+        { isLoading ? <CircularProgress color="secondary" />
+            : <div className="px-4 md:px-14 ">
                 <div className="flex justify-center">
                     <div className="w-full">
                         <div className="mb-0 pb-0">
@@ -269,6 +284,7 @@ function Profile() {
                     </div>
                 </div>
             </div>
+            }
             {currentUser?._id === profileUser?._id && <Share profileUpdate={getUserPosts} />}
             {profilePosts.length > 0 ? profilePosts.map((post) => <Post post={post} key={post._id} profileUpdate={getUserPosts} />)
                 : (<div className='flex flex-col justify-center items-center'>
@@ -279,108 +295,11 @@ function Profile() {
             }
 
             { /* --------------------------------- Modals --------------------------------- */}
-            <Modal isOpen={coverModal} onRequestClose={() => { setCoverModal(false) }} style={customStyles}>
-                <div className='text-end'><CloseIcon onClick={() => { setCoverModal(false) }} /></div>
-                <h1 className='text-2xl  text-purple-700 font-thin mb-3'>Edit cover picture</h1>
-                {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
-                <img
-                    className="w-full max-h-96 object-cover"
-                    src={coverImage ? URL.createObjectURL(coverImage) : (profileUser?.coverPicture ? profileUser.coverPicture : cover_blank)}
-                    alt={profileUser?.fname}
-                />
-                <div className="flex justify-between items-center my-2 mx-2" >
-                    <label htmlFor="cover-upload"> <PermMediaIcon htmlColor="gray" className="text-lg mr-1 cursor-pointer" />Choose cover picture</label>
-                    <input name='coverImage' className='hidden' id='cover-upload' onChange={(e) => setCoverImage(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
-                    <button onClick={handleCoverUpload} className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Upload</button>
-                </div>
-            </Modal>
+            <CoverUploadModal {...coverUploadModalProps} />
+            <ProfileUploadModal {...profileUploadModalProps} />
+            <ListModal {...listModalProps} />
+            <EditProfileModal {...EditProfileModalProps} />
 
-            <Modal isOpen={profileModal} onRequestClose={() => { setProfileModal(false) }} style={customStyles}>
-                <div className='text-end'><CloseIcon onClick={() => { setProfileModal(false) }} /></div>
-                <h1 className='text-2xl  text-purple-700 font-thin mb-3'>Edit profile picture</h1>
-                {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
-                <div className='flex justify-center items-center'>
-                    <img
-                        className="w-52 h-52 rounded-full object-cover"
-                        src={profileImage ? URL.createObjectURL(profileImage) : (profileUser?.profilePicture ? profileUser.profilePicture : blank_profile)}
-                        alt={profileUser?.fname}
-                    />
-                </div>
-                <div className="flex justify-between items-center my-2 mx-2 " >
-                    <label htmlFor="profile-upload"> <PermMediaIcon htmlColor="gray" className="text-lg mr-1 cursor-pointer" />Choose profile picture</label>
-                    <input name='profileImage' className='hidden' id='profile-upload' onChange={(e) => setProfileImage(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
-                    {/* <button className="text-gray-500 border-gray-500 border-2 font-medium rounded-xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Remove</button> */}
-                    <button onClick={handleProfileUpload} className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Upload</button>
-                </div>
-            </Modal>
-
-            <Modal isOpen={listModal} onRequestClose={() => { setListModal(false) }} style={customStyles}>
-                <div className='text-end'><CloseIcon onClick={() => { setListModal(false) }} /></div>
-                <h1 className='text-2xl  text-purple-700 font-thin mb-3'>{list}</h1>
-                {listData.length > 0 ? listData.map((user) => (
-                    <div key={user._id} className=" bg-white my-3 rounded-xl shadow-md border-gray-100  border-2">
-                        <div className=" flex flex-wrap justify-between items-center p-2.5">
-                            <div className="flex items-center">
-                                <img className="w-12 h-12 rounded-full object-cover mr-2.5" src={user?.profilePicture ? user.profilePicture : blank_profile} alt={user.username} />
-                                <Link to={`/profile/${user._id}`} className='font-semibold'>{user.fname + ' ' + user?.lname}</Link>
-                            </div>
-                            {currentUser?.followings.includes(user?._id) ?
-                                <button onClick={(e) => handleUnfollow(e, user._id, user.fname)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
-                                : (user?._id !== currentUser._id && <button onClick={(e) => handleFollow(e, user._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>)
-                            }
-                        </div>
-                    </div>
-                ))
-                    : <p className='text-gray-600 m-3 text-lg'>No {list} yet</p>
-                }
-            </Modal>
-
-            <Modal isOpen={updateModal} onRequestClose={() => { setUpdateModal(false) }} style={customStyles}>
-                <div className='text-end'><CloseIcon onClick={() => { setUpdateModal(false) }} /></div>
-                <h1 className='text-2xl  text-purple-700 font-thin mb-4'>Edit profile</h1>
-
-                <form onSubmit={handleSubmit}>
-                    {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
-
-                    <div className="grid md:grid-cols-2 md:gap-6">
-                        <div className="relative z-0 mb-6 w-full group">
-                            <input type="text" name="fname" id="floating_first_name" value={formValues?.fname} onChange={handleChange} className="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2  appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" />
-                            <label htmlFor="first_name" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First name</label>
-                            <p className='text-red-400 text-sm'>{formErrors.fname}</p>
-                        </div>
-                        <div className="relative z-0 mb-6 w-full group">
-                            <input type="text" name="lname" id="floating_last_name" value={formValues?.lname} onChange={handleChange} className="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2  appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                            <label htmlFor="last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name</label>
-                        </div>
-                    </div>
-                    <div className="grid md:grid-cols-2 md:gap-6">
-                        <div className="relative z-0 mb-6 w-full group">
-                            <input type="text" name="username" id="username" value={formValues?.username} onChange={handleChange} className="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                            <label htmlFor="username" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Username</label>
-                            <p className='text-red-400 text-sm'>{formErrors.username}</p>
-                        </div>
-                        <div className="relative z-0 mb-6 w-full group">
-                            <input type="text" name="city" id="City" value={formValues?.city} onChange={handleChange} className="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                            <label htmlFor="City" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">City</label>
-                        </div>
-                    </div>
-                    <div className="relative z-0 mb-6 w-full group">
-                        <input type="text" name="description" id="description" value={formValues?.description} onChange={handleChange} className="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                        <label htmlFor="description" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">About you</label>
-                    </div>
-                    <div className="relative z-0 mb-6 w-full group">
-                        <input type="email" name="email" id="floating_email" value={formValues?.email} onChange={handleChange} className="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                        <label htmlFor="floating_email" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
-                        <p className='text-red-400 text-sm'>{formErrors.email}</p>
-                    </div>
-                    <div className="relative z-0 mb-6 w-full group">
-                        <input type="password" name="password" id="floating_password" value={formValues?.password} onChange={handleChange} className="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" />
-                        <label htmlFor="floating_password" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Current password</label>
-                        <p className='text-red-400 text-sm'>{formErrors.password}</p>
-                    </div>
-                    <button type="submit" className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Save changes</button>
-                </form>
-            </Modal>
         </>
     )
 }
