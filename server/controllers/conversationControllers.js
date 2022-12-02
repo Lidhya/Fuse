@@ -9,9 +9,12 @@ module.exports = {
         });
         try {
             newConversation.save()
-            .then((res)=> res.status(200).json(res))
-            .catch((error)=> res.status(500).json(error))   
+            .then((response)=> res.status(200).json(response))
+            .catch((error)=>{ 
+                console.log(error);
+                res.status(500).json(error)})   
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     },

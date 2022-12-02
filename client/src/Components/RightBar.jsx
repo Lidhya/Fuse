@@ -18,7 +18,7 @@ function RightBar() {
 
    const { isLoading } = useQuery(["suggestions"], () => {
       return Axios.get(`/user/suggestions/${currentUser._id}`, config).then(({ data }) => {
-         const slicedData = data.slice(0, 5)
+         const slicedData = data.slice(0, 4)
          setSuggestion(slicedData)
          return slicedData;
       }).catch(({ response }) => {
@@ -76,11 +76,13 @@ function RightBar() {
                   </p>
                </li>
                <li className='overflow-y-scroll over max-h-60'>
-                  {conversations && conversations.map((convo) => (
+                  {conversations.length>0? conversations.map((convo) => (
                      <Link to={'/messenger'} key={convo._id} className='dark:hover:bg-gray-700 dark:text-white group'>
                         <Conversations conversation={convo} />
                      </Link>
-                  ))}</li>
+                  ))
+                  : <span className='text-center text-white p-2'>There are no conversations yet</span>
+               }</li>
             </ul>
          </div>
       </aside>

@@ -4,6 +4,10 @@ export const validateSignup = (values) => {
     if (!values.fname) {
         errors.fname = "first name is required";
       }
+
+      if (!values.lname) {
+        errors.lname = "last name is required";
+      }
       
     if (!values.username) {
       errors.username = "username is required";

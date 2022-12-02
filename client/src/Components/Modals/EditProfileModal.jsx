@@ -21,7 +21,8 @@ function EditProfileModal({updateModal, setUpdateModal, errorMessage, formValues
                         </div>
                         <div className="relative z-0 mb-6 w-full group">
                             <input type="text" name="lname" id="floating_last_name" value={formValues?.lname} onChange={handleChange} className="block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2  appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                            <label htmlFor="last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name</label>
+                            <label htmlFor="last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name</label>                   
+                            <p className='text-red-400 text-sm'>{formErrors.lname}</p>
                         </div>
                     </div>
                     <div className="grid md:grid-cols-2 md:gap-6">

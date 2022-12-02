@@ -103,12 +103,12 @@ function LeftBar() {
                         <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
                      </Link>
                   </li>
-                  <li>
+                  {/* <li>
                      <Link to="/" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <LightModeOutlinedIcon />
                         <span className="flex-1 ml-3 whitespace-nowrap">Theme</span>
                      </Link>
-                  </li>
+                  </li> */}
                   <li>
                      <button onClick={handleLogout} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <LogoutOutlinedIcon />
