@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Axios from '../axios'
 import Modal from 'react-modal'
-import cors from 'cors'
 import { countries } from './javascripts/Countries'
 import CloseIcon from '@mui/icons-material/Close';
 import errImg from '../assets/error/404 Error Page not Found with people connecting a plug-amico.png'
-import { Link } from 'react-router-dom';
-const apiKey = process.env.NEWSDATA_API_KEY
+const apiKey = process.env.REACT_NEWSDATA_API_KEY
 
 const customStyles = {
     content: {
@@ -42,6 +40,7 @@ function News() {
     useEffect(() => {
         Axios.get(`https://newsdata.io/api/1/news?apikey=pub_14136a020a5c72671c00a83ceb6150877c374&country=${country}`, { crossdomain: true } ).then(({ data }) => {
             setArticles(data.results)
+            console.log(data.results);
         }).catch((error) => {
             setError(error.message)
         })
