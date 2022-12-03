@@ -2,7 +2,10 @@ const Conversation = require("../models/Conversation");
 
 module.exports = {
     addNewConvo: async (req, res) => {
-       const convo = await Conversation.findOne({members:  [req.body.senderId, req.body.receiverId] })
+       const convo = await Conversation.findOne({$and:[
+        {members:  {$in:req.body.senderId} },
+        {members:  {$in:req.body.receiverId} },
+    ]})
         if(convo?.members) return   res.status(200).json({exist:true});
         const newConversation = new Conversation({
             members: [req.body.senderId, req.body.receiverId],
@@ -11,10 +14,8 @@ module.exports = {
             newConversation.save()
             .then((response)=> res.status(200).json(response))
             .catch((error)=>{ 
-                console.log(error);
                 res.status(500).json(error)})   
         } catch (err) {
-            console.log(err);
             res.status(500).json(err);
         }
     },
