@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Axios from '../axios'
 import Modal from 'react-modal'
+import cors from 'cors'
 import { countries } from './javascripts/Countries'
 import CloseIcon from '@mui/icons-material/Close';
 import errImg from '../assets/error/404 Error Page not Found with people connecting a plug-amico.png'
+import { Link } from 'react-router-dom';
+const apiKey = process.env.NEWSDATA_API_KEY
 
-const apiKey = process.env.REACT_APP_NEWS_KEY
 const customStyles = {
     content: {
         top: '50%',
@@ -32,9 +34,14 @@ function News() {
     const [item, setItem] = useState({})
     const [error, setError] = useState('')
 
+    const config={headers: {
+        'Access-Control-Allow-Origin': true,
+        'Content-Type': 'application/json',
+      },}
+
     useEffect(() => {
-        Axios.get(`https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${apiKey}`).then(({ data }) => {
-            setArticles(data.articles)
+        Axios.get(`https://newsdata.io/api/1/news?apikey=pub_14136a020a5c72671c00a83ceb6150877c374&country=${country}`, { crossdomain: true } ).then(({ data }) => {
+            setArticles(data.results)
         }).catch((error) => {
             setError(error.message)
         })
@@ -60,17 +67,17 @@ function News() {
                 {articles.length ? articles.map((article, index) => (
 
                     <div key={index} className="max-w-sm max-h-sm bg-white rounded-lg border border-gray-200 shadow-md ">                       
-                            <img className="rounded-t-lg" src={article.urlToImage} alt="news img" />
+                           {article.image_url && <img className="rounded-t-lg" src={article.image_url} alt="news img" />}
                         <div className="p-5">
-                            <a href="#">
+                            <div>
                                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">{article.title}</h5>
-                            </a>
-                            <span className='font-light text-xs'>Author: {article.author}</span>
+                            </div>
+                           {article.creator && <span className='font-light text-xs'>Author: {article.creator}</span>}
                             <p className="mb-3 font-normal text-gray-700 ">{article.description}</p>
-                            <button onClick={() => handleRead(article)} className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            {article.link && <a href={article.link} className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 Read more
                                 <svg aria-hidden="true" className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            </button>
+                            </a>}
                         </div>
                     </div>
 
