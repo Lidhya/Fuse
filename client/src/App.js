@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import { RouterProvider, Navigate, createBrowserRouter } from 'react-router-dom';
 import { UserContext } from './context/UserContext';
-import { SocketContext } from './context/SocketContext';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './App.css';
 import Notifications from './Components/Notifications';
 import Error from './Pages/Error';
@@ -13,12 +12,13 @@ import NewsPage from './Pages/NewsPage';
 import ProfilePage from './Pages/ProfilePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
+import BooksPage from './Pages/BooksPage';
 
 function App() {
-  const {currentUser}=useContext(UserContext)
+  const { currentUser } = useContext(UserContext)
 
-// Create a client
-const queryClient = new QueryClient()
+  // Create a client
+  const queryClient = new QueryClient()
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser?.fname) {
@@ -48,7 +48,7 @@ const queryClient = new QueryClient()
       element: (
         <ProtectedRoute>
           <QueryClientProvider client={queryClient}>
-          <Layout />
+            <Layout />
           </QueryClientProvider>
         </ProtectedRoute>
       ),
@@ -66,13 +66,13 @@ const queryClient = new QueryClient()
           element: <Notifications />,
         },
       ],
-    },  
+    },
     {
       path: "/messenger",
       element:
         <ProtectedRoute>
-           <QueryClientProvider client={queryClient}>
-          <MessengerPage />
+          <QueryClientProvider client={queryClient}>
+            <MessengerPage />
           </QueryClientProvider>
         </ProtectedRoute>,
     },
@@ -81,13 +81,24 @@ const queryClient = new QueryClient()
       element:
         <ProtectedRoute>
           <QueryClientProvider client={queryClient}>
-          <NewsPage />
+            <NewsPage />
+          </QueryClientProvider>
+        </ProtectedRoute>,
+    },
+    {
+      path: "/books",
+      element:
+        <ProtectedRoute>
+          <QueryClientProvider client={queryClient}>
+            <BooksPage />
           </QueryClientProvider>
         </ProtectedRoute>,
     },
     {
       path: "*",
-      element: <Error />,
+      element: <QueryClientProvider client={queryClient}>
+        <Error />
+      </QueryClientProvider>
     },
   ]);
 
