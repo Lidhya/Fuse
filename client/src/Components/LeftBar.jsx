@@ -12,6 +12,7 @@ import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import MenuBook from '@mui/icons-material/MenuBook';
 
 
 function LeftBar() {
@@ -92,6 +93,12 @@ function LeftBar() {
                      </Link>
                   </li>
                   <li>
+                     <Link to="/news" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <MenuBook />
+                        <span className="ml-3">Books</span>
+                     </Link>
+                  </li>
+                  <li>
                      <Link to="/messenger" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         < MailOutlinedIcon />
                         <span className="flex-1 ml-3 whitespace-nowrap">Inbox</span>
@@ -103,6 +110,7 @@ function LeftBar() {
                         <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
                      </Link>
                   </li>
+                  
                   {/* <li>
                      <Link to="/" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <LightModeOutlinedIcon />

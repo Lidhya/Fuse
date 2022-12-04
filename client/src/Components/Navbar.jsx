@@ -14,6 +14,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import MenuBook from '@mui/icons-material/MenuBook';
 
 function Navbar() {
   const { logout, currentUser, config } = useContext(UserContext)
@@ -133,6 +134,9 @@ function Navbar() {
             </li>
             <li>
               <Link to="/news" className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><NewspaperOutlinedIcon /><span className='md:hidden pl-3 text-white'>News</span></Link>
+            </li>
+            <li>
+              <Link to="/books" className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><MenuBook /><span className='md:hidden pl-3 text-white'>Books</span></Link>
             </li>
             <li className='md:hidden'>
               <Link to="/" className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "><LightModeOutlinedIcon /><span className=' pl-3 text-white'>Theme</span></Link>
