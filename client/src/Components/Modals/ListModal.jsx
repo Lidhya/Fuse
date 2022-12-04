@@ -18,8 +18,8 @@ function ListModal({listModal, setListModal, listData, currentUser, handleFollow
                     <Link to={`/profile/${user._id}`} className='font-semibold'>{user.fname + ' ' + user?.lname}</Link>
                 </div>
                 {currentUser?.followings?.includes(user?._id) ?
-                    <button onClick={(e) => handleUnfollow(e, user._id, user.fname)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
-                    : (user?._id !== currentUser._id && <button onClick={(e) => handleFollow(e, user._id)} className=" focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>)
+                    <button onClick={(e) => handleUnfollow(e, user._id, user.fname)} className="ml-4 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Following</button>
+                    : (user?._id !== currentUser._id && <button onClick={(e) => handleFollow(e, user._id)} className="ml-4 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 ">Follow</button>)
                 }
             </div>
         </div>
