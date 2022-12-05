@@ -100,7 +100,7 @@ export default function Share({ profileUpdate }) {
                         <textarea
                             rows={3}
                             placeholder="Share what's on your mind"
-                            className="border-none w-full focus:outline-none"
+                            className="border-none w-52 focus:outline-none "
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
