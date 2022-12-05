@@ -12,10 +12,10 @@ import Swal from 'sweetalert2'
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
-import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import blank_profile from "../assets/empty profile/blank_profile.png"
 import CloseIcon from '@mui/icons-material/Close';
+// import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
 const customStyles = {
   content: {
@@ -171,9 +171,9 @@ const Post = ({ post, profileUpdate }) => {
             <TextsmsOutlinedIcon />
             {comments.length > 0 && comments.length}
           </div>
-          <div className="flex items-center gap-3 cursor-pointer text-sm">
+          {/* <div className="flex items-center gap-3 cursor-pointer text-sm">
             <SendOutlinedIcon />
-          </div>
+          </div> */}
         </div>
         {commentOpen && <Comments postId={_id} />}
       </div>
