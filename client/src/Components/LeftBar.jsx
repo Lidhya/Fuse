@@ -10,7 +10,6 @@ import blank_profile from "../assets/empty profile/blank_profile.png";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuBook from "@mui/icons-material/MenuBook";
 
@@ -27,7 +26,7 @@ function LeftBar() {
     _id,
   } = profile;
 
-  const { isLoading, error, data } = useQuery(["userPosts"], () => {
+  const { data } = useQuery(["userPosts"], () => {
     return Axios.get(`/post/${currentUser._id}`, config)
       .then(({ data }) => {
         const sortedData = data.sort(function (a, b) {

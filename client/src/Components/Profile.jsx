@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Axios from '../axios'
 import { UserContext } from '../context/UserContext';
@@ -90,6 +90,7 @@ function Profile() {
     }
 
     useEffect(() => {
+        error && errorHandler()
         setListModal(false)
         setListData([])
         getUserPosts()
