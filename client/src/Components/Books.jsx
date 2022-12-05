@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import Navbar from './Navbar'
 import Axios from '../axios'
-import books_illustration from '../assets/Books/books_bg.jpg'
 import BookCard from './BookCard'
+import Navbar from './Navbar'
+import { errorHandler } from "./javascripts/errorHandler";
+import books_illustration from '../assets/Books/books_bg.jpg'
 
 const bgStyle = {
     backgroundImage: `url(${books_illustration})`,
@@ -30,12 +31,12 @@ function Books() {
                 setIsSubmit(true)
                 Axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search}&key=AIzaSyCMWm6Aw0AuX8ImtDWuXcr3x9NK-FDx6GU`)
                     .then(({ data }) => setBooks(data.items))
-                    .catch((error) => console.log(error))
+                    .catch((error) => errorHandler())
             } else {
                 setErrorMessage('Enter search key')
             }
         } catch (error) {
-            console.log(error);
+            errorHandler()
         }
     }
 
@@ -49,7 +50,7 @@ function Books() {
                         <div className='bg-gray-900 rounded-xl p-3'>
                             <h1 className='m-3 text-white text-2xl font-bold font-mono text-center'>Books are a uniquely portable magic. Find it!</h1>
                             <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                            <div className="relative">
+                            <div className="relative flex felx-wrap">
                                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                 </div>
