@@ -13,11 +13,15 @@ function BookModal({setModal, modal, book}) {
     <div className="inner-box">
                         <img src={thumbnail} alt="book" />
                         <div className="info">
-                            <h1>{book.volumeInfo.title}</h1>
-                            <h3>{book.volumeInfo.authors}</h3>
-                            <h4>{book.volumeInfo.publisher}<span>{book.volumeInfo.publishedDate}</span></h4><br/>
+                            <h1 className='font-bold text-xl'>{book.volumeInfo.title}</h1>
+                            <h3 className='font-semibold text-base'>{book.volumeInfo.authors}</h3>
+                            <h4>{book.volumeInfo.publisher}<span> {book.volumeInfo.publishedDate}</span></h4><br/>
                             <p>{book.volumeInfo.description}</p>
-                            <a href={book.volumeInfo.previewLink}><button className='underline text-blue-800'>More</button></a>
+                            <div className='flex justify-center my-2'>
+                            <div>
+                              <a  href={book.volumeInfo.previewLink} className='bg-purple-700 text-white px-2 py-1 rounded-lg hover:bg-purple-800 my-2'>More</a>
+                              </div> 
+                            </div>
                         </div>
                     </div> 
      
