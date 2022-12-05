@@ -18,7 +18,7 @@ function BookCard({ book }) {
                         <Link>
                             <h5 className="w-40 text-xl font-bold tracking-tight text-gray-900 hover:underline ">{title && title}</h5>
                         </Link>
-                        <span className="w-40 text-gray-900 flex flex-col">{authors.map((auth, index) => (<span key={index}>{auth}</span>))}</span>
+                     {authors && <span className="w-40 text-gray-900 flex flex-col">{authors.length>1? (authors[0], authors[1]) : authors[0]}</span>}
                     </div>
                 </div>
             }
