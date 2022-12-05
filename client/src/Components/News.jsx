@@ -4,7 +4,7 @@ import Modal from 'react-modal'
 import { countries } from './javascripts/Countries'
 import CloseIcon from '@mui/icons-material/Close';
 import errImg from '../assets/error/404 Error Page not Found with people connecting a plug-amico.png'
-const apiKey = process.env.REACT_NEWSDATA_API_KEY
+const NEWS_API = process.env.REACT_APP_NEWSDATA_API_KEY
 
 const customStyles = {
     content: {
@@ -32,13 +32,8 @@ function News() {
     const [item, setItem] = useState({})
     const [error, setError] = useState('')
 
-    const config={headers: {
-        'Access-Control-Allow-Origin': true,
-        'Content-Type': 'application/json',
-      },}
-
     useEffect(() => {
-        Axios.get(`https://newsdata.io/api/1/news?apikey=pub_14136a020a5c72671c00a83ceb6150877c374&country=${country}`, { crossdomain: true } ).then(({ data }) => {
+        Axios.get(`https://newsdata.io/api/1/news?apikey=${NEWS_API}&country=${country}`, { crossdomain: true } ).then(({ data }) => {
             setArticles(data.results)
             console.log(data.results);
         }).catch((error) => {
@@ -46,10 +41,9 @@ function News() {
         })
     }, [country])
 
-    const handleRead = (selected) => {
-        setItem(selected)
-        setModal(true)
-    }
+    function truncate(str, n){
+        return (str.length > n) ? str.slice(0, n-1) + '...' : str;
+      };
 
     return (
         <div className='m-3 flex flex-col justify-around '>
@@ -72,7 +66,7 @@ function News() {
                                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">{article.title}</h5>
                             </div>
                            {article.creator && <span className='font-light text-xs'>Author: {article.creator}</span>}
-                            <p className="mb-3 font-normal text-gray-700 ">{article.description}</p>
+                            <p className="mb-3 font-normal text-gray-700 ">{article.description && truncate(article.description, 300)}</p>
                             {article.link && <a href={article.link} className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 Read more
                                 <svg aria-hidden="true" className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
