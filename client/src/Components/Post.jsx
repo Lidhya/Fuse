@@ -44,7 +44,7 @@ const Post = ({ post, profileUpdate }) => {
   const [drop, setDrop] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [userInfo, setUserInfo] = useState({});
-  const { config, currentUser, logout } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   // Access the client
   const queryClient = useQueryClient();
@@ -52,9 +52,8 @@ const Post = ({ post, profileUpdate }) => {
   // Mutations
   const mutation = useMutation(
     () => {
-      return Axios.put(`/post/like/${currentUser._id}`, { postId: _id }, config)
+      return Axios.put(`/post/like/${currentUser._id}`, { postId: _id })
         .then((response) => {
-          console.log(response);
           profileUpdate && profileUpdate();
         })
         .catch((error) => errorHandler());
@@ -68,15 +67,17 @@ const Post = ({ post, profileUpdate }) => {
   );
 
   useEffect(() => {
-    Axios.get(`/user/get/${userId}`, config)
-      .then((response) => {
-        setUserInfo(response.data);
-      })
-      .catch((error) => {
-        if (!error.response.data?.auth) return logout();
-        errorHandler();
-      });
-
+    try {
+      Axios.get(`/user/get/${userId}`)
+        .then((response) => {
+          setUserInfo(response.data);
+        })
+        .catch((error) => {
+          errorHandler();
+        });
+    } catch (error) {
+      errorHandler();
+    }
     if (url) {
       const extension = key.substring(key.lastIndexOf(".") + 1);
       extension === "mp4" ? setVideo(true) : setVideo(false);
@@ -101,13 +102,17 @@ const Post = ({ post, profileUpdate }) => {
         userId: currentUser._id,
         newDescription: newDescription,
       };
-      Axios.put(`/post/update/${_id}`, updatedValue, config)
-        .then((response) => {
-          console.log(response);
-          queryClient.invalidateQueries({ queryKey: ["posts"] });
-          profileUpdate && profileUpdate();
-        })
-        .catch((error) => errorHandler());
+
+      try {
+        Axios.put(`/post/update/${_id}`, updatedValue)
+          .then((response) => {
+            queryClient.invalidateQueries({ queryKey: ["posts"] });
+            profileUpdate && profileUpdate();
+          })
+          .catch((error) => errorHandler());
+      } catch (error) {
+        errorHandler();
+      }
     }
   };
 
@@ -123,9 +128,8 @@ const Post = ({ post, profileUpdate }) => {
       confirmButtonText: "Yes, delete",
     }).then((result) => {
       if (result.isConfirmed) {
-        Axios.delete(`/post/delete/${_id}`, config)
+        Axios.delete(`/post/delete/${_id}`)
           .then((response) => {
-            console.log(response);
             queryClient.invalidateQueries({ queryKey: ["posts"] });
             queryClient.invalidateQueries({ queryKey: ["userPosts"] });
             profileUpdate && profileUpdate();

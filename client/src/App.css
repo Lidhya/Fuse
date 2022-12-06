@@ -1,8 +1,8 @@
-*{
+* {
   box-sizing: border-box;
 }
 
-body{
+body {
   background-color: rgb(224, 224, 224);
   scroll-behavior: smooth;
 }
@@ -14,14 +14,15 @@ body{
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: rgb(224, 224, 224); 
+  background: rgb(224, 224, 224);
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; }
+  background: #555;
+}

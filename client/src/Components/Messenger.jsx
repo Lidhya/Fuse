@@ -15,7 +15,7 @@ import { SocketContext } from "../context/SocketContext";
 // import VideocamIcon from '@mui/icons-material/Videocam';
 
 function Messenger() {
-  const { currentUser, config } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [user, setUser] = useState(null);
@@ -43,12 +43,10 @@ function Messenger() {
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 
-  // console.log(onlineUsers);
-
   useEffect(() => {
     const getConversations = async () => {
       try {
-        Axios.get(`/conversations/${currentUser?._id}`, config)
+        Axios.get(`/conversations/${currentUser?._id}`)
           .then(({ data }) => {
             setConversations(data);
           })
@@ -64,7 +62,7 @@ function Messenger() {
     try {
       const friendId = currentChat?.members.find((m) => m !== currentUser._id);
       friendId &&
-        Axios.get(`/user/get/${friendId}`, config)
+        Axios.get(`/user/get/${friendId}`)
           .then(({ data }) => {
             setUser(data);
           })
@@ -77,7 +75,7 @@ function Messenger() {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        Axios.get(`/messages/${currentChat?._id}`, config)
+        Axios.get(`/messages/${currentChat?._id}`)
           .then(({ data }) => {
             setMessages(data);
             getUser();
@@ -119,7 +117,7 @@ function Messenger() {
       });
 
       try {
-        Axios.post("/messages", message, config)
+        Axios.post("/messages", message)
           .then(({ data }) => {
             setMessages([...messages, data]);
             setNewMessage("");
@@ -264,19 +262,19 @@ function Messenger() {
                 <InsertEmoticonIcon
                   className="text-gray-600"
                   onClick={() => setShowPicker((val) => !val)}
-                />              
-                  <textarea
-                    name="message"
-                    rows={2}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    value={newMessage}
-                    id=""
-                    placeholder="Send something..."
-                    className="border border-solid border-gray-400 p-2 focus:outline-none rounded-2xl w-full"
-                  />
-                  <p className="text-red-400 text-sm">
-                    {errorMessage && errorMessage}
-                  </p>
+                />
+                <textarea
+                  name="message"
+                  rows={2}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  value={newMessage}
+                  id=""
+                  placeholder="Send something..."
+                  className="border border-solid border-gray-400 p-2 focus:outline-none rounded-2xl w-full"
+                />
+                <p className="text-red-400 text-sm">
+                  {errorMessage && errorMessage}
+                </p>
                 <button
                   onClick={handleSend}
                   type="submit"

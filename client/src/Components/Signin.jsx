@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import Axios from '../axios'
-import { UserContext } from '../context/UserContext'
-import {validateSignin} from './Validations/signinValidate'
-
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Axios from "../axios";
+import { UserContext } from "../context/UserContext";
+import { errorHandler } from "./javascripts/errorHandler";
+import { validateSignin } from "./Validations/signinValidate";
 
 function Signin() {
-  const { setCurrentUser } = useContext(UserContext)
-  const navigate = useNavigate()
+  const { setCurrentUser } = useContext(UserContext);
+  const navigate = useNavigate();
   const initialValues = { username: "", password: "" };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
 
   const handleChange = (e) => {
@@ -28,41 +28,86 @@ function Signin() {
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       try {
-        Axios.post('/auth/login', formValues)
+        Axios.post("/auth/login", formValues)
           .then((response) => {
-            const { user, token } = response.data
-            localStorage.setItem('user', JSON.stringify(user))
-            localStorage.setItem('token', JSON.stringify(token))
-            setCurrentUser(user)
-            navigate('/')
+            const { user, token, auth } = response.data;
+            if (auth) {
+              localStorage.setItem("user", JSON.stringify(user));
+              localStorage.setItem("token", JSON.stringify(token));
+              setCurrentUser(user);
+              navigate("/");
+            } else setErrorMessage("Something went wrong, try again!");
           })
-          .catch((error) => {
-            setErrorMessage(error.response?.data.message)
-          })
+          .catch(({ response }) => {
+            setErrorMessage(response?.data);
+          });
       } catch (err) {
-        setErrorMessage(err)
+        errorHandler();
       }
     }
   }, [formErrors]);
 
   return (
     <>
-      <div id="authentication-modal" tabIndex="-1" aria-hidden="true" className=" flex justify-center absolute overflow-y-auto overflow-x-hidden  z-50 w-full md:inset-0  md:h-full">
+      <div
+        id="authentication-modal"
+        tabIndex="-1"
+        aria-hidden="true"
+        className=" flex justify-center absolute overflow-y-auto overflow-x-hidden  z-50 w-full md:inset-0  md:h-full"
+      >
         <div className=" relative w-full max-w-6xl md:max-w-md h-full md:h-auto bg-black lg:-mr-96">
-
           <div className=" h-screen flex justify-center items-center  bg-black  dark:bg-black">
             <div className=" py-6 px-6 lg:px-8 flex-1">
-              <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to <span className='text-white font-bold '>FUSE</span></h3>
+              <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+                Sign in to <span className="text-white font-bold ">FUSE</span>
+              </h3>
               <form className="space-y-6" onSubmit={handleSubmit}>
-                {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
+                {errorMessage && (
+                  <div
+                    className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                    role="alert"
+                  >
+                    {" "}
+                    {errorMessage}
+                  </div>
+                )}
                 <div>
-                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your username</label>
-                  <input type="text" name="username" id="username" value={formValues.username} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="john_doe" required /></div>
-                <p className='text-red-400 text-xs'>{formErrors.username}</p>
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Your username
+                  </label>
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    value={formValues.username}
+                    onChange={handleChange}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="john_doe"
+                    required
+                  />
+                </div>
+                <p className="text-red-400 text-xs">{formErrors.username}</p>
                 <div>
-                  <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your password</label>
-                  <input type="password" name="password" id="password" value={formValues.password} onChange={handleChange} placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
-                  <p className='text-red-400 text-xs'>{formErrors.password}</p>
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Your password
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    value={formValues.password}
+                    onChange={handleChange}
+                    placeholder="••••••••"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    required
+                  />
+                  <p className="text-red-400 text-xs">{formErrors.password}</p>
                 </div>
                 {/* <div className="flex justify-between">
                   <div className="flex items-start">
@@ -73,18 +118,28 @@ function Signin() {
                   </div>
                   <Link to="/" className="text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</Link>
                 </div> */}
-                <button type='submit' className=" w-full mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign in</button>
+                <button
+                  type="submit"
+                  className=" w-full mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Sign in
+                </button>
                 <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                  Not registered? <Link to={'/signup'} className="text-blue-700 hover:underline dark:text-blue-500">Create account</Link>
+                  Not registered?{" "}
+                  <Link
+                    to={"/signup"}
+                    className="text-blue-700 hover:underline dark:text-blue-500"
+                  >
+                    Create account
+                  </Link>
                 </div>
               </form>
             </div>
-
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Signin
+export default Signin;

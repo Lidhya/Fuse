@@ -1,14 +1,14 @@
-const router = require('express').Router();
-const { verifyJWT } = require('../middlewares/jwtAuth');
-const {getNotifications, updateNotifications } = require('../controllers/notificationControllers')
-
+const router = require("express").Router();
+const { verifyJWT } = require("../middlewares/jwtAuth");
+const {
+  getNotifications,
+  updateNotifications,
+} = require("../controllers/notificationControllers");
 
 //get all notifications
-router.get('/:id', verifyJWT, getNotifications)
+router.get("/:id", verifyJWT, getNotifications);
 
 //update notifications
-router.put('/:id', verifyJWT, updateNotifications)
-
-
+router.put("/:id", verifyJWT, updateNotifications);
 
 module.exports = router;

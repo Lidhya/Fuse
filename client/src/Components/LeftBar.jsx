@@ -14,7 +14,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuBook from "@mui/icons-material/MenuBook";
 
 function LeftBar() {
-  const { logout, currentUser, config } = useContext(UserContext);
+  const { logout, currentUser } = useContext(UserContext);
   const [profile, setProfile] = useState({});
   const {
     fname,
@@ -27,7 +27,7 @@ function LeftBar() {
   } = profile;
 
   const { data } = useQuery(["userPosts"], () => {
-    return Axios.get(`/post/${currentUser._id}`, config)
+    return Axios.get(`/post/${currentUser._id}`)
       .then(({ data }) => {
         const sortedData = data.sort(function (a, b) {
           return new Date(b.createdAt) - new Date(a.createdAt);
@@ -39,7 +39,7 @@ function LeftBar() {
 
   useEffect(() => {
     try {
-      Axios.get(`/user/get/${currentUser._id}`, config)
+      Axios.get(`/user/get/${currentUser._id}`)
         .then(({ data }) => {
           setProfile(data);
         })
@@ -52,11 +52,11 @@ function LeftBar() {
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",
-      text: `Do you want to logout from FUSE?`,
+      text: `Do you want to signout from FUSE?`,
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Logout",
+      confirmButtonText: "Signout",
     }).then((result) => {
       if (result.isConfirmed) {
         logout();

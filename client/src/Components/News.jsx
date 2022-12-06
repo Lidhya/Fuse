@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Axios from "../axios";
+import Axios from "axios";
 import Modal from "react-modal";
 import { countries } from "./javascripts/Countries";
 import errImg from "../assets/error/404 Error Page not Found with people connecting a plug-amico.png";
@@ -36,7 +36,6 @@ function News() {
     )
       .then(({ data }) => {
         setArticles(data.results);
-        console.log(data.results);
       })
       .catch((error) => {
         setError(error.message);

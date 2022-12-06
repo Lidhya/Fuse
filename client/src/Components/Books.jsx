@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import Axios from "../axios";
+import Axios from "axios";
 import BookCard from "./BookCard";
 import Navbar from "./Navbar";
 import { errorHandler } from "./javascripts/errorHandler";
 import books_illustration from "../assets/Books/books_bg.jpg";
 
-
 const bgStyle = {
-    backgroundImage: `url(${books_illustration})`,
-    height: "100vh",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
+  backgroundImage: `url(${books_illustration})`,
+  height: "100vh",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
 };
 
-const API_KEY= process.env.REACT_APP_BOOKS_API_KEY
+const API_KEY = process.env.REACT_APP_BOOKS_API_KEY;
+
 function Books() {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
@@ -34,7 +34,7 @@ function Books() {
           `https://www.googleapis.com/books/v1/volumes?q=${search}&key=${API_KEY}`
         )
           .then(({ data }) => setBooks(data.items))
-          .catch((error) => {errorHandler(); console.log(error);});
+          .catch((error) => errorHandler());
       } else {
         setErrorMessage("Enter search key");
       }
@@ -43,7 +43,6 @@ function Books() {
     }
   };
 
-  console.log(books);
   return (
     <>
       <Navbar />

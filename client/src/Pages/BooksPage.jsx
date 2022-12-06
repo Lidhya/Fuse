@@ -1,14 +1,14 @@
-import React from 'react'
-import Books from '../Components/Books'
-import Navbar from '../Components/Navbar'
+import React from "react";
+import Books from "../Components/Books";
+import Navbar from "../Components/Navbar";
 
 function BooksPage() {
   return (
     <>
-    <Navbar/>
-    <Books/>
+      <Navbar />
+      <Books />
     </>
-  )
+  );
 }
 
-export default BooksPage
+export default BooksPage;

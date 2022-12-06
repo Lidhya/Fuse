@@ -1,6 +1,10 @@
 const router = require("express").Router();
-const { verifyJWT } = require('../middlewares/jwtAuth')
-const { addNewConvo, getUserConvo, getBothConvo } = require('../controllers/conversationControllers')
+const { verifyJWT } = require("../middlewares/jwtAuth");
+const {
+  addNewConvo,
+  getUserConvo,
+  getBothConvo,
+} = require("../controllers/conversationControllers");
 
 //new conv
 router.post("/", verifyJWT, addNewConvo);
