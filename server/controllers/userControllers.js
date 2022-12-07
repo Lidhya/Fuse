@@ -10,9 +10,9 @@ const unlinkFile = util.promisify(fs.unlink);
 module.exports = {
   getUser: async (req, res) => {
     try {
-      const user = await userModel.findById(req.params.id);
-      const { password, ...other } = user._doc;
-      res.status(200).json(other);
+        const user = await userModel.findById(req.params.userId);
+        const { password, ...other } = user._doc;
+        res.status(200).json(other);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -35,7 +35,6 @@ module.exports = {
     const { error, value } = validateUpdate(req.body);
     if (error) return res.status(422).json(error.details);
     const { _id, password, ...details } = value;
-    if (_id === req.params.id) {
       try {
         userModel
           .findOne({ _id: { $ne: _id }, username: details.username })
@@ -61,7 +60,6 @@ module.exports = {
       } catch (err) {
         return res.status(500).json(err);
       }
-    } else return res.status(403).json("You can update only your account!");
   },
 
   profileUpdate: async (req, res) => {
@@ -125,22 +123,18 @@ module.exports = {
   },
 
   userDelete: async (req, res) => {
-    if (req.body.userId === req.params.id) {
       try {
         await userModel.findByIdAndDelete(req.params.id);
         res.status(200).json("Account has been deleted");
       } catch (err) {
         return res.status(500).json(err);
       }
-    } else {
-      return res.status(403).json("You can delete only your account!");
-    }
   },
 
   followUnfollow: async (req, res) => {
     const currentUserId = req.body.currentUser;
-    const userId = req.params.id;
-    if (currentUserId !== userId) {
+    const userId = req.params.userId;
+    if (currentUserId !== userId && currentUserId === req.userId) {
       try {
         const user = await userModel.findById(userId);
         const currentUser = await userModel.findById(currentUserId);
@@ -197,7 +191,7 @@ module.exports = {
   getFollowers: async (req, res) => {
     try {
       userModel
-        .findById(req.params.id)
+        .findById(req.params.userId)
         .then(async (currentUser) => {
           const followers = await Promise.all(
             currentUser.followers.map((followerId) => {
@@ -218,7 +212,7 @@ module.exports = {
   getFollowings: async (req, res) => {
     try {
       userModel
-        .findById(req.params.id)
+        .findById(req.params.userId)
         .then(async (currentUser) => {
           const followings = await Promise.all(
             currentUser.followings.map((followingId) => {

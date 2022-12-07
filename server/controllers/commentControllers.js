@@ -31,10 +31,12 @@ module.exports = {
     try {
       const { error, value } = validateComment(req.body);
       if (error) return res.status(422).json(error.details);
+      if(value.authorId === req.userId){ 
       const postId = req.params.postId;
       PostModel.updateOne({ _id: postId }, { $addToSet: { comments: value } })
         .then((response) => res.status(200).json(response))
         .catch((error) => res.status(500).json(error.message));
+      }else res.status(403).json("You are not authorized");
     } catch (error) {
       res.status(500).json(error.message);
     }

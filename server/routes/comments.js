@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const { verifyJWT } = require("../middlewares/jwtAuth");
+const { verifyUser } = require("../middlewares/userIdCheck");
+
 const {
   getComments,
   addComment,

@@ -9,6 +9,7 @@ const {
   getUserPosts,
 } = require("../controllers/postControllers");
 const { verifyJWT } = require("../middlewares/jwtAuth");
+const { verifyUser } = require("../middlewares/userIdCheck");
 const multer = require("multer");
 const path = require("path");
 
@@ -27,24 +28,24 @@ const upload = multer({
 });
 
 //get timeline posts
-router.get("/timeline/:id", verifyJWT, timelinePosts);
+router.get("/timeline/:id", verifyJWT, verifyUser, timelinePosts);
 
-// get current users posts
-router.get("/:id", verifyJWT, getUserPosts);
+// get  users posts
+router.get("/:userId", verifyJWT, getUserPosts);
 
 //create a post
-router.post("/create-post/:id", verifyJWT, upload.single("file"), createPost);
+router.post("/create-post/:id", verifyJWT, verifyUser, upload.single("file"), createPost);
 
 //update a post
 router.put("/update/:postId", verifyJWT, updatePost);
 
 //delete a post
-router.delete("/delete/:postId", verifyJWT, deletePost);
+router.delete("/delete/:postId", verifyJWT,  deletePost);
 
 //like / dislike a post
-router.put("/like/:id", verifyJWT, likeDislike);
+router.put("/like/:id", verifyJWT, verifyUser, likeDislike);
 
 //get a post
-router.get("/get/:id", verifyJWT, getPost);
+router.get(":/get/id", verifyJWT, getPost);
 
 module.exports = router;

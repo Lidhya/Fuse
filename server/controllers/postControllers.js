@@ -21,7 +21,7 @@ module.exports = {
 
   getUserPosts: (req, res) => {
     try {
-      PostModel.find({ userId: req.params.id })
+      PostModel.find({ userId: req.params.userId })
         .then((response) => {
           res.status(200).json(response);
         })

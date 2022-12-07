@@ -12,6 +12,7 @@ const {
   getFollowings,
 } = require("../controllers/userControllers");
 const { verifyJWT } = require("../middlewares/jwtAuth");
+const { verifyUser } = require("../middlewares/userIdCheck");
 const multer = require("multer");
 const path = require("path");
 
@@ -30,7 +31,7 @@ const upload = multer({
 });
 
 //get a user
-router.get("/get/:id", verifyJWT, getUser);
+router.get("/get/:userId", verifyJWT, getUser);
 
 //get all users
 router.get("/all-users/:id", verifyJWT, getAllUsers);
@@ -39,7 +40,7 @@ router.get("/all-users/:id", verifyJWT, getAllUsers);
 router.get("/suggestions/:id", verifyJWT, getSuggestions);
 
 //update user
-router.put("/update/:id", verifyJWT, userUpdate);
+router.put("/update/:id", verifyJWT, verifyUser, userUpdate);
 
 //update profile picture
 router.put(
@@ -50,18 +51,18 @@ router.put(
 );
 
 //update cover picture
-router.put("/cover-update/:id", verifyJWT, upload.single("cover"), coverUpdate);
+router.put("/cover-update/:id", verifyJWT, verifyUser, upload.single("cover"), coverUpdate);
 
 //delete user
-router.delete("/delete/:id", verifyJWT, userDelete);
+router.delete("/delete/:id", verifyJWT, verifyUser, userDelete);
 
 //follow a user
-router.put("/follow-unfollow/:id", verifyJWT, followUnfollow);
+router.put("/follow-unfollow/:userId", verifyJWT, followUnfollow);
 
 //followers list
-router.get("/followers/:id", verifyJWT, getFollowers);
+router.get("/followers/:userId", verifyJWT, getFollowers);
 
 //followings list
-router.get("/followings/:id", verifyJWT, getFollowings);
+router.get("/followings/:userId", verifyJWT, getFollowings);
 
 module.exports = router;

@@ -3,10 +3,7 @@ const Conversation = require("../models/Conversation");
 module.exports = {
   addNewConvo: async (req, res) => {
     const convo = await Conversation.findOne({
-      $and: [
-        { members: { $in: req.body.senderId } },
-        { members: { $in: req.body.receiverId } },
-      ],
+      members: { $all: [req.body.senderId, req.body.receiverId] },
     });
     if (convo?.members) return res.status(200).json({ exist: true });
     const newConversation = new Conversation({

@@ -27,6 +27,8 @@ module.exports = {
           res.status(200).json(response);
         })
         .catch((error) => res.status(500).json(error));
-    } catch (error) {}
+    } catch (error) {
+      res.status(500).json(error)
+    }
   },
 };

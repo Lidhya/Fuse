@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const { verifyJWT } = require("../middlewares/jwtAuth");
+const { verifyUser } = require("../middlewares/userIdCheck");
+
 const {
   addNewConvo,
   getUserConvo,
@@ -10,7 +12,7 @@ const {
 router.post("/", verifyJWT, addNewConvo);
 
 //get conv of a user
-router.get("/:id", verifyJWT, getUserConvo);
+router.get("/:id", verifyJWT, verifyUser, getUserConvo);
 
 // get conv includes two userId
 router.get("/find/:firstUserId/:secondUserId", verifyJWT, getBothConvo);
