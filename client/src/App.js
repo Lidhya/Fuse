@@ -17,6 +17,7 @@ import ProfilePage from "./Pages/ProfilePage";
 import SigninPage from "./Pages/SigninPage";
 import SignupPage from "./Pages/SignupPage";
 import BooksPage from "./Pages/BooksPage";
+import SuggestionsPage from "./Pages/SuggestionsPage";
 
 function App() {
   const { currentUser } = useContext(UserContext);
@@ -106,6 +107,16 @@ function App() {
         <ProtectedRoute>
           <QueryClientProvider client={queryClient}>
             <BooksPage />
+          </QueryClientProvider>
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/suggestions",
+      element: (
+        <ProtectedRoute>
+          <QueryClientProvider client={queryClient}>
+          <SuggestionsPage />
           </QueryClientProvider>
         </ProtectedRoute>
       ),

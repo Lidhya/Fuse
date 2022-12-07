@@ -12,7 +12,8 @@ import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+// import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import PeopleIcon from '@mui/icons-material/People';
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuBook from "@mui/icons-material/MenuBook";
 
@@ -259,13 +260,22 @@ function Navbar() {
                 <span className="md:hidden pl-3 text-white">Books</span>
               </Link>
             </li>
-            <li className="md:hidden">
+            {/* <li className="md:hidden">
               <Link
                 to="/"
                 className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "
               >
                 <LightModeOutlinedIcon />
                 <span className=" pl-3 text-white">Theme</span>
+              </Link>
+            </li> */}
+            <li className="md:hidden">
+              <Link
+              to={'/suggestions'}
+                className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "
+              >
+                <PeopleIcon />
+                <span className=" pl-3 text-white">Suggestions</span>
               </Link>
             </li>
             <li className="md:hidden">
