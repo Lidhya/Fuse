@@ -16,21 +16,21 @@ const messageRouter = require("./routes/messages");
 const notificationsRouter = require("./routes/notification");
 
 // db connection cloud
-// mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
-//   console.log('Connected to database');
-// }).catch((err) => {
-//   console.log(`Database connection ${err}`);
-// });
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
+  console.log('Connected to database');
+}).catch((err) => {
+  console.log(`Database connection ${err}`);
+});
 
 // db connection local
-mongoose
-  .connect("mongodb://localhost:27017/Fuse", { useNewUrlParser: true })
-  .then((response) => {
-    console.log("Connected to database");
-  })
-  .catch((err) => {
-    console.log(`Database connection ${err}`);
-  });
+// mongoose
+//   .connect("mongodb://localhost:27017/Fuse", { useNewUrlParser: true })
+//   .then((response) => {
+//     console.log("Connected to database");
+//   })
+//   .catch((err) => {
+//     console.log(`Database connection ${err}`);
+//   });
 
 //middlewares
 app.use((req, res, next) => {
