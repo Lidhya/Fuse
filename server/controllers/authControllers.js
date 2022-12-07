@@ -54,7 +54,7 @@ module.exports = {
                   res
                     .status(200)
                     .json({ auth: true, token: token, user: details });
-                } else res.status(401).json("Incorrect password");
+                } else res.status(403).json("Incorrect password");
               })
               .catch((error) => res.status(500).json(error.message));
           } else return res.status(500).json("User not found");
