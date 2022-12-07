@@ -2,32 +2,16 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import Axios from "../axios";
-import moment from "moment";
 import { errorHandler } from "./javascripts/errorHandler";
 /* ---------------------------------- icons --------------------------------- */
 import blank_profile from "../assets/empty profile/blank_profile.png";
-import LinearProgress from "@mui/material/LinearProgress";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import Comment from "./Comment";
 
-const Comments = ({ postId }) => {
+const Comments = ({ postId, comments }) => {
   const { currentUser } = useContext(UserContext);
   const [newComment, setNewComment] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { _id, fname, profilePicture } = currentUser;
-
-  const { isLoading, error, data } = useQuery(["comments"], () => {
-    return Axios.get(`/comments/${postId}`)
-      .then(({ data }) => {
-        data.sort(function (a, b) {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        });
-        return data;
-      })
-      .catch((error) => {
-        errorHandler();
-        return error;
-      });
-  });
 
   const queryClient = useQueryClient();
   const mutation = useMutation(
@@ -41,7 +25,6 @@ const Comments = ({ postId }) => {
     {
       onSuccess: () => {
         // Invalidate and refetch
-        queryClient.invalidateQueries({ queryKey: ["comments"] });
         queryClient.invalidateQueries({ queryKey: ["posts"] });
       },
     }
@@ -58,19 +41,6 @@ const Comments = ({ postId }) => {
     setErrorMessage("");
     setNewComment("");
     mutation.mutate(comment);
-  };
-
-  const handleDelete = (commentId) => {
-    Axios.put(`/comments/delete/${postId}`, { commentId: commentId })
-      .then((res) => {
-        queryClient.invalidateQueries({ queryKey: ["comments"] });
-        queryClient.invalidateQueries({ queryKey: ["posts"] });
-        return res?.data;
-      })
-      .catch((error) => {
-        errorHandler();
-        return error;
-      });
   };
 
   return (
@@ -99,30 +69,8 @@ const Comments = ({ postId }) => {
           {errorMessage && errorMessage}
         </p>
       </div>
-      {isLoading && <LinearProgress color="secondary" />}
-      {data?.map((comment, index) => (
-        <div
-          className="my-8 flex justify-between items-center gap-5"
-          key={comment._id}
-        >
-          <img
-            src={
-              comment.profilePicture ? comment.profilePicture : blank_profile
-            }
-            alt={comment.fname}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <div className="flex-1 flex flex-col gap-1 items-start">
-            <span className="font-semibold">
-              {comment.fname + " " + comment.lname}
-            </span>
-            <p className="text-gray-500">{comment.comment}</p>
-          </div>
-          <span className=" text-gray-600 text-xs self-center font-semibold">
-            {moment(comment.createdAt).fromNow()}
-          </span>
-          <DeleteOutlineIcon onClick={() => handleDelete(comment._id)} />
-        </div>
+      {comments?.map((comment) => (
+        <Comment key={comment._id} postId={postId} comment={comment} />
       ))}
     </div>
   );

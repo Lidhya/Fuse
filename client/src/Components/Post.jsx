@@ -242,7 +242,7 @@ const Post = ({ post, profileUpdate }) => {
             <SendOutlinedIcon />
           </div> */}
         </div>
-        {commentOpen && <Comments postId={_id} />}
+        {commentOpen && <Comments postId={_id} comments={comments} />}
       </div>
       <Modal
         isOpen={edit}
