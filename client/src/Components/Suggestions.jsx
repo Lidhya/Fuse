@@ -20,7 +20,7 @@ function Suggestions() {
     } catch (error) {
       errorHandler();
     }
-  }, []);
+  }, [currentUser._id]);
 
   return (
     <div className="overflow-y-auto pt-20 h-screen  px-3 bg-gray-50 rounded dark:bg-gray-900">
