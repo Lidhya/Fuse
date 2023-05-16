@@ -82,7 +82,7 @@ const Post = ({ post, profileUpdate }) => {
       const extension = key.substring(key.lastIndexOf(".") + 1);
       extension === "mp4" ? setVideo(true) : setVideo(false);
     }
-  }, []);
+  }, [key, url, userId]);
 
   useEffect(() => {
     setNewDescription("");

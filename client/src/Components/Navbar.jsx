@@ -13,7 +13,7 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 // import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import PeopleIcon from '@mui/icons-material/People';
+import PeopleIcon from "@mui/icons-material/People";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuBook from "@mui/icons-material/MenuBook";
 
@@ -25,7 +25,8 @@ function Navbar() {
   const [userData, setUserData] = useState("");
   const [filteredData, setFilteredData] = useState([]);
 
-  const { isLoading, error, data } = useQuery(["notifications"], () => {
+  // eslint-disable-next-line no-unused-vars
+  const { error } = useQuery(["notifications"], () => {
     return Axios.get(`/notifications/${currentUser._id}`)
       .then(({ data }) => {
         setNotifications(data);
@@ -35,10 +36,14 @@ function Navbar() {
   });
 
   useEffect(() => {
-    Axios.get(`/user/all-users/${currentUser._id}`)
-      .then(({ data }) => setUserData(data))
-      .catch((error) => errorHandler());
-  }, []);
+    try {
+      Axios.get(`/user/all-users/${currentUser._id}`)
+        .then(({ data }) => setUserData(data))
+        .catch((error) => errorHandler());
+    } catch (error) {
+      errorHandler();
+    }
+  }, [currentUser._id]);
 
   useEffect(() => {
     notifications &&
@@ -271,7 +276,7 @@ function Navbar() {
             </li> */}
             <li className="md:hidden">
               <Link
-              to={'/suggestions'}
+                to={"/suggestions"}
                 className=" block py-2 pr-4 pl-3 text-purple-700 hover:text-white rounded md:hover:bg-transparent md:hover:text-purple-700 md:p-0 "
               >
                 <PeopleIcon />

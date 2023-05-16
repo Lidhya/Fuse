@@ -5,24 +5,6 @@ import { countries } from "./javascripts/Countries";
 import errImg from "../assets/error/404 Error Page not Found with people connecting a plug-amico.png";
 const NEWS_API = process.env.REACT_APP_NEWSDATA_API_KEY;
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    width: "35rem",
-    height: "38rem",
-    backgroundColor: "#fffff",
-    border: "none",
-  },
-  overlay: {
-    backgroundColor: "rgba(0,0,0,0.2)",
-  },
-};
-
 function News() {
   Modal.setAppElement("#root");
   const [country, setCountry] = useState("in");
@@ -126,15 +108,11 @@ function News() {
           ))
         ) : (
           <div className="max-w-sm max-h-sm bg-white rounded-lg border border-gray-200 shadow-md ">
-            <a href="#">
-              <img className="rounded-t-lg" src={errImg} alt="" />
-            </a>
+            <img className="rounded-t-lg" src={errImg} alt="" />
             <div className="p-5">
-              <a href="#">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
-                  Oops! {error}
-                </h5>
-              </a>
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
+                Oops! {error}
+              </h5>
               <p className="mb-3 font-normal text-gray-700 ">
                 Something went wrong, check your internet connection
               </p>

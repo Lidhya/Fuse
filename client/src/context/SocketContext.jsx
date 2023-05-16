@@ -30,10 +30,10 @@ function Socket({ children }) {
     } else {
       socketConnection.current = null;
     }
-  }, [currentUser]);
+  }, [currentUser, socket]);
 
   return (
-    <SocketContext.Provider value={{ socket, onlineUsers }}>
+    <SocketContext.Provider value={{ socket, onlineUsers, setSocket }}>
       {children}
     </SocketContext.Provider>
   );

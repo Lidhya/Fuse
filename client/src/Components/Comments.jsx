@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import Axios from "../axios";

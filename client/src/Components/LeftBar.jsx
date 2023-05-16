@@ -47,7 +47,7 @@ function LeftBar() {
     } catch (error) {
       errorHandler();
     }
-  }, []);
+  }, [currentUser._id]);
 
   const handleLogout = () => {
     Swal.fire({

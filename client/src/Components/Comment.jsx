@@ -24,7 +24,7 @@ function Comment({ postId, comment }) {
     } catch (error) {
       errorHandler();
     }
-  }, []);
+  }, [comment.authorId]);
 
   const queryClient = useQueryClient();
 

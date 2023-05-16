@@ -38,7 +38,8 @@ function Notifications() {
       }
     };
     updateStatus();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser._id]);
 
   return (
     <div className=" md:px-14  my-3 w-96 md:w-full">

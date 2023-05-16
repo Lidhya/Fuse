@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import blank_profile from "../assets/empty profile/blank_profile.png";
 import Axios from "../axios";
@@ -19,7 +18,7 @@ function Notification({ notification }) {
       .catch((error) => {
         errorHandler();
       });
-  }, [notification]);
+  }, [emiterId]);
 
   return (
     <div className="w-full h-full bg-white my-3 rounded-xl shadow-md border-gray-100  border-2">

@@ -6,7 +6,7 @@ export const UserContext = createContext();
 
 function User({ children }) {
   const user = JSON.parse(localStorage.getItem("user")) || null;
-  const token = JSON.parse(localStorage.getItem("token")) || null;
+  // const token = JSON.parse(localStorage.getItem("token")) || null;
   const [currentUser, setCurrentUser] = useState(user);
 
   const logout = () => {

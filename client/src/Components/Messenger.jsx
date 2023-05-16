@@ -35,7 +35,7 @@ function Messenger() {
         createdAt: Date.now(),
       });
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     arrivalMessage &&
@@ -86,6 +86,7 @@ function Messenger() {
       }
     };
     getMessages();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat]);
 
   useEffect(() => {

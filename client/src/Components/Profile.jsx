@@ -20,7 +20,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 function Profile() {
   const userId = useLocation().pathname.split("/")[2];
-  const { currentUser, updateCurrentUser, token } = useContext(UserContext);
+  const { currentUser, updateCurrentUser } = useContext(UserContext);
   const [listModal, setListModal] = useState(false);
   const [list, setList] = useState("");
   const [listData, setListData] = useState([]);
@@ -105,6 +105,7 @@ function Profile() {
     setListModal(false);
     setListData([]);
     getUserPosts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   useEffect(() => {
@@ -128,7 +129,7 @@ function Profile() {
       });
       setFormErrors({});
     }
-  }, [updateModal]);
+  }, [currentUser._id, data, updateModal]);
 
   useEffect(() => {
     if (listModal) {
@@ -146,7 +147,7 @@ function Profile() {
         errorHandler();
       }
     }
-  }, [listModal]);
+  }, [list, listModal, profileUser._id]);
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
@@ -162,7 +163,8 @@ function Profile() {
         setErrorMessage(error.message);
       }
     }
-  }, [formErrors]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser._id, formErrors, formValues, isSubmit]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
