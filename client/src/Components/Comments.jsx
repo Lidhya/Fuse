@@ -17,30 +17,28 @@ const Comments = ({ postId, comments }) => {
   const mutation = useMutation(
     (commentData) => {
       return Axios.post(`/comments/${postId}`, commentData)
-        .then((response) => {
-          return response;
-        })
+        .then((response) => { })
         .catch((error) => errorHandler());
     },
     {
       onSuccess: () => {
         // Invalidate and refetch
         queryClient.invalidateQueries({ queryKey: ["posts"] });
+        queryClient.invalidateQueries({ queryKey: ["user"] });
       },
     }
   );
 
-  const comment = {
-    authorId: _id,
-    comment: newComment,
-  };
-
   const handleCommentSubmit = (e) => {
     e.preventDefault();
+    const comment = {
+      authorId: _id,
+      comment: newComment,
+    };
     if (!newComment) return setErrorMessage("comment is required");
+    mutation.mutate(comment);
     setErrorMessage("");
     setNewComment("");
-    mutation.mutate(comment);
   };
 
   return (

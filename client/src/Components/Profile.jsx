@@ -106,7 +106,7 @@ function Profile() {
     setListData([]);
     getUserPosts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [error, userId]);
 
   useEffect(() => {
     setCoverImage("");
