@@ -51,6 +51,20 @@ To run Fuse locally, follow these steps:
 1. Clone the repository: `git clone https://github.com/your-username/fuse.git`
 2. Install the dependencies for each interface: `npm install`
 3. Set up the required environment variables (e.g., database connection, API keys).
+
+# client - env file
+REACT_APP_NEWSDATA_API_KEY
+REACT_APP_BOOKS_API_KEY
+
+# server - env file
+MONGO_URL
+JWT_SECRET 
+PORT
+S3_NAME
+S3_REGION
+S3_ACCESS_KEY_ID
+S3_SECRET_KEY
+
 4. Start the development server, client and socket: `npm run dev`
 5. Access the application in your web browser at `http://localhost:3000`
 
