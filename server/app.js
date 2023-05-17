@@ -49,6 +49,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/api", function (req, res){
+  res.send("Welcome, you're good to go")
+})
 app.use("/api/auth", authRouter);
 app.use("/api/user", usersRouter);
 app.use("/api/post", postsRouter);
