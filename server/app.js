@@ -7,6 +7,7 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 
+const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 const postsRouter = require("./routes/posts");
@@ -49,9 +50,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/api", function (req, res){
-  res.send("Welcome, you're good to go")
-})
+
+app.use("/", indexRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/user", usersRouter);
 app.use("/api/post", postsRouter);
