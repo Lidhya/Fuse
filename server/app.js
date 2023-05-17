@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
@@ -16,11 +16,11 @@ const messageRouter = require("./routes/messages");
 const notificationsRouter = require("./routes/notification");
 
 // db connection cloud
-// mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
-//   console.log('Connected to database');
-// }).catch((err) => {
-//   console.log(`Database connection ${err}`);
-// });
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then((response) => {
+  console.log('Connected to database');
+}).catch((err) => {
+  console.log(`Database connection ${err}`);
+});
 
 // db connection local
 // mongoose
