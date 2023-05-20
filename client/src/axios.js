@@ -5,7 +5,7 @@ import axios from "axios";
 // });
 
 const instance = axios.create({
-  baseURL: "https://localhost:5000",
+  baseURL: "https://localhost:5000/api",
 });
 
 instance.defaults.headers.post["Content-Type"] =
