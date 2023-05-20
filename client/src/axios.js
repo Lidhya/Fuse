@@ -7,9 +7,6 @@ const instance = axios.create({
 instance.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
 
-  instance.defaults.headers.put["Content-Type"] =
-  "application/x-www-form-urlencoded";
-
 instance.interceptors.request.use(
   function (config) {
     const token = JSON.parse(localStorage.getItem("token")) || null;
