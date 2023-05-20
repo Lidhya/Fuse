@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://thefuse.netlify.app",
+    origin: ["https://thefuse.netlify.app", "https://localhost:3000"],
   })
 );
 app.use(logger("dev"));

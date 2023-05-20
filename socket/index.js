@@ -1,6 +1,6 @@
 const io = require("socket.io")(8000, {
   cors: {
-    origin: "https://thefuse.netlify.app",
+    origin: ["https://thefuse.netlify.app", "https://fuse.theapparel.shop", "https://localhost:5000", "http://localhost:3000"],
   },
 });
 
