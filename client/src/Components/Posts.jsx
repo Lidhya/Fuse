@@ -28,7 +28,7 @@ const Posts = ({ userId }) => {
       {error ? (
         "Something went wrong!"
       ) : isLoading ? (
-        <CircularProgress color="secondary" />
+        <p><CircularProgress color="secondary" /></p>
       ) : (
         data.map((post) => <Post post={post} key={post._id} />)
       )}

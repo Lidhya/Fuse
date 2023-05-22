@@ -33,8 +33,8 @@ function News() {
   }
 
   return (
-    <div className="m-3 flex flex-col justify-around ">
-      <div className="w-40">
+    <div className="m-3 flex flex-col justify-around">
+      <div className="w-40 top-16 sticky">
         <label
           htmlFor="countries"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"

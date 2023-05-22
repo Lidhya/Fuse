@@ -70,7 +70,7 @@ function LeftBar() {
       <div className="w-full p-3 mb-3 mt-6 max-w-sm  rounded-lg border  shadow-md bg-gray-900 border-gray-700">
         <div className="flex flex-col items-center ">
           <img
-            className=" w-44 relative -top-10 h-44 rounded-full shadow-lg"
+            className=" w-44 relative -top-10 h-44 rounded-full object-cover shadow-lg"
             src={profilePicture ? profilePicture : blank_profile}
             alt={fname}
           />

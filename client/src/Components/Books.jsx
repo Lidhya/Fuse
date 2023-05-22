@@ -100,7 +100,7 @@ function Books() {
           </form>
           {isSubmit && (
             <div className="flex gap-2 flex-wrap justify-center mb-5">
-              {books.length > 0 ? (
+              {books[0] ? (
                 books.map((book) => <BookCard key={book.id} book={book} />)
               ) : (
                 <span className="bg-black text-white text-lg">
